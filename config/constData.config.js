@@ -3,6 +3,8 @@ export default {
 	appName: '**商城',
 	//首页搜索栏前的文字
 	lebalText: '货源',
+	//默认图片
+	defaultImg: '../../static/images/defaultImg.png',
 	//首页搜索栏下方导航栏
 	homeNavigation: [
 		{
@@ -53,5 +55,14 @@ export default {
 			icon: '../../static/images/extension.png',
 			url: ''
 		}
-	]
+	],
+	//分类页面配置
+	lebalUp: {
+		message: '线上订货会',
+		icon: '../../static/images/arrow.svg'
+	},
+	lebalDown: {
+		message: '一手产地',
+		icon: '../../static/images/position.svg'
+	}
 }

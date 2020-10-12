@@ -13,11 +13,11 @@
 				</view>
 			</view>
 			<view class="home_header_navigation">
-				<template v-for="(item, index) in headerNavigation">
-					<view class="home_navigation_bar" @click="navClick(index)">
+				<view v-for="(item, index) in headerNavigation" :key="item.name" class="home_navigation_bar" @click="navClick(index)">
+					<view>
 						<text :class="{isSelected: item.selected}">{{item.name}}</text>
 					</view>
-				</template>
+				</view>
 			</view>
 			<view class="big_img">
 				<image :src="bigImg" mode=""></image>
@@ -25,22 +25,23 @@
 		</view>
 		<view class="body">
 			<view class="icon_navigation">
-				<template v-for="item in iconNavigation">
-					<view class="icon_navi_bar" @click="iconNavClick(item.url)">
+				<view v-for="item in iconNavigation" class="icon_navi_bar" :key="item.name" @click="iconNavClick(item.url)">
+					<view>
 						<image :src="item.icon" mode=""></image>
 						<view>{{item.name}}</view>
 					</view>
-				</template>
+				</view>
 			</view>
 			<view class="activity_img">
 				<image :src="activityImg" mode=""></image>
 			</view>
 			<view class="activity_area">
-				<text class="act_describe">新人推荐</text>
+				<view class="act_describe">新人推荐</view>
 				<view class="act_nav">
 					<view class="activity_products">
-						<view class="act_product_item" v-for="item in activity_products">
-							<image :src="item.img" mode="scaleToFill"></image>
+						<view class="act_product_item"></view>
+						<view class="activity_item" v-for="item in activity_products" :key="item.id">
+							<image :src="item.img ? item.img : $constData.defaultImg" mode="scaleToFill"></image>
 							<view>{{item.message}}</view>
 						</view>
 					</view>
@@ -76,6 +77,16 @@
 			this.headerNavigation = this.$constData.homeNavigation
 			this.iconNavigation = this.$constData.homeIconNavigation
 			this.activityImg = '../../static/images/activity_img.png'
+			this.activity_products = [
+				{
+					id: 0,
+					message: '玩转1688'
+					},
+				{
+					id: 1,
+					message: '玩转1688',
+					}
+			],
 			this.goodsList = [
 				{
 					id: 0,
@@ -105,7 +116,6 @@
 				console.log(index)
 			},
 			iconNavClick(url) {
-				console.log(url)
 				uni.navigateTo({
 					url: url
 				})
@@ -208,17 +218,44 @@
 			}
 			.activity_area {
 				margin: 40rpx 20rpx 30rpx 20rpx;
-				height: 220rpx;
+				height: 250rpx;
 				width: 710rpx;
 				background-color: $uni-color-primary;
 				border-radius: 0.5em;
 				.act_describe {
-					margin: 5rpx 10rpx;
+					margin: 15rpx 10rpx;
 					color: #fff;
 					font-size: 30rpx;
 				}
 				.activity_products {
-					
+					display: flex;
+					justify-content: space-around;
+					margin: auto;
+					width: 680rpx;
+					height: 180rpx;
+					text-align: center;
+					.act_product_item {
+						width: 310rpx;
+						height: 180rpx;
+						background-color: #fff;
+						border-radius: 0.3em;
+					}
+					.activity_item {
+						border-radius: 0.3em;
+						width: 150rpx;
+						height: 180rpx;
+						background-color: #fff;
+						image {
+							text-align: center;
+							margin: 15rpx 0 0 0;
+							width: 120rpx;
+							height: 120rpx;
+							border-radius: 0.3em;
+						}
+						view {
+							font-size: 24rpx;
+						}
+					}
 				}
 			}
 		}

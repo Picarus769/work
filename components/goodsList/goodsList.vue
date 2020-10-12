@@ -41,7 +41,7 @@
 			background-color: #fff;
 			border-radius: 0.2em;
 			.message {
-				font-size: 40rpx;
+				font-size: 36rpx;
 				display: -webkit-box;
 				-webkit-box-orient: vertical;
 				-webkit-line-clamp: 1;
