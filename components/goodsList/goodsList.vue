@@ -41,7 +41,7 @@
 			background-color: #fff;
 			border-radius: 0.2em;
 			.message {
-				font-size: 30rpx;
+				font-size: 40rpx;
 				display: -webkit-box;
 				-webkit-box-orient: vertical;
 				-webkit-line-clamp: 1;
@@ -50,7 +50,8 @@
 			}
 			.price {
 				margin: 8rpx 0;
-				font-size: 30rpx;
+				font-size: 36rpx;
+				font-weight: 800;
 				color: red;
 			}
 			.master {
