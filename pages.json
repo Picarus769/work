@@ -22,6 +22,10 @@
 			"path" : "pages/form/form",
 			"style" : {}
 		}
+        ,{
+            "path" : "pages/index/Roulette",
+            "style" : {}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

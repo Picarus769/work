@@ -39,12 +39,10 @@
 				<text class="act_describe">新人推荐</text>
 				<view class="act_nav">
 					<view class="activity_products">
-						<template v-for="item in activity_products">
-							<view class="act_product_item">
-								<image :src="item.img" mode="scaleToFill"></image>
-								<view>{{item.message}}</view>
-							</view>
-						</template>
+						<view class="act_product_item" v-for="item in activity_products">
+							<image :src="item.img" mode="scaleToFill"></image>
+							<view>{{item.message}}</view>
+						</view>
 					</view>
 				</view>
 			</view>
@@ -81,7 +79,7 @@
 			this.goodsList = [
 				{
 					id: 0,
-					message: 'aaa',
+					message: '随便买点什么',
 					price: '10.1',
 					master: 'pcs',
 					images: 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2165531883,1410252634&fm=26&gp=0.jpg'
@@ -107,8 +105,9 @@
 				console.log(index)
 			},
 			iconNavClick(url) {
+				console.log(url)
 				uni.navigateTo({
-					url
+					url: url
 				})
 			}
 		}

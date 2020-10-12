@@ -41,7 +41,7 @@ export default {
 		{
 			name: '幸运转盘',
 			icon: '../../static/images/roulette.png',
-			url: ''
+			url: '/pages/index/Roulette'
 		},
 		{
 			name: '招募计划',
