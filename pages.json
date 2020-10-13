@@ -19,11 +19,19 @@
             "style" : {}
         },
 		{
-			"path" : "pages/form/form",
+			"path" : "pages/cart/cart",
 			"style" : {}
 		}
         ,{
             "path" : "pages/index/Roulette",
+            "style" : {}
+        },
+				{
+					"path" : "pages/index/conscribe",
+					"style" : {}
+				}
+        ,{
+            "path" : "pages/detail/detail",
             "style" : {}
         }
     ],
@@ -54,8 +62,8 @@
 				"selectedIconPath":"static/images/message_active.svg"
 			},
 			{
-				"text":"进货单",
-				"pagePath":"pages/form/form",
+				"text":"订单",
+				"pagePath":"pages/cart/cart",
 				"iconPath":"static/images/form.svg",
 				"selectedIconPath":"static/images/form_active.svg"
 			},

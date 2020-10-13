@@ -142,6 +142,11 @@
 							id: 6,
 							name: '直播特卖',
 							img: ''
+						},
+						{
+							id: 7,
+							name: '直播特卖',
+							img: ''
 						}
 					]
 				},
@@ -154,22 +159,22 @@
 
 <style lang="scss">
 	.cate {
-		background-color: $uni-cate-bg-color;
+		background-color: $uni-grey-bg-color;
 		height: calc(100vh - 188rpx);
 		display: flex;
 		.left {
-			
 			background-color: #fff;
 			width: 180rpx;
 			height: 100%;
 			.selected {
-				background-color: $uni-cate-bg-color;
+				background-color: $uni-grey-bg-color;
 			}
 			view {
 				width: 180rpx;
 				height: 100rpx;
 				text-align: center;
 				line-height: 100rpx;
+				font-size: 36rpx;
 			}
 		}
 		.right {
@@ -202,21 +207,23 @@
 			.cate-icon {
 				display: flex;
 				flex-wrap:wrap;
-				
 				.cate-item {
-					background-color: $uni-cate-bg-color;
+					background-color: $uni-grey-bg-color;
 					margin: 20rpx;
 					text-align: center;
 					width: 120rpx;
-					height: 180rpx;
+					height: 200rpx;
 					image {
-						margin: 12rpx 0;
-						width: 100rpx;
-						height: 100rpx;
+						margin-top: 10rpx;
+						width: 90rpx;
+						height: 90rpx;
+						line-height: 90rpx;
 					}
 					.cate-name {
-						margin: 10rpx 0;
-						font-size: 26rpx;
+						height: 100rpx;
+						line-height: 100rpx;
+						font-size: 20rpx;
+						overflow: hidden;
 					}
 				}
 			}

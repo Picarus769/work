@@ -48,7 +48,7 @@ export default {
 		{
 			name: '招募计划',
 			icon: '../../static/images/join_in.png',
-			url: ''
+			url: '/pages/index/conscribe'
 		},
 		{
 			name: '营销推广',
@@ -64,5 +64,60 @@ export default {
 	lebalDown: {
 		message: '一手产地',
 		icon: '../../static/images/position.svg'
-	}
+	},
+	//消息页面配置
+	msgHeaderConfig: [
+		{
+			name: '重要通知',
+			icon: '../../static/images/importent_message.svg',
+			url: '',
+			bgColor: 'bg_color1'
+		},
+		{
+			name: '订单通知',
+			icon: '../../static/images/order_message.svg',
+			url: '',
+			bgColor: 'bg_color2'
+		},
+		{
+			name: '店铺通知',
+			icon: '../../static/images/shop_message.svg',
+			url: '',
+			bgColor: 'bg_color3'
+		},
+		{
+			name: '商家成长',
+			icon: '../../static/images/shop_grow.svg',
+			url: '',
+			bgColor: 'bg_color4'
+		},
+		{
+			name: '系统通知',
+			icon: '../../static/images/other_message.svg',
+			url: '',
+			bgColor: 'bg_color5'
+		},
+	],
+	//我的页面配置
+	profileConfig: {
+		myOrder: {
+			message: '我的订单',
+			icon: '../../static/images/my_order.svg'
+		},
+		accountFunds: {
+			message: '账户资金',
+			icon: '../../static/images/account_funds.svg'
+		},
+		myPoints: {
+			message: '我的积分',
+			icon: '../../static/images/my_points.svg'
+		},
+		settings: {
+			message: '设置',
+			icon: '../../static/images/settings.svg'
+		}
+	},
+	
+	
+	
 }
