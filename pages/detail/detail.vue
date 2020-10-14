@@ -88,20 +88,26 @@
 				<navigator
 					url="/pages/index/index"
 					open-type="switchTab"
-					class=""
+					class="navi"
 				>
-					<embed src="" type="">
-					<view></view>
+					<view>
+						<embed :src="config.homeIcon" type="">
+						<view>首页</view>
+					</view>
 				</navigator>
 				<navigator
-					url="/pages/index/index"
+					url="/pages/chat/chat"
 					open-type="switchTab"
-					class="">
+					class="navi">
+					<embed :src="config.chatIcon" type="">
+					<view>客服</view>
 				</navigator>
 				<navigator
-					url="/pages/index/index"
+					url="/pages/cart/cart"
 					open-type="navigate"
-					class="">
+					class="navi">
+					<embed :src="config.cartIcon" type="">
+					<view>购物车</view>
 				</navigator>
 			</view>
 			<view class="right">
@@ -393,7 +399,20 @@
 			display: flex;
 			
 			.left {
-				
+				display: flex;
+				.navi {
+					flex: 1;
+					text-align: center;
+					embed {
+						width: 50rpx;
+						height: 50rpx;
+						vertical-align: middle;
+						margin: 5rpx 0;
+					}
+					view {
+						font-size: 30rpx;
+					}
+				}
 				flex: 1;
 			}
 			.right {
@@ -401,6 +420,7 @@
 				display: flex;
 				line-height: 100rpx;
 				text-align: center;
+				color: #fff;
 				.add_cart {
 					flex: 1;
 					background-color: $add_cart;

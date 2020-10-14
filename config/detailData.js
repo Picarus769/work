@@ -8,6 +8,9 @@ export default {
 		comment: '宝贝评价',
 		allComment: '查看全部',
 		count: '购买数量',
-		shareIcon: '../../static/images/share.svg'
+		shareIcon: '../../static/images/share.svg',
+		homeIcon: '../../static/images/home.svg',
+		chatIcon: '../../static/images/chat.svg',
+		cartIcon: '../../static/images/cart.svg'
 	} 
 }
