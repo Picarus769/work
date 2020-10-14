@@ -17,16 +17,23 @@
 				<view class="button">
 					<embed :src="config.myOrder.icon" type="" class="button_icon">
 					<view class="button_name">{{config.myOrder.message}}</view>
+					<embed :src="$constData.arrowIcon1" type="" class="button_icon arrow_icon">
 				</view>
 				<view class="button">
 					<embed :src="config.accountFunds.icon" type="" class="button_icon">
-					<view class="button_name">{{config.accountFunds.message}}</view></view>
+					<view class="button_name">{{config.accountFunds.message}}</view>
+					<embed :src="$constData.arrowIcon1" type="" class="button_icon arrow_icon">
+				</view>
 				<view class="button">
 					<embed :src="config.myPoints.icon" type="" class="button_icon">
-					<view class="button_name">{{config.myPoints.message}}</view></view>
+					<view class="button_name">{{config.myPoints.message}}</view>
+					<embed :src="$constData.arrowIcon1" type="" class="button_icon arrow_icon">
+					</view>
 				<view class="button">
 					<embed :src="config.settings.icon" type="" class="button_icon">
-					<view class="button_name">{{config.settings.message}}</view></view>
+					<view class="button_name">{{config.settings.message}}</view>
+					<embed :src="$constData.arrowIcon1" type="" class="button_icon arrow_icon">
+				</view>
 			</view>
 			<view class="deadline"></view>
 		</view>
@@ -35,7 +42,11 @@
 </template>
 
 <script>
+	
 	export default {
+		components: {
+			
+		},
 		data() {
 			return {
 				config: {}
@@ -103,6 +114,13 @@
 					vertical-align: middle;
 					width: 50rpx;
 					height: 50rpx;
+				}
+				.arrow_icon {
+					position: absolute;
+					right: 20rpx;
+					margin: 35rpx;
+					width: 30rpx;
+					height: 30rpx;
 				}
 				.button_name {
 					display: inline-block;

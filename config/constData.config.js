@@ -5,6 +5,10 @@ export default {
 	lebalText: '货源',
 	//默认图片
 	defaultImg: '../../static/images/defaultImg.png',
+	//小箭头图标(灰色)
+	arrowIcon1: '../../static/images/arrow1.svg',
+	//小箭头图标(主题色)
+	arrowIcon2: '../../static/images/arrow2.svg',
 	//首页搜索栏下方导航栏
 	homeNavigation: [
 		{
@@ -98,7 +102,7 @@ export default {
 			bgColor: 'bg_color5'
 		},
 	],
-	//我的页面配置
+	//我的(proflie)页面配置
 	profileConfig: {
 		myOrder: {
 			message: '我的订单',

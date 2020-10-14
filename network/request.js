@@ -1,5 +1,7 @@
 
 export const myRequest = (options) => {
+	
+	BASE_URL = "https://admin.counselor.hzrxkjgs.cn"
 	return new Promise((resolve, reject) => {
 		uni.request({
 			url: BASE_URL+options.url,
