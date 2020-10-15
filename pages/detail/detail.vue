@@ -79,9 +79,29 @@
 			</view>
 		</view>
 		<view class="shop area">
-			<view class="left"></view>
-			<view class="center"></view>
-			<view class="right"></view>
+			<view class="shop_info">
+				<view class="left">
+					<image :src="$constData.defaultImg" mode=""></image>
+				</view>
+				<view class="center">
+					{{}}
+				</view>
+				<view class="right">进店逛逛</view>
+			</view>
+			<view class="shop_comment">
+				<view v-for="item in shopComment" :key="item.name" class="score">
+					<text>{{item.name}}</text>
+					<text>{{item.score}}</text>
+				</view>
+			</view>
+		</view>
+		<view class="split">——————宝贝详情——————</view>
+		<view class="detail_img">
+			<view v-for="item in productDetail.images" :key="item.id">
+				<image :src="item.url" mode=""></image>
+			</view>
+		</view>
+		<view class="block_area">
 		</view>
 		<view class="bottom_bar">
 			<view class="left">
@@ -91,22 +111,22 @@
 					class="navi"
 				>
 					<view>
-						<embed :src="config.homeIcon" type="">
+						<image :src="config.homeIcon" type="">
 						<view>首页</view>
 					</view>
 				</navigator>
 				<navigator
 					url="/pages/chat/chat"
-					open-type="switchTab"
+					open-type="navigate"
 					class="navi">
-					<embed :src="config.chatIcon" type="">
+					<image :src="config.chatIcon" type="">
 					<view>客服</view>
 				</navigator>
 				<navigator
 					url="/pages/cart/cart"
-					open-type="navigate"
+					open-type="switchTab"
 					class="navi">
-					<embed :src="config.cartIcon" type="">
+					<image :src="config.cartIcon" type="">
 					<view>购物车</view>
 				</navigator>
 			</view>
@@ -135,6 +155,7 @@
 				config: config.detailConfig,
 				attrSelected: false,
 				selectCount: 0,
+				shopComment: [],
 			}
 		},
 		computed: {
@@ -143,6 +164,7 @@
 			}
 		},
 		methods: {
+			
 			//增加数量
 			increment() {
 				if(this.selectCount >= this.currentAttr.count) return
@@ -183,6 +205,7 @@
 					this.specClass = 'show';
 				}
 			},
+			//选择规格
 			selectAttr(event) {
 				this.attrSelected = true
 				this.attrIndex = event.detail.value
@@ -192,7 +215,20 @@
 			stopPrevent() {}
 		},
 		onLoad(options) {
-			console.log(this.config)
+			this.shopComment = [
+				{
+					name: '宝贝描述',
+					score: 4.8
+				},
+				{
+					name: '卖家服务',
+					score: 4.8
+				},
+				{
+					name: '物流服务',
+					score: 4.8
+				}
+			]
 			this.productDetail = {
 				images: [
 					{
@@ -390,10 +426,62 @@
 				}
 			}
 		}
+		.block_area {
+			height: $bottom_bar_height;
+		}
+		.shop {
+			.shop_info {
+				height: 100rpx;
+				.left {
+					display: inline-block;
+					image {
+						width: 100rpx;
+						height: 100rpx;
+					}
+				}
+				.center {
+					width: 380rpx;
+					vertical-align: top;
+					display: inline-block;
+					font-weight: 600;
+				}
+				.right {
+					margin: 19rpx 0;
+					padding: 5rpx 20rpx;
+					height: 50rpx;
+					line-height: 50rpx;
+					display: inline-block;
+					vertical-align: top;
+					border: 1px solid $uni-color-primary;
+					border-radius: 1.2em;
+					color: $uni-color-primary;
+				}
+			}
+			.shop_comment {
+				margin: 10rpx;
+				display: flex;
+				.score {
+					text-align: center;
+					flex: 1;
+					font-size: 24rpx;
+				}
+			}
+		}
+		.split {
+			text-align: center;
+			margin: 20rpx 0;
+			font-size: 28rpx;
+			color: $font-color-disabled;
+		}
+		.detail_img {
+			image {
+				width: 100%;
+			}
+		}
 		.bottom_bar {
 			position: fixed;
 			bottom: 0;
-			height: 100rpx;
+			height: $bottom_bar_height;
 			width: 100%;
 			background-color: #fff;
 			display: flex;
@@ -403,9 +491,9 @@
 				.navi {
 					flex: 1;
 					text-align: center;
-					embed {
-						width: 50rpx;
-						height: 50rpx;
+					image {
+						width: 45rpx;
+						height: 45rpx;
 						vertical-align: middle;
 						margin: 5rpx 0;
 					}
@@ -421,6 +509,7 @@
 				line-height: 100rpx;
 				text-align: center;
 				color: #fff;
+				font-size: 32rpx;
 				.add_cart {
 					flex: 1;
 					background-color: $add_cart;

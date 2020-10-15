@@ -103,24 +103,34 @@ export default {
 		},
 	],
 	//我的(proflie)页面配置
-	profileConfig: {
-		myOrder: {
+	profileConfig: [
+		{
 			message: '我的订单',
-			icon: '../../static/images/my_order.svg'
+			icon: '../../static/images/my_order.png'
 		},
-		accountFunds: {
+		{
 			message: '账户资金',
-			icon: '../../static/images/account_funds.svg'
+			icon: '../../static/images/account_funds.png'
 		},
-		myPoints: {
+		{
 			message: '我的积分',
-			icon: '../../static/images/my_points.svg'
+			icon: '../../static/images/my_points.png'
 		},
-		settings: {
+		{
 			message: '设置',
-			icon: '../../static/images/settings.svg'
+			icon: '../../static/images/settings.png'
+		},
+		{
+			message: '商家服务',
+			icon: '../../static/images/shop_serve.png'
+		},
+		{
+			message: '商家客服',
+			icon: '../../static/images/shopChat.png'
 		}
-	},
+	],
+		
+	
 	
 	
 	

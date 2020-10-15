@@ -1,10 +1,12 @@
 <template>
 	<view class="cate">
 		<view class="left">
-			<view v-for="(item, index) in cate"
-					:key="item.id"
-					:class="{selected: selectedId === index}"
-					@click="navClick(index)">{{item.message}}</view>
+			<scroll-view scroll-y="true" >
+				<view v-for="(item, index) in cate"
+						:key="item.id"
+						:class="{selected: selectedId === index}"
+						@click="navClick(index)">{{item.message}}</view>
+			</scroll-view>
 		</view>
 		<view class="right" scroll-y="true" >
 			<view class="right-up">
@@ -13,7 +15,7 @@
 					<view class="lebal">{{lebalUp.message}}</view>
 				</view>
 				<view class="cate-icon">
-					<view v-for="item in currentCate.online" :key="item.id" class="cate-item">
+					<view v-for="item in currentCate.online" :key="item.id" class="cate-item" @click="cateClick(item.id)">
 						<image :src="item.img?item.img:$constData.defaultImg" mode=""></image>
 						<view class="cate-name">{{item.name}}</view>
 					</view>
@@ -50,6 +52,11 @@
 				this.selectedId = index
 				this.currentCate = this.cate[index].cateList
 				console.log(this.currentCate)
+			},
+			cateClick(id) {
+				uni.navigateTo({
+					url: './category_list?id=' + id
+				})
 			}
 		},
 		onLoad() {
@@ -160,12 +167,12 @@
 <style lang="scss">
 	.cate {
 		background-color: $uni-grey-bg-color;
-		height: calc(100vh - 188rpx);
+		height: calc(100vh - 190rpx);
 		display: flex;
 		.left {
 			background-color: #fff;
 			width: 180rpx;
-			height: 100%;
+			height: calc(100vh - 200rpx);
 			.selected {
 				background-color: $uni-grey-bg-color;
 			}
@@ -178,7 +185,8 @@
 			}
 		}
 		.right {
-			
+			display: flex;
+			flex-direction: column;
 			width: 600rpx;
 			padding: 20rpx;
 			.icon {
@@ -194,14 +202,13 @@
 			.right-up {
 				padding: 20rpx;
 				background-color: #fff;
-				height: 300rpx;
 				width: 490rpx;
 			}
 			.right-down {
 				padding: 20rpx;
 				background-color: #fff;
 				margin-top: 40rpx;
-				height: calc(100vh - 188rpx - 360rpx);
+				height: calc(100vh - 190rpx - 360rpx);
 				width: 490rpx;
 			}
 			.cate-icon {
@@ -212,7 +219,6 @@
 					margin: 20rpx;
 					text-align: center;
 					width: 120rpx;
-					height: 200rpx;
 					image {
 						margin-top: 10rpx;
 						width: 90rpx;

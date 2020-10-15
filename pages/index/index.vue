@@ -12,17 +12,18 @@
 					</view>
 				</view>
 			</view>
-			<view class="home_header_navigation">
+			<!-- <view class="home_header_navigation">
 				<view v-for="(item, index) in headerNavigation" :key="item.name" class="home_navigation_bar" @click="navClick(index)">
 					<view>
 						<text :class="{isSelected: item.selected}">{{item.name}}</text>
 					</view>
 				</view>
-			</view>
+			</view> -->
 			<view class="big_img">
 				<image :src="bigImg" mode=""></image>
 			</view>
 		</view>
+		<view class="block"></view>
 		<view class="body">
 			<view class="icon_navigation">
 				<view v-for="item in iconNavigation" class="icon_navi_bar" :key="item.name" @click="iconNavClick(item.url)">
@@ -193,8 +194,11 @@
 				}
 			}
 		}
+		.block {
+			height: 120rpx;
+		}
 		.body {
-			margin-top: 170rpx;
+			
 			.icon_navigation {
 				display: flex;
 				height: 150rpx;

@@ -152,9 +152,9 @@
 						background-color: $uni-color-primary;
 						border-radius: 50%;
 						color: #fff;
-						height: 55rpx;
-						width: 55rpx;
-						line-height: 55rpx;
+						height: 45rpx;
+						width: 45rpx;
+						line-height: 45rpx;
 						font-size: 20rpx;
 					}
 				}

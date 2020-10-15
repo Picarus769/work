@@ -1,38 +1,32 @@
 <template>
 	<view class="container">
-		<view class="header">
-			<view class="header_left">
-				<image src="../../static/images/Roulette1.png" mode="" class="header_left_image"></image>
+		<view v-if="isLogin">
+			<view class="header">
+				<view class="header_left">
+					<image src="../../static/images/Roulette1.png" mode="" class="header_left_image"></image>
+				</view>
+				<view class="header_center">
+					<view>用户名</view>
+					<view class="gray_font">店铺编号:726840795</view>
+				</view>
+				<view class="header_right">
+					<view class="gray_font">基本信息 ></view>
+				</view>
 			</view>
-			<view class="header_center">
-				<view>用户名</view>
-				<view class="gray_font">店铺编号:726840795</view>
-			</view>
-			<view class="header_right">
-				<view class="gray_font">基本信息 ></view>
+		</view>
+		<view v-else>
+			<view class="header">
+				<view class="login_btn" @click="loginClick">点击登录</view>
 			</view>
 		</view>
 		<view class="main">
 			<view class="button_area">
-				<view class="button">
-					<embed :src="config.myOrder.icon" type="" class="button_icon">
-					<view class="button_name">{{config.myOrder.message}}</view>
-					<embed :src="$constData.arrowIcon1" type="" class="button_icon arrow_icon">
-				</view>
-				<view class="button">
-					<embed :src="config.accountFunds.icon" type="" class="button_icon">
-					<view class="button_name">{{config.accountFunds.message}}</view>
-					<embed :src="$constData.arrowIcon1" type="" class="button_icon arrow_icon">
-				</view>
-				<view class="button">
-					<embed :src="config.myPoints.icon" type="" class="button_icon">
-					<view class="button_name">{{config.myPoints.message}}</view>
-					<embed :src="$constData.arrowIcon1" type="" class="button_icon arrow_icon">
+				<view v-for="item in config" :key="item.message">
+					<view class="button">
+						<image :src="item.icon" type="" class="button_icon">
+						<view class="button_name">{{item.message}}</view>
+						<image :src="$constData.arrowIcon1" type="" class="button_icon arrow_icon">
 					</view>
-				<view class="button">
-					<embed :src="config.settings.icon" type="" class="button_icon">
-					<view class="button_name">{{config.settings.message}}</view>
-					<embed :src="$constData.arrowIcon1" type="" class="button_icon arrow_icon">
 				</view>
 			</view>
 			<view class="deadline"></view>
@@ -49,10 +43,17 @@
 		},
 		data() {
 			return {
-				config: {}
+				config: {},
+				isLogin: false
 			}
 		},
-		methods: {},
+		methods: {
+			loginClick() {
+				uni.navigateTo({
+					url: '../login/login'
+				})
+			}
+		},
 		onLoad() {
 			this.config = this.$constData.profileConfig
 			console.log(this.config)
@@ -71,7 +72,18 @@
 			justify-content: space-around;
 			color: #000;
 			border-bottom: 1px solid #c8c7cc;
-
+			.login_btn {
+				margin: auto;
+				width: 200rpx;
+				height: 70rpx;
+				border: 1px solid $uni-color-primary;
+				color: $uni-color-primary;
+				border-radius: 0.5em;
+				text-align: center;
+				line-height: 70rpx;
+				font-size: 32rpx;
+			}
+			
 			.header_left {
 				width: 125rpx;
 				height: 100%;

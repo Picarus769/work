@@ -10,6 +10,8 @@ Vue.config.productionTip = false
 Vue.prototype.$constData = $constData
 Vue.prototype.$myRequest = $myRequest
 
+
+
 App.mpType = 'app'
 
 const app = new Vue({

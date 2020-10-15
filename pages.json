@@ -38,6 +38,10 @@
             "path" : "pages/chat/chat",
             "style" : {}
         }
+        ,{
+            "path" : "pages/cate/category_list",
+            "style" : {}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
@@ -66,10 +70,10 @@
 				"selectedIconPath":"static/images/message_active.svg"
 			},
 			{
-				"text":"订单",
+				"text":"购物车",
 				"pagePath":"pages/cart/cart",
-				"iconPath":"static/images/form.svg",
-				"selectedIconPath":"static/images/form_active.svg"
+				"iconPath":"static/images/cart1.svg",
+				"selectedIconPath":"static/images/cart_active.svg"
 			},
 			{
 				"text":"我的",
