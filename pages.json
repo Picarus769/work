@@ -42,6 +42,30 @@
             "path" : "pages/cate/category_list",
             "style" : {}
         }
+        ,{
+            "path" : "pages/profile/settings",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/order/order",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/profile/myOrder",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/profile/myPoints",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/profile/shopServe",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/profile/accountFunds",
+            "style" : {}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

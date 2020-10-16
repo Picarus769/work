@@ -6,7 +6,7 @@
 					<image src="../../static/images/Roulette1.png" mode="" class="header_left_image"></image>
 				</view>
 				<view class="header_center">
-					<view>用户名</view>
+					<view>{{userInfo.name}}</view>
 					<view class="gray_font">店铺编号:726840795</view>
 				</view>
 				<view class="header_right">
@@ -20,15 +20,7 @@
 			</view>
 		</view>
 		<view class="main">
-			<view class="button_area">
-				<view v-for="item in config" :key="item.message">
-					<view class="button">
-						<image :src="item.icon" type="" class="button_icon">
-						<view class="button_name">{{item.message}}</view>
-						<image :src="$constData.arrowIcon1" type="" class="button_icon arrow_icon">
-					</view>
-				</view>
-			</view>
+			<menuList :config="config"></menuList>
 			<view class="deadline"></view>
 		</view>
 		
@@ -36,15 +28,16 @@
 </template>
 
 <script>
-	
+	import menuList from '../../components/menu/menu.vue'
 	export default {
 		components: {
-			
+			menuList
 		},
 		data() {
 			return {
 				config: {},
-				isLogin: false
+				isLogin: false,
+				userInfo: null,
 			}
 		},
 		methods: {
@@ -117,29 +110,7 @@
 		.main {
 			background-color: $uni-grey-bg-color;
 			
-			.button {
-				margin: 20rpx 0;
-				height: 100rpx;
-				background-color: #fff;
-				.button_icon {
-					margin: 25rpx;
-					vertical-align: middle;
-					width: 50rpx;
-					height: 50rpx;
-				}
-				.arrow_icon {
-					position: absolute;
-					right: 20rpx;
-					margin: 35rpx;
-					width: 30rpx;
-					height: 30rpx;
-				}
-				.button_name {
-					display: inline-block;
-					height: 100rpx;
-					line-height: 100rpx;
-				}
-			}
+			
 			.deadline {
 				height: 5rpx;
 				width: 100%;

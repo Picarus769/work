@@ -9,7 +9,7 @@
 			<view class="info">
 				<view class="describe">{{productDetail.name}}</view>
 				<view class="share">
-					<embed :src="config.shareIcon" type="">
+					<image :src="config.shareIcon" type="">
 					<view>分享</view>
 				</view>
 			</view>
@@ -53,8 +53,17 @@
 								<image :src="currentAttr.itemPic" mode=""></image>
 								<view class="info">
 									<view class="name">{{currentAttr.name}}</view>
-									<view class="price">￥{{currentAttr.price}}</view>
+									<view class="price">￥{{selectCount === 0 ? currentAttr.price : totalPrice}}</view>
 									<view class="count">库存：{{currentAttr.count ? currentAttr.count : 0}}</view>
+								</view>
+							</view>
+							<view class="popup_attr">
+								<view v-for="item in productDetail.productItemDtos"
+											:key="item.id"
+											class="attr_item"
+											@click="selectAttr(item.id)"
+											>
+									<view type="default" size="mini" :class="{is_selected: item.id===currentAttr.id}">{{item.name}}</view>
 								</view>
 							</view>
 							<view class="select_count">
@@ -66,7 +75,7 @@
 								</view>
 							</view>
 						</view>
-						<button type="default">完成</button>
+						<button type="default" @click="attrChecked">完成</button>
 					</view>
 				</pop-menu>
 			</view>
@@ -75,7 +84,7 @@
 			<view class="title">
 				<view class="left">{{config.comment}}({{productDetail.comment.length}})</view>
 				<view class="right">{{config.allComment}}
-				<embed :src="$constData.arrowIcon2" type=""></view>
+				<image :src="$constData.arrowIcon2" type=""></view>
 			</view>
 		</view>
 		<view class="shop area">
@@ -131,8 +140,8 @@
 				</navigator>
 			</view>
 			<view class="right">
-				<view class="add_cart">加入购物车</view>
-				<view class="buy_now">立即购买</view>
+				<view class="add_cart" @click="addCart">加入购物车</view>
+				<view class="buy_now" @click="buyClick(currentAttr,selectCount)">立即购买</view>
 			</view>
 		</view>
 	</view>
@@ -150,7 +159,7 @@
 		data() {
 			return {
 				specClass: 'none', // 商品参数弹窗
-				attrIndex: 0,
+				attrId: 0,
 				productDetail: {},
 				config: config.detailConfig,
 				attrSelected: false,
@@ -160,27 +169,55 @@
 		},
 		computed: {
 			currentAttr() {
-				return this.productDetail.productItemDtos[this.attrIndex]
+				return this.productDetail.productItemDtos.filter((item) => this.attrId == item.id)[0]
+			},
+			totalPrice() {
+				return this.currentAttr.price * this.selectCount
 			}
 		},
 		methods: {
-			
+			//加入购物车
+			addCart() {
+				const product = {}
+				product.image = this.currentAttr.itemPic
+				product.title = this.currentAttr.name
+				product.desc = this.currentAttr.info
+				product.price = this.currentAttr.price
+				product.iid = this.currentAttr.id
+				this.$store.dispatch('addCart', product).then(res => {
+					uni.showToast({
+						title: res
+					})
+					// this.$toast.show(res, 1500)
+				})
+			},
+			buyClick(currentAttr,selectCount) {
+				uni.navigateTo({
+					url: '/pages/order/order',
+					//不知道为什么不好使
+					// success(res) {
+					// 	res.eventChannel.emit('transmitProduct', {data: {product:currentAttr, count:selectCount}})
+					// }
+				})
+			},
 			//增加数量
 			increment() {
 				if(this.selectCount >= this.currentAttr.count) return
 				this.selectCount++
-				console.log(this.selectCount)
 			},
+			//减少数量
 			decrement() {
 				if(this.selectCount === 0) return
 				this.selectCount--
-				console.log(this.selectCount)
 			},
-			//减少数量
+			attrChecked() {
+				this.specClass = 'none';
+			},
 			//规格关闭
 			hideService() {
 				this.specClass = 'none';
 			},
+			
 			//规格窗口开启
 			toggleSpec(row) {
 				if (!this.productDetail) return;
@@ -206,10 +243,10 @@
 				}
 			},
 			//选择规格
-			selectAttr(event) {
+			selectAttr(id) {
 				this.attrSelected = true
-				this.attrIndex = event.detail.value
-				console.log(event)
+				this.attrId = id
+				console.log(this.currentAttr)
 			},
 			//阻止冒泡
 			stopPrevent() {}
@@ -250,24 +287,25 @@
 				price3: 18.15,
 				comment: [],
 				productItemDtos: [
-						{
-							"name": "属性1",
-							"price": 20,
-							"info": "产品1属性1",
-							"productId": 16,
-							"itemPic": 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2165531883,1410252634&fm=26&gp=0.jpg',
-							"id": 1
-						},
-						{
-							"name": "属性2",
-							"price": 30,
-							"info": "产品2属性2",
-							"productId": 16,
-							"itemPic": 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2165531883,1410252634&fm=26&gp=0.jpg',
-							"id": 2
-						}
+					{
+						"name": "属性1",
+						"price": 20,
+						"info": "产品1属性1",
+						"productId": 16,
+						"itemPic": 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2165531883,1410252634&fm=26&gp=0.jpg',
+						"id": 1
+					},
+					{
+						"name": "属性2",
+						"price": 30,
+						"info": "产品2属性2",
+						"productId": 16,
+						"itemPic": 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2165531883,1410252634&fm=26&gp=0.jpg',
+						"id": 2
+					}
 				],
 			}
+			this.attrId = this.productDetail.productItemDtos[0].id
 		}
 	}
 </script>
@@ -306,7 +344,7 @@
 					width: 120rpx;
 					height: 120rpx;
 					font-size: 20rpx;
-					embed {
+					image {
 						width: 70rpx;
 						height: 70rpx;
 					}
@@ -386,6 +424,26 @@
 						}
 					}
 				}
+				.popup_attr {
+					display: flex;
+					
+					.attr_item {
+						
+						view {
+							display: inline-block;
+							padding: 10rpx 20rpx;
+							margin: 10rpx;
+							border-radius: 0.5em;
+							font-size: 30rpx;
+							background-color: $uni-grey-bg-color;
+						}
+						.is_selected {
+							background-color: #ccc;
+						}
+					}
+					
+				}
+				
 				.select_count {
 					margin-top: 20rpx;
 					height: 80rpx;
@@ -417,9 +475,9 @@
 				.right {
 					display: inline-block;
 					position: absolute;
-					right: 20rpx;
+					right: 50rpx;
 					color: $uni-color-primary;
-					embed {
+					image {
 						width: 20rpx;
 						height: 20rpx;
 					}
@@ -440,7 +498,7 @@
 					}
 				}
 				.center {
-					width: 380rpx;
+					width: 360rpx;
 					vertical-align: top;
 					display: inline-block;
 					font-weight: 600;

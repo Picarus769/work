@@ -37,6 +37,8 @@
 	</view>
 </template>
 <script>
+	import data from '@/data/cate/cate.js'
+	
 	export default {
 		data() {
 			return {
@@ -62,132 +64,40 @@
 		onLoad() {
 			this.lebalUp = this.$constData.lebalUp
 			this.lebalDown = this.$constData.lebalDown
-			this.cate = [
-			{
-				id: 0,
-				message: '热门推荐',
-				cateList: {
-					online: [
-						{
-							id: 0,
-							name: '直播特卖',
-							img: ''
-						},
-						{
-							id: 1,
-							name: '直播特卖',
-							img: ''
-						},
-						{
-							id: 2,
-							name: '直播特卖',
-							img: ''
-						}
-					],
-					address:[
-						{
-							id: 3,
-							name: '直播特卖',
-							img: ''
-						},
-						{
-							id: 4,
-							name: '直播特卖',
-							img: ''
-						},
-						{
-							id: 5,
-							name: '直播特卖',
-							img: ''
-						},
-						{
-							id: 6,
-							name: '直播特卖',
-							img: ''
-						}
-					]
-				},
-			},
-			{
-				id: 1,
-				message: '热门推荐',
-				cateList: {
-					online: [
-						{
-							id: 0,
-							name: '直播特卖',
-							img: ''
-						},
-						{
-							id: 1,
-							name: '直播特卖',
-							img: ''
-						},
-						{
-							id: 2,
-							name: '直播特卖',
-							img: ''
-						}
-					],
-					address:[
-						{
-							id: 3,
-							name: '直播特卖',
-							img: ''
-						},
-						{
-							id: 4,
-							name: '直播特卖',
-							img: ''
-						},
-						{
-							id: 5,
-							name: '直播特卖',
-							img: ''
-						},
-						{
-							id: 6,
-							name: '直播特卖',
-							img: ''
-						},
-						{
-							id: 7,
-							name: '直播特卖',
-							img: ''
-						}
-					]
-				},
-			}
-			],
+			this.cate = data.temp
 			this.currentCate = this.cate[this.selectedId].cateList
 		}
 	}
 </script>
 
 <style lang="scss">
+	
 	.cate {
 		background-color: $uni-grey-bg-color;
-		height: calc(100vh - 190rpx);
+		height: calc(100vh - 188rpx);
 		display: flex;
 		.left {
 			background-color: #fff;
 			width: 180rpx;
-			height: calc(100vh - 200rpx);
+			height: calc(100vh - 188rpx);
 			.selected {
 				background-color: $uni-grey-bg-color;
 			}
 			view {
+				
 				width: 180rpx;
 				height: 100rpx;
 				text-align: center;
 				line-height: 100rpx;
-				font-size: 36rpx;
+				font-size: 32rpx;
 			}
 		}
 		.right {
 			display: flex;
 			flex-direction: column;
-			width: 600rpx;
+			height: calc(100vh - 188rpx);
+			overflow: hidden;
+			width: 580rpx;
 			padding: 20rpx;
 			.icon {
 				width: 50rpx;
