@@ -3,7 +3,7 @@
 		<view class="header">
 			<view v-for="item in config" :key='item.name' class="nav_bar">
 				<view class="icon" :class="item.bgColor">
-					<embed :src="item.icon" type="">
+					<image :src="item.icon" type="">
 				</view>
 				<view>{{item.name}}</view>
 			</view>
@@ -74,7 +74,7 @@
 					height: 80rpx;
 					border-radius: 50%;
 					vertical-align: middle;
-					embed {
+					image {
 						margin-top: 10rpx;
 						vertical-align: middle;
 						text-align: center;
@@ -84,7 +84,7 @@
 				}
 				view {
 					color: $uni-grey-font-color;
-					font-size: 10rpx;
+					font-size: 28rpx;
 					height: 60rpx;
 					line-height: 60rpx;
 				}

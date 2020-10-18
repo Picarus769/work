@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="Roulette_header-bar">
-			<embed src="../../static/images/Roulette_total.svg">
+			<image src="../../static/images/Roulette_total.svg">
 			<text>余额积分:</text>
 			<text>{{total}}</text>
 		</view>
@@ -18,11 +18,11 @@
 			<image src="../../static/images/Roulette_pointer.png" mode="" class="Roulette_container_image2"></image>
 		</view>
 		<view class="Roulette_footer">
-			<embed src="../../static/images/Roulette_menu.svg">
+			<image src="../../static/images/Roulette_menu.svg">
 			<view class="Roulette_footer_start" v-on:click="clickBtn">
                 {{flag ? "开始抽奖" : "未开始"}}
 			</view>
-			<embed src="../../static/images/Roulette_timer.svg">
+			<image src="../../static/images/Roulette_timer.svg">
 		</view>
 	</view>
 </template>
@@ -70,7 +70,7 @@
 		justify-content: space-around;
 		color: $uni-color-primary;
 
-		embed {
+		image {
 			width: 45rpx;
 			height: 45rpx;
 		}
@@ -140,7 +140,7 @@
 			font-weight: bold;
 			color: $uni-color-warning;
 		}
-		embed{
+		image{
 			width: 50rpx;
 			height: 50rpx;
 		}

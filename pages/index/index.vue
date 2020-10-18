@@ -8,7 +8,7 @@
 				<view class="header_right">
 					<view class="input">
 						<input type="text">
-						<embed src="../../static/images/search.svg" class="search" type="">
+						<image src="../../static/images/search.svg" class="search" type="">
 					</view>
 				</view>
 			</view>
@@ -74,6 +74,7 @@
 			}
 		},
 		onLoad() {
+			this.getLocation()
 			this.lebalText = this.$constData.lebalText
 			this.headerNavigation = this.$constData.homeNavigation
 			this.iconNavigation = this.$constData.homeIconNavigation
@@ -113,6 +114,10 @@
 			]
 		},
 		methods: {
+			getLocation() {
+				// console.log(this.$store.state.location)
+				
+			},
 			navClick(index) {
 				console.log(index)
 			},
@@ -153,7 +158,7 @@
 						border-radius: 1em;
 						height: 54rpx;
 						padding: 5rpx;
-						embed {
+						image {
 							width: 40rpx;
 							height: 40rpx;
 						}

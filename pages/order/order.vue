@@ -171,8 +171,12 @@
 					}
 				}
 				.down {
-					font-size: 20rpx;
+					display: -webkit-box;
+					-webkit-box-orient: vertical;
+					-webkit-line-clamp: 1;
+					text-overflow: ellipsis;
 					overflow: hidden;
+					font-size: 20rpx;
 					height: 50rpx;
 				}
 			}

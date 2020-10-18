@@ -3,67 +3,113 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"navigationBarTitleText": ""
 			}
 		}
         ,{
             "path" : "pages/profile/profile",
-            "style" : {}
+            "style" : {
+							"navigationBarTitleText": "我的"
+						}
         }
         ,{
             "path" : "pages/message/message",
-            "style" : {}
+            "style" : {
+							"navigationBarTitleText": "消息"
+						}
         }
         ,{
             "path" : "pages/cate/cate",
-            "style" : {}
+            "style" : {
+							"navigationBarTitleText": "分类"
+						}
         },
 		{
 			"path" : "pages/cart/cart",
-			"style" : {}
+			"style" : {
+				"navigationBarTitleText": "购物车"
+			}
 		}
         ,{
             "path" : "pages/index/Roulette",
-            "style" : {}
+            "style" : {
+							"navigationBarTitleText": "大转盘"
+						}
         },
 				{
 					"path" : "pages/index/conscribe",
-					"style" : {}
+					"style" : {
+						"navigationBarTitleText": "加入我们"
+					}
 				}
         ,{
             "path" : "pages/detail/detail",
-            "style" : {}
+            "style" : {
+							"navigationBarTitleText": "详情"
+						}
         }
         ,{
             "path" : "pages/chat/chat",
-            "style" : {}
+            "style" : {
+							"navigationBarTitleText": "客服"
+						}
         }
         ,{
             "path" : "pages/cate/category_list",
-            "style" : {}
+            "style" : {
+							"navigationBarTitleText": ""
+						}
         }
         ,{
             "path" : "pages/profile/settings",
-            "style" : {}
+            "style" : {
+							"navigationBarTitleText": "设置"
+						}
         }
         ,{
             "path" : "pages/order/order",
-            "style" : {}
+            "style" : {
+							"navigationBarTitleText": "提交订单"
+						}
         }
         ,{
             "path" : "pages/profile/myOrder",
-            "style" : {}
+            "style" : {
+							"navigationBarTitleText": "我的订单"
+						}
         }
         ,{
             "path" : "pages/profile/myPoints",
-            "style" : {}
+            "style" : {
+							"navigationBarTitleText": "我的积分"
+						}
         }
         ,{
             "path" : "pages/profile/shopServe",
-            "style" : {}
+            "style" : {
+							"navigationBarTitleText": "商家服务"
+						}
         }
         ,{
             "path" : "pages/profile/accountFunds",
+            "style" : {
+							"navigationBarTitleText": ""
+						}
+        }
+        ,{
+            "path" : "pages/profile/baseInfo",
+            "style" : {
+							"navigationBarTitleText": "基本信息"
+						}
+        }
+        ,{
+            "path" : "pages/profile/address",
+            "style" : {
+							"navigationBarTitleText": "填写地址"
+						}
+        }
+        ,{
+            "path" : "pages/index/shopLocation",
             "style" : {}
         }
     ],

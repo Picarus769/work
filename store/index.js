@@ -9,6 +9,9 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+		isLogin: false,
+		location: null,
+		userInfo: {},
 		cartList: []
   },
   mutations,

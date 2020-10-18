@@ -6,10 +6,10 @@
 					<image src="../../static/images/Roulette1.png" mode="" class="header_left_image"></image>
 				</view>
 				<view class="header_center">
-					<view>{{userInfo.name}}</view>
-					<view class="gray_font">店铺编号:726840795</view>
+					<view>昵称</view>
+					<!-- <view class="gray_font">店铺编号:726840795</view> -->
 				</view>
-				<view class="header_right">
+				<view class="header_right" @click="infoClick">
 					<view class="gray_font">基本信息 ></view>
 				</view>
 			</view>
@@ -40,16 +40,23 @@
 				userInfo: null,
 			}
 		},
+		
 		methods: {
 			loginClick() {
 				uni.navigateTo({
 					url: '../login/login'
+				})
+			},
+			infoClick() {
+				uni.navigateTo({
+					url: '/pages/profile/baseInfo'
 				})
 			}
 		},
 		onLoad() {
 			this.config = this.$constData.profileConfig
 			console.log(this.config)
+			this.isLogin = true
 		}
 	}
 </script>
@@ -93,7 +100,7 @@
 				flex-direction: column;
 				justify-content: space-around;
 				.gray_font{
-					font-size: 12rpx;
+					font-size: 28rpx;
 					color: #c8c7cc;
 				}
 			}
@@ -102,7 +109,7 @@
 				display: flex;
 				align-items: center;
 				.gray_font{
-					font-size: 12rpx;
+					font-size: 28rpx;
 					color: #c8c7cc;
 				}
 			}

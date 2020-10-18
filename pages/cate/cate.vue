@@ -11,7 +11,7 @@
 		<view class="right" scroll-y="true" >
 			<view class="right-up">
 				<view>
-					<embed class="icon" :src="lebalUp.icon" type="">
+					<image class="icon" :src="lebalUp.icon" type="">
 					<view class="lebal">{{lebalUp.message}}</view>
 				</view>
 				<view class="cate-icon">
@@ -23,7 +23,7 @@
 			</view>
 			<view class="right-down">
 				<view>
-					<embed class="icon" :src="lebalDown.icon" type="">
+					<image class="icon" :src="lebalDown.icon" type="">
 					<view class="lebal">{{lebalDown.message}}</view>
 				</view>
 				<view class="cate-icon">
@@ -71,20 +71,21 @@
 </script>
 
 <style lang="scss">
-	
-	.cate {
+	page {
 		background-color: $uni-grey-bg-color;
-		height: calc(100vh - 188rpx);
+	}
+	.cate {
+		
+		
 		display: flex;
 		.left {
 			background-color: #fff;
 			width: 180rpx;
-			height: calc(100vh - 188rpx);
+			height: calc(100vh - 94px);
 			.selected {
 				background-color: $uni-grey-bg-color;
 			}
 			view {
-				
 				width: 180rpx;
 				height: 100rpx;
 				text-align: center;
@@ -93,12 +94,13 @@
 			}
 		}
 		.right {
+			height: calc(100vh - 94px);
 			display: flex;
 			flex-direction: column;
-			height: calc(100vh - 188rpx);
 			overflow: hidden;
-			width: 580rpx;
+			box-sizing: border-box;
 			padding: 20rpx;
+			
 			.icon {
 				width: 50rpx;
 				height: 50rpx;
@@ -110,15 +112,16 @@
 				height: 50rpx;
 			}
 			.right-up {
+				
 				padding: 20rpx;
 				background-color: #fff;
 				width: 490rpx;
 			}
 			.right-down {
+				flex: 1;
 				padding: 20rpx;
 				background-color: #fff;
 				margin-top: 40rpx;
-				height: calc(100vh - 190rpx - 360rpx);
 				width: 490rpx;
 			}
 			.cate-icon {
