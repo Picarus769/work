@@ -87,7 +87,7 @@
 				<image :src="$constData.arrowIcon2" type=""></view>
 			</view>
 		</view>
-		<view class="shop area">
+		<view class="shop area" @click="shopClick">
 			<view class="shop_info">
 				<view class="left">
 					<image :src="$constData.defaultImg" mode=""></image>
@@ -247,6 +247,12 @@
 				this.attrSelected = true
 				this.attrId = id
 				console.log(this.currentAttr)
+			},
+			//点击商家
+			shopClick() {
+				uni.navigateTo({
+					url: '/pages/shop/shop'
+				})
 			},
 			//阻止冒泡
 			stopPrevent() {}

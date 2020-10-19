@@ -1,237 +1,166 @@
 <template>
-	<view>
-		<view class="yt-list">
-			<view class="yt-list-cell b-b">
-				<view class="cell-tit clamp"><text class="red_color">*</text>省市区</view>
-				<text class="cell-tip" @click="toggleMaskLocation()">
-					<text class="choose-text">{{addressByPcrs}}</text>
-					<text class="iconfont icon-xiangxia"></text>
-				</text>
+	<view class="address">
+		<view class="address_item" v-for="item in address" :key="item.id">
+			<view>
+				<text>{{item.userName}}</text><text>{{item.phone}}</text>
 			</view>
-			<view class="yt-list-cell b-b">
-				<view class="cell-tit clamp"><text class="red_color"></text>电话</view>
-				<text class="cell-tip">
-					<input type="text" value="" v-model="phone"/>
-				</text>
+			<view>
+				{{item.provinceName}}  {{item.cityName}}  {{item.countieName}}
 			</view>
-			<view class="yt-list-cell b-b">
-				<view class="cell-tit clamp"><text class="red_color"></text>详细地址</view>
-				<text class="cell-tip">
-					<input type="text" value="" v-model="info"/>
-				</text>
+			<view>
+				{{item.info}}
+			</view>
+			<view class="btn_area">
+				<view class="left" :class="{isOften: item.isOften}" @click="setOften(item.id, item.isOften)">
+					<image 
+					:src="item.isOften ? '../../static/images/check_active.svg' : '../../static/images/check.svg'"
+					mode=""
+					></image>
+					设为默认
+				</view>
+				<view class="center"></view>
+				<view class="right">
+					<text @click="deleteAddress(item.id)">删除</text>
+					<text @click="changeAddress(item.id)">修改</text>
+				</view>
 			</view>
 		</view>
-		
-		<!-- <text class="notice">
-			<text style="color: red;">*</text>
-			根据地区查找附近商家，省区市为必选项。
-		</text> -->
-		<button type="default" @click="submit">提交</button>
-		<gk-city
-			:headtitle="headtitle"
-			:provincedata="provincedata"
-			:data="selfData"
-			mode="cityPicker"
-            ref="cityPicker"
-            @funcvalue="getpickerParentValue"
-            :pickerSize="3"></gk-city>
+		<button type="default" @click="btnClick">
+			添加收货地址
+		</button>
 	</view>
 </template>
 
 <script>
-	import provinceData from '@/common/city.data.js';
 	export default {
 		data() {
 			return {
-				provincedata:[
-					{
-					text:'北京市',
-					value:'1'
-					}
-				],
-				selfData:provinceData,
-				headtitle:"请选择所在地",
-				addressByPcrs:"请选择所在地",
-				provinceId: -1,
-				cityId: -1,
-				countiesId: -1,
-				info: '',
-				phone: null,
+				userInfo: {
+					id: 1
+				},
+				address: []
 			}
 		},
-		computed: {
-		},
-		// onBackPress() {
-		// 	if(this.$store.state.location == null) {
-		// 		uni.navigateTo({
-		// 			url: '/pages/profile/address',
-		// 			success() {
-		// 				uni.showToast({
-		// 					title: 'ss'
-		// 				})
-		// 			}
-		// 		})
-		// 	}
-		// },
-		methods: {
+		onLoad() {
+			this.getAddress()
 			
-			toggleMaskLocation(){
-				this.$refs["cityPicker"].show();
-			},
-			getpickerParentValue(data){
-				this.provincedata=data;
-				this.addressByPcrs=data[0].text+" "+data[1].text+" "+data[2].text;
-				this.provinceId = data[0].value
-				this.cityId = data[1].value
-				this.countiesId = data[2].value
-			},
-			async submit() {
+		},
+		methods: {
+			async deleteAddress(id) {
 				const res = await this.$myRequest({
-					url: 'api/Address',
-					method: 'POST',
+					url: 'api/Address/' + id,
+					method : 'DELETE'
+				})
+				.then(() => {
+					
+					this.getAddress()
+				})
+			},
+			changeAddress(id) {
+				uni.navigateTo({
+					url: '/pages/profile/setAddress?id='+ id
+				})
+			},
+			async getAddress() {
+				const res = await this.$myRequest({
+					url: 'api/Address?UserId=' + this.userInfo.id
+				})
+				this.address = res.data.data
+				console.log(this.address)
+			},
+			async setOften(id, isOften) {
+				if (isOften) {
+					uni.showToast({
+						title: '已设为默认'
+					})
+					return
+				}
+				const res = await this.$myRequest({
+					url: 'api/Address/ChangeOften',
+					method : 'POST',
 					data: {
-						"id": 0,
-						"provinceId": parseInt(this.provinceId),
-						"cityId": parseInt(this.cityId),
-						"countiesId": parseInt(this.countiesId),
-						"info": this.info,
-						"userId": 1,
-						"phone": this.phone,
+						"id": id,
 						"isOften": true
 					}
-				}).then(res => console.log(res))
+				})
+				.then(() => {
+					for (let value of this.address) {
+						if (value.isOften === true && value.id != id) {
+						  return this.$myRequest({
+								url: 'api/Address/ChangeOften',
+								method : 'POST',
+								data: {
+									"id": value.id,
+									"isOften": false
+								}
+							})
+							value.isOften = false
+						}
+					}
+				})
+				.then(() => {
+					this.getAddress()
+				})
+				
+				
+			},
+			btnClick() {
+				uni.navigateTo({
+					url: '/pages/profile/setAddress'
+				})
 			}
 		}
 	}
 </script>
+
 <style lang="scss" scoped>
+page {
+	background-color: $uni-grey-bg-color;
+}
+.address {
+	
+	.address_item {
+		margin-bottom: 20rpx;
+		background-color: #fff;
+		padding: 20rpx 20rpx 0 20rpx;
+		font-size: 28rpx;
+		.btn_area {
+			border-top: 1px solid #eee;
+			margin-top: 10rpx;
+			height: 80rpx;
+			display: flex;
+			line-height: 80rpx;
+			.isOften {
+				color: #FE3F13;
+			}
+			.left {
+				flex: 1;
+				
+				image {
+					vertical-align: middle;
+					width: 35rpx;
+					height: 35rpx;
+				}
+			}
+			.center {
+				flex: 1;
+			}
+			.right {
+				flex: 1;
+				display: flex;
+				text {
+					text-align: center;
+					color: #ccc;
+					flex: 1;
+				}
+			}
+		}
+	}
 	button {
-		margin: 30rpx;
+		margin-top: 80rpx;
+		color: #fff;
+		font-size: 34rpx;
+		background-color: #FE3F13;
 	}
-	// .notice {
-	// 	margin: 30rpx;
-	// 	font-size: 24rpx;
-	// 	color: $font-color-disabled;
-	// }
-.yt-list {
-		background: #fff;
-	}
-	.yt-list-cell-warnning{
-		display: flex;
-		padding: 10rpx 30rpx 10rpx 40rpx;
-		color: red;
-	}
-	.yt-list-cell {
-		display: flex;
-		align-items: center;
-		padding: 6px 12px 6px 17px;
-		line-height: 70rpx;
-		position: relative;
-		&.cell-hover {
-			background: #fafafa;
-		}
-
-		&.b-b:after {
-			left: 30rpx;
-			right: 30rpx;
-			
-		}
-		.gray{
-			flex: 1;
-			font-size: 28rpx;
-			margin-right: 10rpx;
-			height: 25px;
-			line-height: 20px;
-			color: gray;
-		}
-		.cell-icon {
-			height: 32rpx;
-			width: 32rpx;
-			font-size: 28rpx;
-			color: #fff;
-			text-align: center;
-			line-height: 32rpx;
-			background: #f85e52;
-			border-radius: 4rpx;
-			margin-right: 12rpx;
-
-			&.hb {
-				background: #ffaa0e;
-			}
-
-			&.lpk {
-				background: #3ab54a;
-			}
-
-		}
-
-		.cell-more {
-			align-self: center;
-			font-size: 28rpx;
-			color: #000;
-			margin-left: 8rpx;
-			margin-right: -10rpx;
-		}
-
-		.cell-tit {
-			flex: 1;
-			font-size: 14px;
-			color: #000;
-			margin-right: 10rpx;
-		}
-		.money{
-			
-			color: red;
-			font-weight: bold;
-			margin-left: 10px;
-		}
-		.picker-class{
-			display: inline-block;
-		}
-		.cell-tip {
-			font-size: 14px;
-			color: #000;
-			flex-direction: column;
-			&.disabled {
-				color: #000;
-			}
-
-			&.active {
-				color: $uni-color-primary;
-			}
-			&.red{
-				color: #000;
-			}
-		}
-
-		&.desc-cell {
-			.cell-tit {
-				max-width: 90rpx;
-			}
-		}
-
-		.desc {
-			flex: 1;
-			font-size: 14px;
-			color: #000;
-		}
-	}
-	.b-b:after, .b-t:after {
-	    position: absolute;
-	    z-index: 3;
-		bottom: 0;
-	    left: 0;
-	    right: 0;
-	    height: 0;
-	    content: '';
-	    -webkit-transform: scaleY(0.5);
-	    -ms-transform: scaleY(0.5);
-	    transform: scaleY(0.5);
-	    border-bottom: 1px solid #E4E7ED;
-	}
-	.red_color{
-		color: red;
-		display: inline-flex;
-		padding-right: 6px;
-	}
+}
 </style>

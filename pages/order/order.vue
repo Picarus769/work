@@ -42,18 +42,18 @@
 				
 			</view>
 		</view>
-		<pop-menu 
+		<!-- <pop-menu 
 			title="积分抵扣"
 			@hide="hideService"
 			:specClass="specClass"
 			@show="toggleSpec"
 			 class="score_area"
 			>
-			
-		</pop-menu>
+		</pop-menu> -->
 		<view class="points area">
-			<image src="../../static/images/score.svg" mode=""></image>
+			<image class="point_icon" src="../../static/images/score.svg" mode=""></image>
 			<text>可用积分抵扣</text>
+			<image class="check" @click="checkClick" :src="isChecked? '../../static/images/check_active.svg' : '../../static/images/check.svg'" mode=""></image>
 		</view>
 		<view class="bottom-bar">
 			<view class="btn">
@@ -75,39 +75,44 @@
 		},
 		data() {
 			return {
+				isChecked: false,
 				product: null,
-				count: null
+				count: null,
+				specClass: 'none'
 			}
 		},
 		methods: {
-			//规格关闭
-			hideService() {
-				this.specClass = 'none';
-			},
-			//规格窗口开启
-			toggleSpec(row) {
-				if (!this.productDetail) return;
-				if (this.specClass === 'show') {
-					this.currentStock = row.stock;
-					this.currentSkuPrice = row.price;
-					this.currentSkuName = row.skuName;
-					this.currentCartCount = row.cartCount;
-					const skuId = row.skuId;
+			checkClick() {
+				this.isChecked = !this.isChecked
+			}
+			// //规格关闭
+			// hideService() {
+			// 	this.specClass = 'none';
+			// },
+			// //规格窗口开启
+			// toggleSpec(row) {
+			// 	if (!this.productDetail) return;
+			// 	if (this.specClass === 'show') {
+			// 		this.currentStock = row.stock;
+			// 		this.currentSkuPrice = row.price;
+			// 		this.currentSkuName = row.skuName;
+			// 		this.currentCartCount = row.cartCount;
+			// 		const skuId = row.skuId;
 					
-					// if (this.cartType === 'cart') {
-					// 	this.handleCartItemCreate(skuId);
-					// } else if (this.cartType === 'buy') {
-					// 	this.buy(skuId);
-					// }
-					// this.cartType = null;
-					this.specClass = 'hide';
-					setTimeout(() => {
-						this.specClass = 'none';
-					}, 250);
-				} else if (this.specClass === 'none') {
-					this.specClass = 'show';
-				}
-			},
+			// 		// if (this.cartType === 'cart') {
+			// 		// 	this.handleCartItemCreate(skuId);
+			// 		// } else if (this.cartType === 'buy') {
+			// 		// 	this.buy(skuId);
+			// 		// }
+			// 		// this.cartType = null;
+			// 		this.specClass = 'hide';
+			// 		setTimeout(() => {
+			// 			this.specClass = 'none';
+			// 		}, 250);
+			// 	} else if (this.specClass === 'none') {
+			// 		this.specClass = 'show';
+			// 	}
+			// },
 		},
 		onLoad() {
 			this.product = {
@@ -145,10 +150,13 @@
 			overflow: hidden;
 			.left {
 				display: inline-block;
+				
 				height: 100rpx;
 				width: 80rpx;
 				line-height: 100rpx;
+				
 				image {
+					
 					vertical-align: middle;
 					width: 60rpx;
 					height: 60rpx;
@@ -186,6 +194,7 @@
 				height: 100rpx;
 				line-height: 100rpx;
 				image{
+					
 					width: 30rpx;
 					height: 30rpx;
 				}
@@ -199,6 +208,7 @@
 					margin-right: 20rpx;
 					vertical-align: top;
 					image {
+						border-radius: 0.5em;
 						width: 150rpx;
 						height: 150rpx;
 					}
@@ -226,7 +236,7 @@
 			}
 		}
 		.points {
-			image {
+			.point_icon {
 				width: 50rpx;
 				height: 50rpx;
 				vertical-align: middle;
@@ -235,6 +245,12 @@
 				font-size: 30rpx;
 				height: 50rpx;
 				line-height: 50rpx;
+			}
+			.check {
+				width: 30rpx;
+				height: 30rpx;
+				vertical-align: middle;
+				margin-left: 400rpx;
 			}
 		}
 		.bottom-bar {

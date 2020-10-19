@@ -103,13 +103,25 @@
 						}
         }
         ,{
-            "path" : "pages/profile/address",
+            "path" : "pages/profile/setAddress",
             "style" : {
 							"navigationBarTitleText": "填写地址"
 						}
         }
         ,{
             "path" : "pages/index/shopLocation",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/shop/shop",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/profile/address",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/profile/address",
             "style" : {}
         }
     ],

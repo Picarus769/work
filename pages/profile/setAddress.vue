@@ -1,0 +1,232 @@
+<template>
+	<view>
+		<view class="yt-list">
+			<view class="yt-list-cell b-b">
+				<view class="cell-tit clamp"><text class="red_color">*</text>省市区</view>
+				<text class="cell-tip" @click="toggleMaskLocation()">
+					<text class="choose-text">{{addressByPcrs}}</text>
+					<text class="iconfont icon-xiangxia"></text>
+				</text>
+			</view>
+			<view class="yt-list-cell b-b">
+				<view class="cell-tit clamp"><text class="red_color"></text>电话</view>
+				<text class="cell-tip">
+					<input type="text" value="" v-model="phone"/>
+				</text>
+			</view>
+			<view class="yt-list-cell b-b">
+				<view class="cell-tit clamp"><text class="red_color"></text>详细地址</view>
+				<text class="cell-tip">
+					<input type="text" value="" v-model="info"/>
+				</text>
+			</view>
+		</view>
+		
+		<!-- <text class="notice">
+			<text style="color: red;">*</text>
+			根据地区查找附近商家，省区市为必选项。
+		</text> -->
+		<button type="default" @click="submit">提交</button>
+		<gk-city
+			:headtitle="headtitle"
+			:provincedata="provincedata"
+			:data="selfData"
+			mode="cityPicker"
+            ref="cityPicker"
+            @funcvalue="getpickerParentValue"
+            :pickerSize="3"></gk-city>
+	</view>
+</template>
+
+<script>
+	import provinceData from '@/common/city.data.js';
+	export default {
+		data() {
+			return {
+				provincedata:[
+					{
+					text:'北京市',
+					value:'1'
+					}
+				],
+				selfData:provinceData,
+				headtitle:"请选择所在地",
+				addressByPcrs:"请选择所在地",
+				provinceId: -1,
+				cityId: -1,
+				countiesId: -1,
+				info: '',
+				phone: null,
+				changeId: null
+			}
+		},
+		computed: {
+		},
+		onLoad(options) {
+			if (options.id) {
+				this.changeId = options.id
+			}
+			
+		},
+		methods: {
+			
+			toggleMaskLocation(){
+				this.$refs["cityPicker"].show();
+			},
+			getpickerParentValue(data){
+				this.provincedata=data;
+				this.addressByPcrs=data[0].text+" "+data[1].text+" "+data[2].text;
+				this.provinceId = data[0].value
+				this.cityId = data[1].value
+				this.countiesId = data[2].value
+			},
+			async submit() {
+				const res = await this.$myRequest({
+					url: 'api/Address',
+					method: 'POST',
+					data: {
+						"id": 0,
+						"provinceId": parseInt(this.provinceId),
+						"cityId": parseInt(this.cityId),
+						"countiesId": parseInt(this.countiesId),
+						"info": this.info,
+						"userId": 1,
+						"phone": this.phone,
+						"isOften": true
+					}
+				}).then(res => console.log(res))
+			}
+		}
+	}
+</script>
+<style lang="scss" scoped>
+	button {
+		margin: 30rpx;
+	}
+	// .notice {
+	// 	margin: 30rpx;
+	// 	font-size: 24rpx;
+	// 	color: $font-color-disabled;
+	// }
+.yt-list {
+		background: #fff;
+	}
+	.yt-list-cell-warnning{
+		display: flex;
+		padding: 10rpx 30rpx 10rpx 40rpx;
+		color: red;
+	}
+	.yt-list-cell {
+		display: flex;
+		align-items: center;
+		padding: 6px 12px 6px 17px;
+		line-height: 70rpx;
+		position: relative;
+		&.cell-hover {
+			background: #fafafa;
+		}
+
+		&.b-b:after {
+			left: 30rpx;
+			right: 30rpx;
+			
+		}
+		.gray{
+			flex: 1;
+			font-size: 28rpx;
+			margin-right: 10rpx;
+			height: 25px;
+			line-height: 20px;
+			color: gray;
+		}
+		.cell-icon {
+			height: 32rpx;
+			width: 32rpx;
+			font-size: 28rpx;
+			color: #fff;
+			text-align: center;
+			line-height: 32rpx;
+			background: #f85e52;
+			border-radius: 4rpx;
+			margin-right: 12rpx;
+
+			&.hb {
+				background: #ffaa0e;
+			}
+
+			&.lpk {
+				background: #3ab54a;
+			}
+
+		}
+
+		.cell-more {
+			align-self: center;
+			font-size: 28rpx;
+			color: #000;
+			margin-left: 8rpx;
+			margin-right: -10rpx;
+		}
+
+		.cell-tit {
+			flex: 1;
+			font-size: 14px;
+			color: #000;
+			margin-right: 10rpx;
+		}
+		.money{
+			
+			color: red;
+			font-weight: bold;
+			margin-left: 10px;
+		}
+		.picker-class{
+			display: inline-block;
+		}
+		.cell-tip {
+			font-size: 14px;
+			color: #000;
+			flex-direction: column;
+			&.disabled {
+				color: #000;
+			}
+
+			&.active {
+				color: $uni-color-primary;
+			}
+			&.red{
+				color: #000;
+			}
+		}
+
+		&.desc-cell {
+			.cell-tit {
+				max-width: 90rpx;
+			}
+		}
+
+		.desc {
+			flex: 1;
+			font-size: 14px;
+			color: #000;
+		}
+	}
+	.b-b:after, .b-t:after {
+	    position: absolute;
+	    z-index: 3;
+		bottom: 0;
+	    left: 0;
+	    right: 0;
+	    height: 0;
+	    content: '';
+	    -webkit-transform: scaleY(0.5);
+	    -ms-transform: scaleY(0.5);
+	    transform: scaleY(0.5);
+	    border-bottom: 1px solid #E4E7ED;
+	}
+	.red_color{
+		color: red;
+		display: inline-flex;
+		padding-right: 6px;
+	}
+</style>
