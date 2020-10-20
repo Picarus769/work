@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-		<view v-if="isLogin">
+		<view v-if="userInfo">
 			<view class="header">
 				<view class="header_left">
 					<image src="../../static/images/Roulette1.png" mode="" class="header_left_image"></image>
@@ -36,7 +36,6 @@
 		data() {
 			return {
 				config: {},
-				isLogin: false,
 				userInfo: null,
 			}
 		},
@@ -55,8 +54,7 @@
 		},
 		onLoad() {
 			this.config = this.$constData.profileConfig
-			console.log(this.config)
-			this.isLogin = true
+			this.userInfo = this.$store.state.userInfo
 		}
 	}
 </script>

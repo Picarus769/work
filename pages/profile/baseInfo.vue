@@ -56,7 +56,7 @@
 		//第一次加载
 		onLoad() {
 			this.avatar = this.userInfo.avatar || "../../static/images/avatar.svg";
-			this.nickname = this.userInfo.nickname || "默认";
+			this.nickname = this.userInfo.name || "默认";
 			// this.phone = this.userInfo.phone || "";
 		},
 		//页面显示
@@ -90,7 +90,26 @@
 				})
 			},
 			//提交
-			onSubmit() {
+			async login() {
+				const res = await this.$myRequest({
+					url: 'api/User?Id=2&OpenId'
+				})
+				console.log(res.data.data[0])
+				this.$store.commit('setUserInfo', res.data.data[0]);
+			},
+			async submitInfo() {
+				const res = await this.$myRequest({
+					url: 'api/User',
+					method: 'POST',
+					data: {
+						"id": this.$store.state.userInfo.id,
+						"name": this.nickname,
+						"avatar": this.avatar
+					}
+				})
+				console.log(res)
+			},
+			async onSubmit() {
 				if (this.avatar == '') {
 					uni.showToast({
 						title: '请上传头像',
@@ -105,10 +124,17 @@
 					});
 					return;
 				}
-				let httpData = {
-					nickname: this.nickname,
-					avatar: this.avatar
-				};
+				// const response = this.uploadImgToBase64(this.avatar)
+				// console.log(response)
+				console.log(this.nickname, this.avatar)
+			},	
+				// this.submitInfo()
+				// this.login()
+				// let httpData = {
+				// 	nickname: this.nickname,
+				// 	avatar: this.avatar
+				// };
+				
 				// if(this.phone){
 				// 	if (!this.$base.phoneRegular.test(this.phone)) {
 				// 		uni.showToast({
@@ -121,19 +147,28 @@
 				// 		httpData.phone = this.phone;
 				// 	}
 				// }
-				this.$http
-					.post('api/common/v1/edit_user_info', httpData)
-					.then(res => {
-						this.setUserInfo({
-							nickname: this.nickname,
-							avatar: this.avatar,
-							// phone: this.phone || this.userInfo.phone
-						});
-						uni.showToast({
-							title: '修改成功！'
-						});
-					});
-			},
+				// this.$http
+				// 	.post('api/common/v1/edit_user_info', httpData)
+				// 	.then(res => {
+				// 		this.setUserInfo({
+				// 			nickname: this.nickname,
+				// 			avatar: this.avatar,
+				// 			// phone: this.phone || this.userInfo.phone
+				// 		});
+				// 		uni.showToast({
+				// 			title: '修改成功！'
+				// 		});
+				// 	});
+			
+			// uploadImgToBase64 (file) {
+			//   const reader = new FileReader()
+			// 	console.log(file)
+			//   reader.onload = function () { // 图片转base64完成后返回reader对象
+			// 		console.log(reader)
+			//   }
+			//   reader.readAsDataURL(file)
+			// },
+			 
 			addressClick() {
 				uni.navigateTo({
 					url: '/pages/profile/address'

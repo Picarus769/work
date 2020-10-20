@@ -1,6 +1,7 @@
 export default {
 	//储存用户信息
 	setUserInfo(state, data) {
+		console.log("保存信息")
 		if (data) {
 			console.log("保存信息")
 			state.isLogin = true
@@ -55,8 +56,9 @@ export default {
 			}
 		
 	},
-	//获取地址
+	//保存地址
 	setLocation(state, location) {
+		console.log("已保存地址")
 		state.location = location
 		uni.setStorageSync('location', state.location);
 	},

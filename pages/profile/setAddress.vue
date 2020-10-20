@@ -221,7 +221,7 @@
 						"cityId": this.prefecturesRange[this.selectCityValue].id,
 						"countiesId": this.countiesRange[this.selectCountiesValue].id,
 						"info": this.info,
-						"userId": 1,
+						"userId": this.$store.state.userInfo.id,
 						"phone": this.phone,
 						"isOften": false
 					}

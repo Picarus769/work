@@ -9,13 +9,14 @@
 			} else {
 				this.login()
 			}
+			this.getAddress()
 		},
 		onShow: function() {
-			// if(this.$store.state.location == null) {
-			// 	uni.navigateTo({
-			// 		url: '/pages/profile/address'
-			// 	})
-			// }
+			if(store.state.location.length === 0) {
+				uni.navigateTo({
+					url: '/pages/profile/setAddress'
+				})
+			}
 			console.log('App Show')
 		},
 		onHide: function() {
@@ -24,14 +25,18 @@
 		methods: {
 			async login() {
 				const res = await this.$myRequest({
-					url: 'api/User?Name=aaa&Id=2&OpenId'
+					url: 'api/User?Id=2&OpenId'
 				})
 				console.log(res.data.data[0])
 				store.commit('setUserInfo', res.data.data[0]);
-				let cookies = uni.getStorageSync('userInfo')
-				console.log(cookies)
-			}
-			
+			},
+			async getAddress() {
+				const res = await this.$myRequest({
+					url: 'api/Address?UserId=' + store.state.userInfo.id
+				})
+				console.log(res.data.data)
+				store.commit('setLocation', res.data.data)
+			},
 		}
 	}
 </script>

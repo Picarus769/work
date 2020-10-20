@@ -43,19 +43,20 @@
 		},
 		onLoad() {
 			// this.getAddress()
+			this.userInfo = this.$store.state.userInfo
 		},
 		onShow() {
 			this.getAddress()
 		},
 		methods: {
 			async deleteAddress(id, isOften) {
-				if (this.address.length === 1) {
-					uni.showToast({
-						title: '不能删除最后一条数据',
-						icon: 'none'
-					})
-					return
-				}
+				// if (this.address.length === 1) {
+				// 	uni.showToast({
+				// 		title: '不能删除最后一条数据',
+				// 		icon: 'none'
+				// 	})
+				// 	return
+				// }
 				const res = await this.$myRequest({
 					url: 'api/Address/' + id,
 					method : 'DELETE'
@@ -85,6 +86,7 @@
 				})
 				this.address = res.data.data
 				console.log(this.address)
+				this.$store.commit('setLocation', this.address)
 			},
 			async setOften(id, isOften) {
 				if (isOften) {
