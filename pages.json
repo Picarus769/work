@@ -124,6 +124,14 @@
             "path" : "pages/profile/address",
             "style" : {}
         }
+        ,{
+            "path" : "pages/profile/shopPoints",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/profile/rootPoints",
+            "style" : {}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

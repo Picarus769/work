@@ -1,16 +1,21 @@
 <template>
 	<view class="category_list">
 		<view class="header">
-			<view class="left">价格
+			<view class="left" @click="priceClick">价格
 				<view class="sort_icon">
 					<image :src="upSort ? sortIcon.active_icon : sortIcon.icon" mode="" class="up"></image>
 					<image :src="downSort ? sortIcon.active_icon : sortIcon.icon" mode=""></image>
 				</view>
 			</view>
-			<view class="center">热销</view>
-			<view class="right">上新</view>
+			<view class="center" @click="hotClick">热销</view>
+			<view class="right" @click="newClick">上新</view>
 		</view>
 		<view class="block"></view>
+		<wyb-popup ref="popup" type="top" height="200" width="" radius="6" :showCloseIcon="true">
+		    <view class="popup-content">
+		        我是里面的内容
+		    </view>
+		</wyb-popup>
 		<view class="list">
 			<goodsList :goods="goods"></goodsList>
 		</view>
@@ -18,12 +23,14 @@
 </template>
 
 <script>
+	import popup from '@/components/wyb-popup/wyb-popup.vue'
 	import goodsList from '@/components/goodsList/goodsList.vue';
 	import data from '@/data/cate/category_list.js'
 	
 	export default {
 		components: {
-			goodsList
+			goodsList,
+			popup
 		},
 		data() {
 			return {
@@ -37,7 +44,17 @@
 			}
 		},
 		methods: {
-			
+			priceClick() {
+				this.$refs.popup.show() // 显示
+			},
+			hotClick() {
+				
+			},
+			newClick() {
+				
+			},
+			// this.$refs.popup.show() // 显示
+			// this.$refs.popup.hide() // 隐藏
 		},
 		onLoad(options) {
 			this.goods = data.temp.data
@@ -81,7 +98,6 @@
 						width: 16rpx;
 						height: 16rpx;
 					}
-				
 				}
 			}
 			.center {

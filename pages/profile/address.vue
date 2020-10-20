@@ -2,17 +2,17 @@
 	<view class="address">
 		<view class="address_item" v-for="item in address" :key="item.id">
 			<view>
-				<text>{{item.userName}}</text><text>{{item.phone}}</text>
+				<text class="name">{{item.userName}}</text><text>{{item.phone}}</text>
 			</view>
 			<view>
-				{{item.provinceName}}  {{item.cityName}}  {{item.countieName}}
+				{{item.provinceName + '  ' + item.cityName + '  ' + item.countieName}}
 			</view>
 			<view>
 				{{item.info}}
 			</view>
 			<view class="btn_area">
 				<view class="left" :class="{isOften: item.isOften}" @click="setOften(item.id, item.isOften)">
-					<image 
+					<image
 					:src="item.isOften ? '../../static/images/check_active.svg' : '../../static/images/check.svg'"
 					mode=""
 					></image>
@@ -20,7 +20,7 @@
 				</view>
 				<view class="center"></view>
 				<view class="right">
-					<text @click="deleteAddress(item.id)">删除</text>
+					<text @click="deleteAddress(item.id, item.isOften)">删除</text>
 					<text @click="changeAddress(item.id)">修改</text>
 				</view>
 			</view>
@@ -42,17 +42,35 @@
 			}
 		},
 		onLoad() {
+			// this.getAddress()
+		},
+		onShow() {
 			this.getAddress()
-			
 		},
 		methods: {
-			async deleteAddress(id) {
+			async deleteAddress(id, isOften) {
+				if (this.address.length === 1) {
+					uni.showToast({
+						title: '不能删除最后一条数据',
+						icon: 'none'
+					})
+					return
+				}
 				const res = await this.$myRequest({
 					url: 'api/Address/' + id,
 					method : 'DELETE'
 				})
 				.then(() => {
-					
+					if (isOften) {
+						let tempId = null
+						for (let item of this.address) {
+							if (item.id != id) {
+								tempId = item.id
+								break
+							}
+						}
+						this.setOften(tempId, !isOften)
+					}
 					this.getAddress()
 				})
 			},
@@ -101,8 +119,6 @@
 				.then(() => {
 					this.getAddress()
 				})
-				
-				
 			},
 			btnClick() {
 				uni.navigateTo({
@@ -124,6 +140,9 @@ page {
 		background-color: #fff;
 		padding: 20rpx 20rpx 0 20rpx;
 		font-size: 28rpx;
+		.name {
+			margin-right: 100rpx;
+		}
 		.btn_area {
 			border-top: 1px solid #eee;
 			margin-top: 10rpx;

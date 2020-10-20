@@ -1,24 +1,56 @@
 <template>
 	<view>
 		<view class="yt-list">
-			<view class="yt-list-cell b-b">
+			<!-- <view class="yt-list-cell b-b">
 				<view class="cell-tit clamp"><text class="red_color">*</text>省市区</view>
 				<text class="cell-tip" @click="toggleMaskLocation()">
 					<text class="choose-text">{{addressByPcrs}}</text>
 					<text class="iconfont icon-xiangxia"></text>
 				</text>
+			</view> -->
+			<view class="container">
+				<!-- <view class="picker">
+					<gb-picker
+					 :provincesRange='provincesRange'
+					 :prefecturesRange='prefecturesRange'
+					 :countiesRange='countiesRange'
+					 @update="update"
+					 @change="change">
+					    <text>{{text}}</text>
+					 </gb-picker>
+				</view> -->
+				<view class="my_picker">
+					<picker mode="selector" :value="selectProvinceValue" :range="provincesName" @change="provinceChange">
+						<view>{{provincesRange[selectProvinceValue].name}}</view>
+					</picker>
+					<picker mode="selector" :value="selectCityValue" :range="prefecturesName" @change="cityChange">
+						<view>{{prefecturesRange[selectCityValue].name}}</view>
+					</picker>
+					<picker mode="selector" :value="selectCountiesValue" :range="countiesName" @change="countiesChange">
+						<view>{{countiesRange[selectCountiesValue].name}}</view>
+					</picker>
+				</view>
+				
+			  <!-- <view class="notice">
+			  	<text style="color: red;">*</text>
+			  	根据地区查找附近商家，省区市为必选项。
+			  </view> -->
+				<!-- <view class="btn">
+					<button type="default" size="mini">确认</button>
+				</view> -->
+				
 			</view>
 			<view class="yt-list-cell b-b">
 				<view class="cell-tit clamp"><text class="red_color"></text>电话</view>
-				<text class="cell-tip">
+				<view class="cell-tip">
 					<input type="text" value="" v-model="phone"/>
-				</text>
+				</view>
 			</view>
 			<view class="yt-list-cell b-b">
 				<view class="cell-tit clamp"><text class="red_color"></text>详细地址</view>
-				<text class="cell-tip">
+				<view class="cell-tip">
 					<input type="text" value="" v-model="info"/>
-				</text>
+				</view>
 			</view>
 		</view>
 		
@@ -27,14 +59,14 @@
 			根据地区查找附近商家，省区市为必选项。
 		</text> -->
 		<button type="default" @click="submit">提交</button>
-		<gk-city
+		<!-- <gk-city
 			:headtitle="headtitle"
 			:provincedata="provincedata"
 			:data="selfData"
 			mode="cityPicker"
             ref="cityPicker"
             @funcvalue="getpickerParentValue"
-            :pickerSize="3"></gk-city>
+            :pickerSize="3"></gk-city> -->
 	</view>
 </template>
 
@@ -43,15 +75,23 @@
 	export default {
 		data() {
 			return {
-				provincedata:[
-					{
-					text:'北京市',
-					value:'1'
-					}
-				],
-				selfData:provinceData,
-				headtitle:"请选择所在地",
-				addressByPcrs:"请选择所在地",
+				selectProvinceValue: 0,
+				provincesRange: [{name: '选择省',id: -1}],
+				selectCityValue: 0,
+				prefecturesRange: [{name:'选择市',id: -1}],
+				selectCountiesValue: 0,
+				countiesRange: [{name:'选择区',id: -1}],
+				addressData: [],
+				text: '',
+				// provincedata:[
+				// 	{
+				// 	text:'北京市',
+				// 	value:'1'
+				// 	}
+				// ],
+				// selfData:provinceData,
+				// headtitle:"请选择所在地",
+				// addressByPcrs:"请选择所在地",
 				provinceId: -1,
 				cityId: -1,
 				countiesId: -1,
@@ -61,40 +101,136 @@
 			}
 		},
 		computed: {
+			provincesName() {
+				let arr = []
+				for (let item of this.provincesRange) {
+					arr.push(item.name)
+				}
+				return arr
+			},
+			prefecturesName() {
+				let arr = []
+				for (let item of this.prefecturesRange) {
+					arr.push(item.name)
+				}
+				return arr
+			},
+			countiesName() {
+				let arr = []
+				for (let item of this.countiesRange) {
+					arr.push(item.name)
+				}
+				return arr
+			}
 		},
 		onLoad(options) {
 			if (options.id) {
 				this.changeId = options.id
 			}
-			
+			this.getProvinceRange()
 		},
 		methods: {
-			
-			toggleMaskLocation(){
-				this.$refs["cityPicker"].show();
+			provinceChange(e) {
+				this.selectProvinceValue = e.detail.value
+				this.getCityRange()
 			},
-			getpickerParentValue(data){
-				this.provincedata=data;
-				this.addressByPcrs=data[0].text+" "+data[1].text+" "+data[2].text;
-				this.provinceId = data[0].value
-				this.cityId = data[1].value
-				this.countiesId = data[2].value
+			cityChange(e) {
+				this.selectCityValue = e.detail.value
+				this.getCountiesRange()
 			},
+			countiesChange(e) {
+				this.selectCountiesValue = e.detail.value
+			},
+			// update (e) {
+			//     this.text = e.name.join('/')
+			// },
+			// change(e) {
+			//     console.log(e.code)
+			//     this.text = e.name.join('/')
+			// },
+			async getProvinceRange() {
+				const res = await this.$myRequest({
+					url: 'api/Counties?Name&Id=0'
+				})
+				this.addressData = res.data.data
+				console.log(this.addressData)
+				for (let counties of res.data.data) {
+					// this.countiesRange.push(counties.name)
+					// this.prefecturesRange.push(counties.city.name)
+					// let flag = this.provincesRange.some((item) => {
+					// 		return item.name === counties.city.provinceDto.name
+					// 	})
+					if (this.provincesRange.some((item) => {
+							return item.name === counties.city.provinceDto.name
+						})) return
+					this.provincesRange.push(counties.city.provinceDto)
+					console.log(this.provincesRange)
+				}
+			},
+			getCityRange() {
+				this.prefecturesRange = []
+				for (let counties of this.addressData) {
+					if(this.provincesRange[this.selectProvinceValue].name === counties.city.provinceDto.name) {
+						this.prefecturesRange.push(counties.city)
+					}
+				}
+				this.getCountiesRange()
+			},
+			getCountiesRange() {
+				this.countiesRange = []
+				for (let counties of this.addressData) {
+					if(this.prefecturesRange[this.selectCityValue].name === counties.city.name) {
+						this.countiesRange.push(counties)
+					}
+				}
+			},
+			// async getCityRange() {
+			// 	const res = await this.$myRequest({
+			// 		url: 'api/Province?Name&Id=0'
+			// 	})
+			// 	this.addressData = res.data.data
+			// 	for (let counties of res.data.data) {
+			// 		// this.countiesRange.push(counties.name)
+			// 		// this.prefecturesRange.push(counties.city.name)
+			// 		// this.provincesRange.push(counties.city.provinceDto.name)
+			// 	}
+			// },
+			// toggleMaskLocation(){
+			// 	this.$refs["cityPicker"].show();
+			// },
+			// getpickerParentValue(data){
+			// 	this.provincedata=data;
+			// 	this.addressByPcrs=data[0].text+" "+data[1].text+" "+data[2].text;
+			// 	this.provinceId = data[0].value
+			// 	this.cityId = data[1].value
+			// 	this.countiesId = data[2].value
+			// },
 			async submit() {
+				
+				// console.log(this.phone)
+				// console.log(this.provincesRange[this.selectProvinceValue].id)
+				// console.log(this.prefecturesRange[this.selectCityValue].id)
+				// console.log(this.countiesRange[this.selectCountiesValue].id)
+				
 				const res = await this.$myRequest({
 					url: 'api/Address',
 					method: 'POST',
 					data: {
-						"id": 0,
-						"provinceId": parseInt(this.provinceId),
-						"cityId": parseInt(this.cityId),
-						"countiesId": parseInt(this.countiesId),
+						"id": this.changeId ? parseInt(this.changeId) : 0,
+						"provinceId": this.provincesRange[this.selectProvinceValue].id,
+						"cityId": this.prefecturesRange[this.selectCityValue].id,
+						"countiesId": this.countiesRange[this.selectCountiesValue].id,
 						"info": this.info,
 						"userId": 1,
 						"phone": this.phone,
-						"isOften": true
+						"isOften": false
 					}
-				}).then(res => console.log(res))
+				}).then(res => {
+					console.log(res)
+					uni.navigateBack({
+						
+					})
+				})
 			}
 		}
 	}
@@ -108,6 +244,30 @@
 	// 	font-size: 24rpx;
 	// 	color: $font-color-disabled;
 	// }
+	.my_picker {
+		display: flex;
+		padding-right: 200rpx;
+		picker {
+			text-align: center;
+			flex: 1;
+		}
+	}
+	.picker {
+		background-color: $uni-grey-bg-color;
+		padding: 20rpx;
+		margin: 0 30rpx 30rpx;
+		border: 1px solid #ccc;
+		border-radius: 0.5em;
+		text-align: center;
+	}
+	.notice {
+		margin: 30rpx;
+		font-size: 24rpx;
+		color: $font-color-disabled;
+	}
+	.btn {
+		text-align: center;
+	}
 .yt-list {
 		background: #fff;
 	}
@@ -184,7 +344,7 @@
 			display: inline-block;
 		}
 		.cell-tip {
-			font-size: 14px;
+			font-size: 26px;
 			color: #000;
 			flex-direction: column;
 			&.disabled {

@@ -37,7 +37,6 @@
 				uni.navigateTo({
 					url
 				})
-				console.log(url)
 			}
 		}
 	}
