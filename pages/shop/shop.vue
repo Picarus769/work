@@ -2,11 +2,11 @@
 	<view class="shop">
 		<view class="info">
 			<view class="left">
-				<image :src="shopInfo.shopAvatar" mode=""></image>
+				<image :src="shopInfo.shopAvatar || '../../static/images/defaultImg.png'" mode=""></image>
 			</view>
 			<view class="right">
 				<view class="shop_name">{{shopInfo.name}}</view>
-				<view class="shop_address">{{shopInfo.addressInfo}}</view>
+				<view class="shop_address">{{shopInfo.adressInfo}}</view>
 			</view>
 		</view>
 		<view class="nav_bar">
@@ -14,7 +14,7 @@
 				{{item.message}}
 			</view>
 		</view>
-		<goods-list :goods="[]"></goods-list>
+		<goods-list :goods="products"></goods-list>
 	</view>
 </template>
 
@@ -26,8 +26,8 @@
 		},
 		data() {
 			return {
-				shopInfo: null,
-				product: [],
+				shopInfo: {},
+				products: [],
 				selectId: 0,
 				nav: [
 					{
@@ -55,18 +55,23 @@
 			}
 		},
 		onLoad() {
-			this.shopInfo = {
-				"name": "商店名称",
-				"adressId": 1,
-				"areaCate": 1,
-				"cost": 100,
-				"addressInfo": "地址",
-				"gps": "gps坐标",
-				"shopLevel": 1,
-				"staffsId": 1,
-				"staffName": "商家姓名",
-				"shopAvatar": null,
-				"id": 1
+			this.shopInfo = this.$store.state.shop
+			this.products = this.$store.state.products
+		},
+		computed: {
+			shop() {
+				return this.$store.state.shop
+			},
+			product() {
+				return this.$store.state.products
+			}
+		},
+		watch: {
+			shop() {
+				this.shopInfo = this.$store.state.shop
+			},
+			product() {
+				this.products = this.$store.state.products
 			}
 		}
 	}
@@ -84,7 +89,9 @@ page {
 		height: 120rpx;
 		.left {
 			display: inline-block;
+			margin-right: 20rpx;
 			image {
+				
 				width: 120rpx;
 				height: 120rpx;
 				border-radius: 50%;
@@ -95,13 +102,13 @@ page {
 			margin: 10rpx 0;
 			display: inline-block;
 			.shop_name {
-				height: 60rpx;
-				line-height: 60rpx;
+				height: 50rpx;
+				line-height: 50rpx;
 				font-size: 34rpx;
 			}
 			.shop_address{
-				height: 60rpx;
-				line-height: 60rpx;
+				height: 50rpx;
+				line-height: 50rpx;
 				font-size: 28rpx;
 			}
 		}

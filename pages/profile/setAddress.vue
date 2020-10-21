@@ -21,13 +21,13 @@
 				</view> -->
 				<view class="my_picker">
 					<picker mode="selector" :value="selectProvinceValue" :range="provincesName" @change="provinceChange">
-						<view>{{provincesRange[selectProvinceValue].name}}</view>
+						<view> <text>{{provincesRange[selectProvinceValue].name}}</text></view>
 					</picker>
 					<picker mode="selector" :value="selectCityValue" :range="prefecturesName" @change="cityChange">
-						<view>{{prefecturesRange[selectCityValue].name}}</view>
+						<view> <text>{{prefecturesRange[selectCityValue].name}}</text></view>
 					</picker>
 					<picker mode="selector" :value="selectCountiesValue" :range="countiesName" @change="countiesChange">
-						<view>{{countiesRange[selectCountiesValue].name}}</view>
+						<view><text>{{countiesRange[selectCountiesValue].name}}</text></view>
 					</picker>
 				</view>
 				
@@ -211,7 +211,7 @@
 				// console.log(this.provincesRange[this.selectProvinceValue].id)
 				// console.log(this.prefecturesRange[this.selectCityValue].id)
 				// console.log(this.countiesRange[this.selectCountiesValue].id)
-				
+				let isOften = this.$store.state.location.length === 0 ? true : false
 				const res = await this.$myRequest({
 					url: 'api/Address',
 					method: 'POST',
@@ -223,7 +223,7 @@
 						"info": this.info,
 						"userId": this.$store.state.userInfo.id,
 						"phone": this.phone,
-						"isOften": false
+						"isOften": isOften
 					}
 				}).then(res => {
 					console.log(res)
@@ -246,10 +246,14 @@
 	// }
 	.my_picker {
 		display: flex;
-		padding-right: 200rpx;
+		padding:20rpx 200rpx 20rpx 0;
 		picker {
 			text-align: center;
 			flex: 1;
+			// text {
+			// 	border-bottom: 1px solid $uni-color-primary;
+			// }
+			
 		}
 	}
 	.picker {
@@ -257,6 +261,7 @@
 		padding: 20rpx;
 		margin: 0 30rpx 30rpx;
 		border: 1px solid #ccc;
+		
 		border-radius: 0.5em;
 		text-align: center;
 	}

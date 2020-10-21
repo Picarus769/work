@@ -3,10 +3,10 @@
 		<view v-if="userInfo">
 			<view class="header">
 				<view class="header_left">
-					<image src="../../static/images/Roulette1.png" mode="" class="header_left_image"></image>
+					<image :src="userInfo.avatar ? userInfo.avatar : '../../static/images/Roulette1.png'" mode="" class="header_left_image"></image>
 				</view>
 				<view class="header_center">
-					<view>昵称</view>
+					<view>{{userInfo.name}}</view>
 					<!-- <view class="gray_font">店铺编号:726840795</view> -->
 				</view>
 				<view class="header_right" @click="infoClick">

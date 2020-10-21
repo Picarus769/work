@@ -1,8 +1,8 @@
 <template>
 	<view class="detail">
 		<swiper indicator-dots="true" autoplay="true">
-			<swiper-item v-for="item in productDetail.images" :key="item.id">
-				<image :src="item.url"></image>
+			<swiper-item v-for="(item,index) in infoPics" :key="item.index">
+				<image :src="'https://admin.counselor.hzrxkjgs.cn/'+item"></image>
 			</swiper-item>
 		</swiper>
 		<view class="header area">
@@ -14,7 +14,7 @@
 				</view>
 			</view>
 			<view class="price_area">
-				<view class="price1 price"><text>￥</text>{{productDetail.price1?productDetail.price1:'暂无'}}</view>
+				<view class="price1 price"><text>￥</text>{{productDetail.price?productDetail.price:'暂无'}}</view>
 				<view class="price2 price"><text>￥</text>{{productDetail.price2?productDetail.price2:'暂无'}}</view>
 				<view class="price3 price"><text>￥</text>{{productDetail.price3?productDetail.price3:'暂无'}}</view>
 			</view>
@@ -81,10 +81,13 @@
 			</view>
 		</view>
 		<view class="comment area">
-			<view class="title">
-				<view class="left">{{config.comment}}({{productDetail.comment.length}})</view>
+			<!-- <view class="title">
+				<view class="left">{{config.comment}}({{productDetail.comments.length}})</view>
 				<view class="right">{{config.allComment}}
 				<image :src="$constData.arrowIcon2" type=""></view>
+			</view> -->
+			<view class="comment_content">
+				
 			</view>
 		</view>
 		<view class="shop area" @click="shopClick">
@@ -106,8 +109,8 @@
 		</view>
 		<view class="split">——————宝贝详情——————</view>
 		<view class="detail_img">
-			<view v-for="item in productDetail.images" :key="item.id">
-				<image :src="item.url" mode=""></image>
+			<view v-for="(item, index) in infoPics" :key="index">
+				<image :src="'https://admin.counselor.hzrxkjgs.cn/'+item" mode=""></image>
 			</view>
 		</view>
 		<view class="block_area">
@@ -160,6 +163,7 @@
 			return {
 				specClass: 'none', // 商品参数弹窗
 				attrId: 0,
+				infoPics: [],
 				productDetail: {},
 				config: config.detailConfig,
 				attrSelected: false,
@@ -173,13 +177,21 @@
 			},
 			totalPrice() {
 				return this.currentAttr.price * this.selectCount
-			}
+			},
+			//监听点击商品
+			// productClick() {
+			// 	return this.$store.state.currentProduct
+			// }
+			
+		},
+		watch: {
+			
 		},
 		methods: {
 			//加入购物车
 			addCart() {
 				const product = {}
-				product.image = this.currentAttr.itemPic
+				product.image = 'https://admin.counselor.hzrxkjgs.cn/' + this.currentAttr.itemPic
 				product.title = this.currentAttr.name
 				product.desc = this.currentAttr.info
 				product.price = this.currentAttr.price
@@ -194,10 +206,10 @@
 			buyClick(currentAttr,selectCount) {
 				uni.navigateTo({
 					url: '/pages/order/order',
-					//不知道为什么不好使
-					// success(res) {
-					// 	res.eventChannel.emit('transmitProduct', {data: {product:currentAttr, count:selectCount}})
-					// }
+					
+					success(res) {
+						res.eventChannel.emit('acceptDataFromOpenerPage', {data: {product:currentAttr, count:selectCount}})
+					}
 				})
 			},
 			//增加数量
@@ -257,7 +269,11 @@
 			//阻止冒泡
 			stopPrevent() {}
 		},
-		onLoad(options) {
+		onLoad(option) {
+			const eventChannel = this.getOpenerEventChannel()
+			eventChannel.on('acceptDataFromOpenerPage', function(data) {
+			    this.productDetail = data.data
+			})
 			this.shopComment = [
 				{
 					name: '宝贝描述',
@@ -272,45 +288,48 @@
 					score: 4.8
 				}
 			]
-			this.productDetail = {
-				images: [
-					{
-						id: 0,
-						url: 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2165531883,1410252634&fm=26&gp=0.jpg',
-					},
-					{
-						id: 1,
-						url: 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2165531883,1410252634&fm=26&gp=0.jpg',
-					},
-					{
-						id: 2,
-						url: 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2165531883,1410252634&fm=26&gp=0.jpg',
-					},
-				],
-				name: '商品名称商品名称商品名称商品名称商品名称商品名称商品名称商品名称商品名称',
-				price1: 35.13,
-				price2: 15.23,
-				price3: 18.15,
-				comment: [],
-				productItemDtos: [
-					{
-						"name": "属性1",
-						"price": 20,
-						"info": "产品1属性1",
-						"productId": 16,
-						"itemPic": 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2165531883,1410252634&fm=26&gp=0.jpg',
-						"id": 1
-					},
-					{
-						"name": "属性2",
-						"price": 30,
-						"info": "产品2属性2",
-						"productId": 16,
-						"itemPic": 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2165531883,1410252634&fm=26&gp=0.jpg',
-						"id": 2
-					}
-				],
-			}
+			this.productDetail = this.$store.state.currentProduct
+			console.log(this.productDetail)
+			this.infoPics = this.productDetail.infoPic.split(',')
+			// this.productDetail = {
+			// 	images: [
+			// 		{
+			// 			id: 0,
+			// 			url: 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2165531883,1410252634&fm=26&gp=0.jpg',
+			// 		},
+			// 		{
+			// 			id: 1,
+			// 			url: 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2165531883,1410252634&fm=26&gp=0.jpg',
+			// 		},
+			// 		{
+			// 			id: 2,
+			// 			url: 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2165531883,1410252634&fm=26&gp=0.jpg',
+			// 		},
+			// 	],
+			// 	name: '商品名称商品名称商品名称商品名称商品名称商品名称商品名称商品名称商品名称',
+			// 	price: 35.13,
+			// 	price2: 15.23,
+			// 	price3: 18.15,
+			// 	comment: [],
+			// 	productItemDtos: [
+			// 		{
+			// 			"name": "属性1",
+			// 			"price": 20,
+			// 			"info": "产品1属性1",
+			// 			"productId": 16,
+			// 			"itemPic": 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2165531883,1410252634&fm=26&gp=0.jpg',
+			// 			"id": 1
+			// 		},
+			// 		{
+			// 			"name": "属性2",
+			// 			"price": 30,
+			// 			"info": "产品2属性2",
+			// 			"productId": 16,
+			// 			"itemPic": 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2165531883,1410252634&fm=26&gp=0.jpg',
+			// 			"id": 2
+			// 		}
+			// 	],
+			// }
 			this.attrId = this.productDetail.productItemDtos[0].id
 		}
 	}
@@ -401,8 +420,8 @@
 			.popup_content {
 				width: 100%;
 				height: auto;
+				box-sizing: border-box;
 				padding: 40rpx;
-				
 				.popup_info {
 					padding-bottom: 40rpx;
 					border-bottom: 1px solid #eee;
@@ -416,7 +435,7 @@
 						display: inline-block;
 						vertical-align: top;
 						padding-left: 40rpx;
-						width: 490rpx;
+						width: 450rpx;
 						height: 180rpx;
 						.name {
 							margin-bottom: 20rpx;
@@ -432,15 +451,14 @@
 				}
 				.popup_attr {
 					display: flex;
-					
+					flex-wrap: wrap;
 					.attr_item {
-						
 						view {
 							display: inline-block;
-							padding: 10rpx 20rpx;
+							padding: 10rpx;
 							margin: 10rpx;
 							border-radius: 0.5em;
-							font-size: 30rpx;
+							font-size: 22rpx;
 							background-color: $uni-grey-bg-color;
 						}
 						.is_selected {

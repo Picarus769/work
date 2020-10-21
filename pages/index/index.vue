@@ -8,7 +8,7 @@
 				<view class="header_right">
 					<view class="input">
 						<input type="text">
-						<image src="../../static/images/search.svg" class="search" type="">
+						<image src="../../static/images/search.svg" class="search" type="" @click="searchClick">
 					</view>
 				</view>
 			</view>
@@ -74,6 +74,7 @@
 			}
 		},
 		onLoad() {
+			console.log("aaa")
 			this.getLocation()
 			this.lebalText = this.$constData.lebalText
 			this.headerNavigation = this.$constData.homeNavigation
@@ -88,32 +89,35 @@
 					id: 1,
 					message: '玩转1688',
 					}
-			],
-			this.goodsList = [
-				{
-					id: 0,
-					message: '随便买点什么',
-					price: '10.1',
-					master: 'pcs',
-					images: 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2165531883,1410252634&fm=26&gp=0.jpg'
-				},
-				{
-					id: 1,
-					message: 'aaa',
-					price: '10.1',
-					master: 'pcs',
-					images: 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2165531883,1410252634&fm=26&gp=0.jpg'
-				},
-				{
-					id: 2,
-					message: 'aaa',
-					price: '10.1',
-					master: 'pcs',
-					images: 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2165531883,1410252634&fm=26&gp=0.jpg'
-				}
 			]
+			this.goodsList = this.$store.state.products
+			
+		},
+		onShow() {
+			// if (this.goodsList === []) {
+			// 	uni.navigateTo({
+			// 		url: 'pages/index/index'
+			// 	})
+			// }
+		},
+		computed: {
+		  isFollow () {
+		    return this.$store.state.products　　//需要监听的数据
+		  }
+		},
+		watch: {
+		  isFollow (newVal, oldVal) {
+				this.goodsList = this.$store.state.products
+				console.log(this.goodsList)
+		  }
 		},
 		methods: {
+			searchClick() {
+				uni.showToast({
+					title: '暂不支持搜索',
+					icon: 'none'
+				})
+			},
 			getLocation() {
 				// console.log(this.$store.state.location)
 				
@@ -122,6 +126,12 @@
 				console.log(index)
 			},
 			iconNavClick(url) {
+				if(url==='') {
+					uni.showToast({
+						title: '敬请期待',
+						icon: 'none'
+					})
+				}
 				uni.navigateTo({
 					url: url
 				})

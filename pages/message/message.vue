@@ -1,7 +1,7 @@
 <template>
 	<view class="message">
 		<view class="header">
-			<view v-for="item in config" :key='item.name' class="nav_bar">
+			<view v-for="item in config" :key='item.name' class="nav_bar" @click="itemClick">
 				<view class="icon" :class="item.bgColor">
 					<image :src="item.icon" type="">
 				</view>
@@ -9,7 +9,7 @@
 			</view>
 		</view>
 		<view class="middle_line"></view>
-		<view class="chat_list" v-for="item in messageList" :key="item.id">
+		<view class="chat_list" v-for="item in messageList" :key="item.id" @click="itemClick">
 			<view class="chat_item">
 				<view class="chat_left">
 					<image :src="item.portrait" mode=""></image>
@@ -36,7 +36,12 @@
 			}
 		},
 		methods: {
-			
+			itemClick() {
+				uni.showToast({
+					title: "功能尚未完成",
+					icon: "none"
+				})
+			}
 		},
 		onLoad() {
 			this.config = this.$constData.msgHeaderConfig
