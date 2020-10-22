@@ -9,10 +9,15 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+		shop: null,
 		location: [],
+		oftenAddress: null,
 		userInfo: {},
+		currentProduct: null,
+		products: [],
 		cartList: [],
-		cacheNameList: ["userInfo","location"]
+		cacheNameList: ["userInfo","location","staff"],
+		staff: null
   },
   mutations,
 	getters,

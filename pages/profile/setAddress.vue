@@ -206,31 +206,67 @@
 			// 	this.countiesId = data[2].value
 			// },
 			async submit() {
-				
+				if(this.provincesRange[this.selectProvinceValue].id === -1 || 
+						this.prefecturesRange[this.selectCityValue].id === -1 || 
+						this.countiesRange[this.selectCountiesValue].id === -1) {
+					uni.showToast({
+						title: '请选择正确的地址',
+						icon: "none"
+					})
+				} else {
+					console.log(this.provincesRange[this.selectProvinceValue].id)
+					let isFirst = this.$store.state.location.length === 0 ? true : false
+					const res = await this.$myRequest({
+						url: 'api/Address',
+						method: 'POST',
+						data: {
+							"id": this.changeId ? parseInt(this.changeId) : 0,
+							"provinceId": this.provincesRange[this.selectProvinceValue].id,
+							"cityId": this.prefecturesRange[this.selectCityValue].id,
+							"countiesId": this.countiesRange[this.selectCountiesValue].id,
+							"info": this.info,
+							"userId": this.$store.state.userInfo.id,
+							"phone": this.phone,
+							"isOften": isFirst
+						}
+					}).then(res => {
+						if(res === 0) {
+							uni.showToast({
+								title: '设置失败'
+							})
+							return
+						}
+						if(res === 1 || isFirst) {
+							let areaId = this.countiesRange[this.selectCountiesValue].id
+							let shopId = null
+							this.$myRequest({
+								url: 'api/Shop',
+								data: {
+											AreaId: areaId,
+											AreaCate: 3,
+										}
+								}
+							).then((res1) => {
+								console.log('商店信息', res1.data.data[0])
+								this.$store.commit('setShop', res1.data.data[0])
+								shopId = res1.data.data[0].id
+								const res2 = this.$myRequest({
+									url: 'api/ShopStore?shopId=' + shopId
+								})
+								console.log(res2.data.products)
+								store.commit('setProducts', res2.data.products)
+							})
+						}
+						uni.navigateBack({
+							
+						})
+					})
+				}
 				// console.log(this.phone)
 				// console.log(this.provincesRange[this.selectProvinceValue].id)
 				// console.log(this.prefecturesRange[this.selectCityValue].id)
 				// console.log(this.countiesRange[this.selectCountiesValue].id)
-				let isOften = this.$store.state.location.length === 0 ? true : false
-				const res = await this.$myRequest({
-					url: 'api/Address',
-					method: 'POST',
-					data: {
-						"id": this.changeId ? parseInt(this.changeId) : 0,
-						"provinceId": this.provincesRange[this.selectProvinceValue].id,
-						"cityId": this.prefecturesRange[this.selectCityValue].id,
-						"countiesId": this.countiesRange[this.selectCountiesValue].id,
-						"info": this.info,
-						"userId": this.$store.state.userInfo.id,
-						"phone": this.phone,
-						"isOften": isOften
-					}
-				}).then(res => {
-					console.log(res)
-					uni.navigateBack({
-						
-					})
-				})
+				
 			}
 		}
 	}

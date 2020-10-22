@@ -50,7 +50,7 @@
 					<view slot="popup" @click.stop="stopPrevent">
 						<view class="popup_content">
 							<view class="popup_info">
-								<image :src="currentAttr.itemPic" mode=""></image>
+								<image :src="currentAttr.itemPic?'https://admin.counselor.hzrxkjgs.cn/'+currentAttr.itemPic:$constData.defaultImg" mode=""></image>
 								<view class="info">
 									<view class="name">{{currentAttr.name}}</view>
 									<view class="price">￥{{selectCount === 0 ? currentAttr.price : totalPrice}}</view>
@@ -58,12 +58,12 @@
 								</view>
 							</view>
 							<view class="popup_attr">
-								<view v-for="item in productDetail.productItemDtos"
+								<view v-for="item in productDetail.shopStore_ProductItems"
 											:key="item.id"
 											class="attr_item"
 											@click="selectAttr(item.id)"
 											>
-									<view type="default" size="mini" :class="{is_selected: item.id===currentAttr.id}">{{item.name}}</view>
+									<view type="default" size="mini" :class="{is_selected: item.id===currentAttr.id}">{{item.productItemName}}</view>
 								</view>
 							</view>
 							<view class="select_count">
@@ -81,11 +81,11 @@
 			</view>
 		</view>
 		<view class="comment area">
-			<!-- <view class="title">
-				<view class="left">{{config.comment}}({{productDetail.comments.length}})</view>
+			<view class="title">
+				<view class="left">{{config.comment}}({{productDetail.comments?productDetail.comments.length : 0}})</view>
 				<view class="right">{{config.allComment}}
 				<image :src="$constData.arrowIcon2" type=""></view>
-			</view> -->
+			</view>
 			<view class="comment_content">
 				
 			</view>
@@ -173,7 +173,7 @@
 		},
 		computed: {
 			currentAttr() {
-				return this.productDetail.productItemDtos.filter((item) => this.attrId == item.id)[0]
+				return this.productDetail.shopStore_ProductItems.filter((item) => this.attrId == item.id)[0]
 			},
 			totalPrice() {
 				return this.currentAttr.price * this.selectCount
@@ -311,7 +311,7 @@
 			// 	price2: 15.23,
 			// 	price3: 18.15,
 			// 	comment: [],
-			// 	productItemDtos: [
+			// 	shopStore_ProductItems: [
 			// 		{
 			// 			"name": "属性1",
 			// 			"price": 20,
@@ -330,7 +330,7 @@
 			// 		}
 			// 	],
 			// }
-			this.attrId = this.productDetail.productItemDtos[0].id
+			this.attrId = this.productDetail.shopStore_ProductItems[0].id
 		}
 	}
 </script>

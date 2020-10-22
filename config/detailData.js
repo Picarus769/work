@@ -1,6 +1,6 @@
 export default {
 	detailConfig: {
-		price1: '原市场价',
+		price1: '原价',
 		price2: '会员价',
 		price3: '店铺复购价',
 		select: '选择',

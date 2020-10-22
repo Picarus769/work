@@ -107,10 +107,10 @@
 				}
 			}
 			.right {
-				
+				position: relative;
 				.count {
 					color: $font-color-disabled;
-					position: relative;
+					position: absolute;
 					right: 0;
 				}
 			}

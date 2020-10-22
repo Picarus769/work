@@ -21,7 +21,7 @@
 			<view class="shop_name"></view>
 			<view class="product_item">
 				<view class="left">
-					<image :src="product.itemPic?product.itemPic:'../../static/images/defaultImg.png'" mode=""></image>
+					<image :src="product.itemPic?'https://admin.counselor.hzrxkjgs.cn/'+product.itemPic:'../../static/images/defaultImg.png'" mode=""></image>
 				</view>
 				<view class="center">
 					<view class="product_message">
@@ -52,19 +52,21 @@
 		</pop-menu> -->
 		<view class="points area">
 			<image class="point_icon" src="../../static/images/score.svg" mode=""></image>
-			<text>可用店铺积分抵扣</text>
-			<image class="check" @click="checkClick" :src="isChecked? '../../static/images/check_active.svg' : '../../static/images/check.svg'" mode=""></image>
+			<text>可用店铺积分抵扣{{product.shopIntegral * userInfo.shopIntegral}}元</text>
+			<image class="check" @click="checkClick(0)" :src="shopIntChecked? '../../static/images/check_active.svg' : '../../static/images/check.svg'" mode=""></image>
 		</view>
 		<view class="points area">
 			<image class="point_icon" src="../../static/images/score.svg" mode=""></image>
-			<text>可用平台积分抵扣</text>
-			<image class="check" @click="checkClick" :src="isChecked? '../../static/images/check_active.svg' : '../../static/images/check.svg'" mode=""></image>
+			<text>可用平台积分抵扣{{product.integral * userInfo.integral}}元</text>
+			<image class="check" @click="checkClick(1)" :src="integralChecked? '../../static/images/check_active.svg' : '../../static/images/check.svg'" mode=""></image>
+		</view>
+		<view class="reIntegral">
+			本次可反平台积分{{product.reIntegral * count}}分,店铺积分{{product.reShopIntegral * count}}
 		</view>
 		<view class="bottom-bar">
 			<view class="btn" @click="submit">
 				提交订单
 			</view>
-			
 			<view class="price">{{totalPrice}}</view>
 			<view class="text">合计：</view>
 			<view class="count">共{{count}}件,</view>
@@ -80,21 +82,30 @@
 		},
 		data() {
 			return {
-				isChecked: false,
+				integralChecked: false,
+				shopIntChecked: false,
 				product: null,
 				count: null,
 				specClass: 'none',
-				address: {}
+				address: {},
+				userInfo: null
 			}
 		},
 		computed: {
 			totalPrice() {
-				return this.product.price * this.count
-			}
+				let shopIntPrice = this.shopIntChecked?this.product.shopIntegral * userInfo.shopIntegral:0
+				let intPrice = this.integralChecked?this.product.integral * userInfo.integral: 0
+				return this.product.price * this.count -shopIntPrice-intPrice
+			},
 		},
 		methods: {
-			checkClick() {
-				this.isChecked = !this.isChecked
+			checkClick(flag) {
+				if(flag === 0) {
+					this.shopIntChecked = !this.shopIntChecked
+				} else if (flag ===1) {
+					this.shopIntChecked = !this.integralChecked
+				}
+				// this.isChecked = !this.isChecked
 			},
 			addressClick() {
 				uni.navigateTo({
@@ -104,31 +115,32 @@
 			async submit() {
 				console.log(this.address.userId)
 				console.log(this.$store.state.shop.id)
-				console.log(this.totalPrice)
+				// console.log(this.totalPrice)
 				console.log(this.product.id)
 				console.log(this.count)
 				
-				// const res = await this.$myRequest({
-				// 	url: 'api/UserOrders',
-				// 	method: 'POST',
-				// 	data: {
-				// 		"userId": this.address.userId,
-				// 		"shopId": this.$store.state.shop.id,
-				// 		"payPrice": this.totalPrice,
-				// 		"activitieId": ,
-				// 		"useShopIntegral": ,
-				// 		"useIntegral": ,
-				// 		"productItems": [
-				// 			{
-				// 				"productItems": this.product.id,
-				// 				"count": this.count
-				// 			}
-				// 		]
-				// 	}
-				// })
+				const res = await this.$myRequest({
+					url: 'api/UserOrders',
+					method: 'POST',
+					data: {
+						"userId": this.address.userId,
+						"shopId": this.$store.state.shop.id,
+						// "payPrice": this.totalPrice,
+						// "activitieId": ,
+						"useShopIntegral": this.shopIntChecked,
+						"useIntegral": this.integral,
+						"productItems": [
+							{
+								"productItems": this.product.id,
+								"count": this.count
+							}
+						]
+					}
+				})
 			}
 		},
 		onLoad(option) {
+			this.userInfo = this.$store.state.userInfo
 			const eventChannel = this.getOpenerEventChannel()
 			eventChannel.on('acceptDataFromOpenerPage', data => {
 				console.log(data.data)
@@ -255,60 +267,64 @@
 						right: 0;
 					}
 				}
+				}
+				.distribution {
+					margin: 20rpx;
+					font-size: 28rpx;
+				}
 			}
-			.distribution {
-				margin: 20rpx;
-				font-size: 28rpx;
+			.points {
+				display: flex;
+				.point_icon {
+					width: 50rpx;
+					height: 50rpx;
+					vertical-align: middle;
+				}
+				text {
+					flex: 1;
+					font-size: 26rpx;
+					height: 50rpx;
+					line-height: 50rpx;
+				}
+				.check {
+					width: 40rpx;
+					height: 40rpx;
+					
+				}
 			}
-		}
-		.points {
-			display: flex;
-			.point_icon {
-				width: 50rpx;
-				height: 50rpx;
-				vertical-align: middle;
+			.reIntegral {
+				margin: 20rpx 30rpx;
+				font-size: 26rpx;
 			}
-			text {
-				flex: 1;
-				font-size: 30rpx;
-				height: 50rpx;
-				line-height: 50rpx;
-			}
-			.check {
-				width: 40rpx;
-				height: 40rpx;
-				
-			}
-		}
-		.bottom-bar {
-			background-color: #fff;
-			position: fixed;
-			width: 100%;
-			height: 100rpx;
-			bottom: 0;
-			display: flex;
-			flex-direction: row-reverse;
-			.btn {
-				height: 80rpx;
-				line-height: 80rpx;
-				background-color: #FE3F13;
-				color: #fff;
-				padding: 0 30rpx;
-				border-radius: 0.5em;
-				font-size: 30rpx;
-				margin: 10rpx;
-			}
-			view {
+			.bottom-bar {
+				background-color: #fff;
+				position: fixed;
+				width: 100%;
 				height: 100rpx;
-				line-height: 100rpx;
-			}
-			.price {
-				color: #FE3F13;
-			}
-			.count {
-				color: $font-color-disabled;
-				font-size: 20rpx;
+				bottom: 0;
+				display: flex;
+				flex-direction: row-reverse;
+				.btn {
+					height: 80rpx;
+					line-height: 80rpx;
+					background-color: #FE3F13;
+					color: #fff;
+					padding: 0 30rpx;
+					border-radius: 0.5em;
+					font-size: 30rpx;
+					margin: 10rpx;
+				}
+				view {
+					height: 100rpx;
+					line-height: 100rpx;
+				}
+				.price {
+					color: #FE3F13;
+				}
+				.count {
+					color: $font-color-disabled;
+					font-size: 20rpx;
+				}
 			}
 		}
-	}
-</style>
+	</style>

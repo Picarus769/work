@@ -1,10 +1,8 @@
 export default {
 	//储存用户信息
 	setUserInfo(state, data) {
-		console.log("保存信息")
 		if (data) {
 			console.log("保存信息")
-			state.isLogin = true
 			state.userInfo =  Object.assign({}, state.userInfo,data);
 			
 			uni.setStorageSync('userInfo', state.userInfo);
@@ -60,8 +58,38 @@ export default {
 	setLocation(state, location) {
 		console.log("已保存地址")
 		state.location = location
+		for (let item of location) {
+			if (item.isOften === true) {
+				state.oftenAddress = item
+				break
+			}
+		}
+		console.log('常用地址', state.oftenAddress)
 		uni.setStorageSync('location', state.location);
 	},
+	//保存商家
+	setStaff(state, staff) {
+		console.log("已保存商家")
+		state.staff = staff
+		uni.setStorageSync('staff', state.staff);
+	},
+	//保存商店
+	setShop(state, shop) {
+		console.log("已保存商店")
+		state.shop = shop
+		// uni.setStorageSync('staff', state.staff);
+	},
+	//保存商品
+	setProducts(state, products) {
+		console.log("已保存商品")
+		state.products = products
+	},
+	//保存点击的商品
+	setCurrentProduct(state, product) {
+		console.log('已保存点击的商品')
+		state.currentProduct = product
+	},
+	//订单商品
 	addItem(state, payload) {
 		payload.checked = false
 		state.cartList.push(payload)

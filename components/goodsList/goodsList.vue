@@ -1,14 +1,14 @@
 <template>
 	<view>
 		<view class="goods">
-			<view v-for="item in goods" :key="item.id" class="goodsItem" @click="itemClick(item.id)">
-				<image :src="item.homePic" mode=""></image>
+			<view v-for="item in goods" :key="item.id" class="goodsItem" @click="itemClick(item)">
+				<image :src="'https://admin.counselor.hzrxkjgs.cn/' + item.homePic" mode=""></image>
 				<view class="message">{{item.name}}</view>
 				<view class="price">{{"￥" + item.price}}</view>
-				<view class="master">
-					<!-- <image :src="item.portrait" mode="aspectFit" class="portrait"></image> -->
+				<!-- <view class="master">
+					<image :src="item.portrait" mode="aspectFit" class="portrait"></image>
 					<view>{{item.master}}</view>
-				</view>
+				</view> -->
 			</view>
 		</view>
 	</view>
@@ -18,9 +18,19 @@
 	export default {
 		props:['goods'],
 		methods: {
-			itemClick(id) {
+			itemClick(item) {
+				this.$store.commit('setCurrentProduct', item)
 				uni.navigateTo({
-					url: '/pages/detail/detail?id=' + id
+					url: '/pages/detail/detail?id=' + item.id,
+					// events: {
+					//     // 为指定事件添加一个监听器，获取被打开页面传送到当前页面的数据
+					//     acceptDataFromOpenedPage: function(data) {
+					//       console.log(data)
+					//     },
+					// },
+					success(res) {
+						res.eventChannel.emit('acceptDataFromOpenerPage', { data: item })
+					}
 				})
 			}
 		}
