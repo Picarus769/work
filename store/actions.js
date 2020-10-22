@@ -7,7 +7,7 @@ export default {
 				context.commit('addCounter', oldProduct)
 				resolve('商品数量+1')
 			} else {
-				payload.count = 1
+				
 				context.commit('addItem', payload)
 				resolve('添加商品')
 			}

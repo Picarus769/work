@@ -34,9 +34,16 @@
 		},
 		methods: {
 			itemClick(url) {
-				uni.navigateTo({
-					url
-				})
+				if (url === '') {
+					uni.showToast({
+						title: '敬请期待',
+						icon: 'none'
+					})
+				} else {
+					uni.navigateTo({
+						url
+					})
+				}
 			}
 		}
 	}

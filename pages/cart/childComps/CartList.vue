@@ -2,7 +2,8 @@
 	<view class="cart-list">
 		<cart-list-item v-for="(item, index) in cartList"
 			:key="index"
-			:item="item" />
+			:item="item"
+			@deleteItem="deleteItem"/>
 	</view>
 	
 </template>
@@ -19,8 +20,16 @@
 			CartListItem
 			
 		},
+		onLoad() {
+			
+		},
 		computed: {
 			...mapGetters(['cartList'])
+		},
+		methods: {
+			deleteItem(id) {
+				this.$store.commit('deleteItem',id)
+			}
 		}
 	}
 </script>

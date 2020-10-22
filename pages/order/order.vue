@@ -1,77 +1,81 @@
 <template>
-	<view class="order">
-		<view class="address area" @click="addressClick">
-			<view class="left">
-				<image src="../../static/images/position1.svg" mode=""></image>
-			</view>
-			<view class="center">
-				<view class="top">
-					<text class="name">{{address.userName}}</text>
-					<text class="phone">{{address.phone}}</text>
-				</view>
-				<view class="down">
-					{{address.provinceName+address.cityName+address.countieName+address.info}}
-				</view>
-			</view>
-			<view class="right">
-				<image src="../../static/images/arrow1.svg" mode=""></image>
-			</view>
-		</view>
-		<view class="product area">
-			<view class="shop_name"></view>
-			<view class="product_item">
+	<view class="main">
+		<view class="order">
+			<view class="address area" @click="addressClick">
 				<view class="left">
-					<image :src="product.itemPic?'https://admin.counselor.hzrxkjgs.cn/'+product.itemPic:'../../static/images/defaultImg.png'" mode=""></image>
+					<image src="../../static/images/position1.svg" mode=""></image>
 				</view>
 				<view class="center">
-					<view class="product_message">
-						{{product.info}}
+					<view class="top">
+						<text class="name">{{address.userName}}</text>
+						<text class="phone">{{address.phone}}</text>
+					</view>
+					<view class="down">
+						{{address.provinceName+address.cityName+address.countieName+address.info}}
 					</view>
 				</view>
 				<view class="right">
-					<view class="price">
-						￥{{product.price}}
-					</view>
-					<view class="count">
-						×{{count}}
-					</view>
+					<image src="../../static/images/arrow1.svg" mode=""></image>
 				</view>
 			</view>
-			<view class="distribution">配送方式：普通配送</view>
-			<view class="total_price">
-				
+			
+			<view class="product area" v-for="item in product">
+				<view class="shop_name"></view>
+				<view class="product_item">
+					<view class="left">
+						<image :src="item.itemPic?'https://admin.counselor.hzrxkjgs.cn/'+item.itemPic:'../../static/images/defaultImg.png'" mode=""></image>
+					</view>
+					<view class="center">
+						<view class="product_message">
+							{{item.productItemName}}
+						</view>
+					</view>
+					<view class="right">
+						<view class="price">
+							￥{{item.price}}
+						</view>
+						<view class="count">
+							×{{item.selectCount}}
+						</view>
+					</view>
+				</view>
+				<view class="distribution">配送方式：普通配送</view>
+				<view class="total_price">
+					
+				</view>
 			</view>
-		</view>
-		<!-- <pop-menu 
-			title="积分抵扣"
-			@hide="hideService"
-			:specClass="specClass"
-			@show="toggleSpec"
-			 class="score_area"
-			>
-		</pop-menu> -->
-		<view class="points area">
-			<image class="point_icon" src="../../static/images/score.svg" mode=""></image>
-			<text>可用店铺积分抵扣{{product.shopIntegral * userInfo.shopIntegral}}元</text>
-			<image class="check" @click="checkClick(0)" :src="shopIntChecked? '../../static/images/check_active.svg' : '../../static/images/check.svg'" mode=""></image>
-		</view>
-		<view class="points area">
-			<image class="point_icon" src="../../static/images/score.svg" mode=""></image>
-			<text>可用平台积分抵扣{{product.integral * userInfo.integral}}元</text>
-			<image class="check" @click="checkClick(1)" :src="integralChecked? '../../static/images/check_active.svg' : '../../static/images/check.svg'" mode=""></image>
-		</view>
-		<view class="reIntegral">
-			本次可反平台积分{{product.reIntegral * count}}分,店铺积分{{product.reShopIntegral * count}}
-		</view>
-		<view class="bottom-bar">
-			<view class="btn" @click="submit">
-				提交订单
+			<!-- <pop-menu 
+				title="积分抵扣"
+				@hide="hideService"
+				:specClass="specClass"
+				@show="toggleSpec"
+				 class="score_area"
+				>
+			</pop-menu> -->
+			<view class="points area">
+				<image class="point_icon" src="../../static/images/score.svg" mode=""></image>
+				<text>可用店铺积分抵扣{{shopIntPrice}}元</text>
+				<image class="check" @click="checkClick(0)" :src="shopIntChecked? '../../static/images/check_active.svg' : '../../static/images/check.svg'" mode=""></image>
 			</view>
-			<view class="price">{{totalPrice}}</view>
-			<view class="text">合计：</view>
-			<view class="count">共{{count}}件,</view>
+			<view class="points area">
+				<image class="point_icon" src="../../static/images/score.svg" mode=""></image>
+				<text>可用平台积分抵扣{{intPrice}}元</text>
+				<image class="check" @click="checkClick(1)" :src="integralChecked? '../../static/images/check_active.svg' : '../../static/images/check.svg'" mode=""></image>
+			</view>
+			<view class="reIntegral">
+				本次可反平台积分{{reIntegral}}分,店铺积分{{reShopInt}}
+			</view>
+			<view class="bottom-bar">
+				<view class="btn" @click="submit">
+					提交订单
+				</view>
+				<view class="price">{{totalPrice}}</view>
+				<view class="text">合计：</view>
+				<view class="count">共{{count}}件,</view>
+			</view>
 		</view>
 	</view>
+	
 </template>
 
 <script>
@@ -84,7 +88,8 @@
 			return {
 				integralChecked: false,
 				shopIntChecked: false,
-				product: null,
+				product: [],
+				orderProduct: [],
 				count: null,
 				specClass: 'none',
 				address: {},
@@ -93,17 +98,30 @@
 		},
 		computed: {
 			totalPrice() {
-				let shopIntPrice = this.shopIntChecked?this.product.shopIntegral * userInfo.shopIntegral:0
-				let intPrice = this.integralChecked?this.product.integral * userInfo.integral: 0
-				return this.product.price * this.count -shopIntPrice-intPrice
+				let sPrice = this.shopIntChecked?this.shopIntPrice : 0
+				let iPrice = this.integralChecked?this.intPrice : 0
+				return this.product.reduce((sum, item) => {return sum + item.price * item.selectCount},0) - sPrice - iPrice
+				
 			},
+			shopIntPrice() {
+				return this.product.reduce((sum, item) => {return sum + item.shopIntegral * this.userInfo.shopIntegral},0)
+			},
+			intPrice() {
+				return this.product.reduce((sum, item) => {return sum + item.integral * this.userInfo.integral},0)
+			},
+			reShopInt() {
+				return this.product.reduce((sum, item) => {return sum + item.reShopIntegral * item.selectCount},0)
+			},
+			reIntegral() {
+				return this.product.reduce((sum, item) => {return sum + item.reIntegral * item.selectCount},0)
+			}
 		},
 		methods: {
 			checkClick(flag) {
 				if(flag === 0) {
 					this.shopIntChecked = !this.shopIntChecked
 				} else if (flag ===1) {
-					this.shopIntChecked = !this.integralChecked
+					this.integralChecked = !this.integralChecked
 				}
 				// this.isChecked = !this.isChecked
 			},
@@ -115,43 +133,51 @@
 			async submit() {
 				console.log(this.address.userId)
 				console.log(this.$store.state.shop.id)
-				// console.log(this.totalPrice)
-				console.log(this.product.id)
-				console.log(this.count)
-				
+				console.log(this.totalPrice)
+				console.log(this.shopIntChecked)
+				console.log(this.integralChecked)
+				console.log(this.orderProduct)
 				const res = await this.$myRequest({
 					url: 'api/UserOrders',
 					method: 'POST',
 					data: {
 						"userId": this.address.userId,
 						"shopId": this.$store.state.shop.id,
-						// "payPrice": this.totalPrice,
-						// "activitieId": ,
+						"payPrice": this.totalPrice,
+						"activitieId": 0,
 						"useShopIntegral": this.shopIntChecked,
-						"useIntegral": this.integral,
-						"productItems": [
-							{
-								"productItems": this.product.id,
-								"count": this.count
-							}
-						]
+						"useIntegral": this.integralChecked,
+						"productItems": this.orderProduct
 					}
 				})
+				console.log(res)
 			}
 		},
 		onLoad(option) {
 			this.userInfo = this.$store.state.userInfo
 			const eventChannel = this.getOpenerEventChannel()
 			eventChannel.on('acceptDataFromOpenerPage', data => {
-				console.log(data.data)
-				this.product = data.data.product
-				this.count = data.data.count
-				if (this.count === 0) {
-					this.count = 1
+				if (data.data.length) {
+					console.log(0)
+					this.product = data.data
+				} else {
+					console.log(1)
+					let temp = data.data.product
+					temp.selectCount = data.data.count
+					if (temp.selectCount === 0) {
+						temp.selectCount = 1
+					}
+					this.product.push(temp)
 				}
+				this.product.forEach(item => {
+					this.orderProduct.push({
+						productItems: item.id,
+						count: item.selectCount
+					}) 
+				})
+				console.log(this.orderProduct)
 			})
 			console.log(this.product)
-			console.log(this.$store.state.oftenAddress)
 			this.address = this.$store.state.oftenAddress
 			// this.product = {
 			// 	"name": "属性1",
@@ -168,19 +194,23 @@
 
 <style lang="scss">
 	page {
+		
 		background-color: $uni-grey-bg-color;
+	}
+	.main {
+		padding: 20rpx;
 	}
 	.order {
 		.score_area {
 			background-color: #fff;
 			border-radius: 0.5em;
-			margin: 20rpx;
+			
 		}
 		.area {
 			background-color: #fff;
 			padding: 20rpx;
 			border-radius: 0.5em;
-			margin: 20rpx;
+			margin-bottom: 20rpx;
 		}
 		.address {
 			display: flex;
@@ -239,6 +269,7 @@
 			}
 		}
 		.product {
+			
 			.product_item {
 				display: flex;
 				.left {

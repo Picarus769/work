@@ -5,7 +5,7 @@
 			<span>全选</span>
 		</view>
 		<span class="total-price">合计：{{totalPrice}}元</span>
-		<view class="calc">结算：{{checkLength}}</view>
+		<view class="calc" @click="buyClick(cartList)">结算：{{checkLength}}</view>
 	</view>
 </template>
 
@@ -17,6 +17,11 @@
 			CheckButton
 		},
 		computed: {
+			cartList() {
+				return this.$store.state.cartList.filter(item => {
+					return item.checked
+				})
+			},
 			totalPrice() {
 				return this.$store.state.cartList.filter(item => {
 					return item.checked
@@ -41,7 +46,23 @@
 				} else {
 					this.$store.state.cartList.forEach(item => item.checked = true)
 				}
-			}
+			},
+			buyClick(cartList) {
+				if(this.checkLength === 0) {
+					uni.showToast({
+						title: '没有选中的商品',
+						icon: "none"
+					})
+					return
+				}
+				uni.navigateTo({
+					url: '/pages/order/order',
+					
+					success(res) {
+						res.eventChannel.emit('acceptDataFromOpenerPage', {data: cartList})
+					}
+				})
+			},
 		}
 	}
 </script>

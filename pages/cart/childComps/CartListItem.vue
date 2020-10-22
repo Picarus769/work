@@ -11,9 +11,10 @@
 			<view class="item-desc">{{item.desc}}</view>
 			<view class="item-bottom">
 				<view class="item-price">{{item.price}}元</view>
-				<view class="item-count">×{{item.count}}</view>
+				<view class="item-count">×{{item.selectCount}}</view>
 			</view>
 		</view>
+		<view class="delete" @click="deleteCart">删除</view>
 	</view>
 </template>
 
@@ -39,6 +40,9 @@
 				} else {
 					this.item.checked = true
 				}
+			},
+			deleteCart() {
+				this.$emit('deleteItem', this.item.iid)
 			}
 		}
 	}
@@ -49,11 +53,11 @@
 		width: 100%;
 		display: flex;
 		font-size: 0;
-		padding: 5px;
+		padding: 10rpx;
 		border-bottom: 1px solid #ccc;
 	}
 	.item-select {
-		width: 20px;
+		width: 40rpx;
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -64,34 +68,40 @@
 		text-overflow: ellipsis;
 	}
 	.item-img {
-		padding: 5px;
+		padding: 10rpx;
 	}
 	.item-img img {
-		width: 80px;
-		height: 100px;
+		width: 160rpx;
+		height: 200rpx;
 		display: block;
-		border-radius: 5px;
+		border-radius: 10rpx;
 	}
 	.item-info {
-		font-size: 17px;
+		font-size: 34rpx;
 		color: #333;
-		padding: 5px 10px;
+		padding: 10rpx 20rpx;
 		position: relative;
 		overflow: hidden;
 	}
 	.item-info .item-desc {
-		font-size: 14px;
+		font-size: 28rpx;
 		color: #666;
-		margin-top: 15px;
+		margin-top: 30rpx;
 	}
 	.item-bottom {
-		margin-top: 10px;
+		margin-top: 20rpx;
 		position: absolute;
-		bottom: 10px;
-		left: 10px;
-		right: 10px;
+		bottom: 20rpx;
+		left: 20rpx;
+		right: 20rpx;
 	}
 	.item-price {
 		color: orangered;
+	}
+	.delete {
+		margin-left: auto;
+		padding: 10rpx 20rpx;
+		color: #ccc;
+		font-size: 30rpx;
 	}
 </style>

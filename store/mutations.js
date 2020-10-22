@@ -95,6 +95,9 @@ export default {
 		state.cartList.push(payload)
 	},
 	addCounter(state, payload) {
-		payload.count++
+		payload.selectCount++
+	},
+	deleteItem(state, iid) {
+		state.cartList = state.cartList.filter(item => item.iid != iid)
 	}
 }

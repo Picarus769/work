@@ -192,8 +192,16 @@
 			addCart() {
 				const product = {}
 				product.image = 'https://admin.counselor.hzrxkjgs.cn/' + this.currentAttr.itemPic
-				product.title = this.currentAttr.name
-				product.desc = this.currentAttr.info
+				product.title = this.currentAttr.productItemName
+				product.cateId = this.currentAttr.cateId
+				product.cateName = this.currentAttr.cateName
+				product.totalCount = this.currentAttr.count
+				product.selectCount = this.selectCount!=0?this.selectCount:1
+				product.integral = this.currentAttr.integral
+				product.reIntergal = this.currentAttr.reIntergal
+				product.reShopIntegral = this.currentAttr.reShopIntegral
+				product.shopIntegral = this.currentAttr.shopIntegral
+				product.desc = this.productDetail.info
 				product.price = this.currentAttr.price
 				product.iid = this.currentAttr.id
 				this.$store.dispatch('addCart', product).then(res => {
@@ -291,45 +299,6 @@
 			this.productDetail = this.$store.state.currentProduct
 			console.log(this.productDetail)
 			this.infoPics = this.productDetail.infoPic.split(',')
-			// this.productDetail = {
-			// 	images: [
-			// 		{
-			// 			id: 0,
-			// 			url: 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2165531883,1410252634&fm=26&gp=0.jpg',
-			// 		},
-			// 		{
-			// 			id: 1,
-			// 			url: 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2165531883,1410252634&fm=26&gp=0.jpg',
-			// 		},
-			// 		{
-			// 			id: 2,
-			// 			url: 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2165531883,1410252634&fm=26&gp=0.jpg',
-			// 		},
-			// 	],
-			// 	name: '商品名称商品名称商品名称商品名称商品名称商品名称商品名称商品名称商品名称',
-			// 	price: 35.13,
-			// 	price2: 15.23,
-			// 	price3: 18.15,
-			// 	comment: [],
-			// 	shopStore_ProductItems: [
-			// 		{
-			// 			"name": "属性1",
-			// 			"price": 20,
-			// 			"info": "产品1属性1",
-			// 			"productId": 16,
-			// 			"itemPic": 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2165531883,1410252634&fm=26&gp=0.jpg',
-			// 			"id": 1
-			// 		},
-			// 		{
-			// 			"name": "属性2",
-			// 			"price": 30,
-			// 			"info": "产品2属性2",
-			// 			"productId": 16,
-			// 			"itemPic": 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2165531883,1410252634&fm=26&gp=0.jpg',
-			// 			"id": 2
-			// 		}
-			// 	],
-			// }
 			this.attrId = this.productDetail.shopStore_ProductItems[0].id
 		}
 	}

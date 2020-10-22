@@ -5,7 +5,7 @@
 				<text>{{item.message}}</text>
 			</view>
 		</view>
-		<order-list :orderList="product">
+		<order-list :orderList="filteredProduct">
 		</order-list>
 	</view>
 </template>
@@ -20,6 +20,7 @@
 			return {
 				selectId: 0,
 				product: [],
+				state: 0,
 				nav: [
 					{
 						id: 0,
@@ -52,20 +53,18 @@
 		methods: {
 			navClick(id) {
 				this.selectId = id
+				this.state = id
+			}
+		},
+		computed: {
+			filteredProduct() {
+				return this.product.filter(item => {
+					return item.orderState === this.state
+				})
 			}
 		},
 		onLoad() {
-			// this.product = [
-			// 	{
-			// 		"name": "属性1",
-			// 		"price": 20,
-			// 		"info": "产品1属性1",
-			// 		"productId": 16,
-			// 		"itemPic": 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2165531883,1410252634&fm=26&gp=0.jpg',
-			// 		"id": 1,
-			// 		"count": 
-			// 	}
-			// ]
+			
 			this.product = [
 				{
 					"id": 0,
@@ -105,9 +104,48 @@
 							"pic": "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2165531883,1410252634&fm=26&gp=0.jpg"
 						}
 					]
+				},
+				{
+					"id": 1,
+					"orderState": 1,
+					"paiedTime": "2020-10-19T02:16:08.779Z",
+					"sendTime": "2020-10-19T02:16:08.779Z",
+					"userId": 0,
+					"userName": "string",
+					"shopId": 0,
+					"shopName": "string",
+					"discount": 0,
+					"discountInfo": "string",
+					"voucherId": 0,
+					"price": 0,
+					"integral": 0,
+					"productItems": [
+						{
+							"id": 0,
+							"userOrderId": 0,
+							"productItemId": 0,
+							"productItemName": "string",
+							"count": 1,
+							"discount": 0,
+							"price": 20,
+							"discountInfo": "string",
+							"pic": "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2165531883,1410252634&fm=26&gp=0.jpg"
+						},
+						{
+							"id": 1,
+							"userOrderId": 0,
+							"productItemId": 0,
+							"productItemName": "string",
+							"count": 2,
+							"price": 100,
+							"discount": 0,
+							"discountInfo": "string",
+							"pic": "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2165531883,1410252634&fm=26&gp=0.jpg"
+						}
+					]
 				}
-			]
-			  
+			],
+			console.log(this.filteredProduct)
 		}
 	}
 </script>

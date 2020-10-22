@@ -7,6 +7,7 @@
 
 <script>
 	import CartList from './childComps/CartList.vue'
+	import { mapGetters } from 'vuex'
 	import CartBottomBar from './childComps/cartBottomBar.vue'
   export default{
     name:'Cart',
@@ -15,7 +16,10 @@
 			CartBottomBar
 		},
 		onLoad() {
-			
+			console.log(this.cartList)
+		},
+		computed:{
+			...mapGetters(['cartList'])
 		}
   }
 </script>

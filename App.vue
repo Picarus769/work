@@ -53,8 +53,9 @@
 				const res = await this.$myRequest({
 					url: 'api/Shop',
 					data: {
-								AreaId: areaId,
-								AreaCate: 3,
+								AddressId: areaId,
+								AreaCate: 2,
+								Id: 5
 							}
 				}).then((res) => {
 					console.log('商店信息', res.data.data[0])
