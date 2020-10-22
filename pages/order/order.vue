@@ -154,7 +154,7 @@
 			}
 		},
 		onLoad(option) {
-			this.userInfo = this.$store.state.userInfo
+			
 			const eventChannel = this.getOpenerEventChannel()
 			eventChannel.on('acceptDataFromOpenerPage', data => {
 				if (data.data.length) {
@@ -178,6 +178,7 @@
 				console.log(this.orderProduct)
 			})
 			console.log(this.product)
+			this.userInfo = this.$store.state.userInfo
 			this.address = this.$store.state.oftenAddress
 			// this.product = {
 			// 	"name": "属性1",

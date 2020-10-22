@@ -13,18 +13,7 @@
 			this.getAddress()
 		},
 		onShow: function() {
-			if(store.state.location.length === 0) {
-				uni.showModal({
-					content: '添加地址以寻找附近商店',
-					showCancel: false,
-					success() {
-						uni.navigateTo({
-							url: '/pages/profile/setAddress'
-						})
-					}
-				})
-				
-			}
+			
 			console.log('App Show')
 		},
 		onHide: function() {
@@ -78,6 +67,18 @@
 				const res = await this.$myRequest({
 					url: 'api/Address?UserId=' + store.state.userInfo.id
 				}).then((res)=> {
+					if(res.data.data.length === 0) {
+						uni.showModal({
+							content: '添加地址以寻找附近商店',
+							showCancel: false,
+							success() {
+								uni.navigateTo({
+									url: '/pages/profile/setAddress'
+								})
+							}
+						})
+						return
+					}
 					let oftenAddr = null
 					for (let item of res.data.data) {
 						if (item.isOften === true) {
