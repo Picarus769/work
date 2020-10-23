@@ -10,7 +10,7 @@
 					<!-- <view class="gray_font">店铺编号:726840795</view> -->
 				</view>
 				<view class="header_right" @click="infoClick">
-					<view class="gray_font">基本信息 ></view>
+					<view class="gray_font">收货地址 ></view>
 				</view>
 			</view>
 		</view>
@@ -29,6 +29,7 @@
 
 <script>
 	import menuList from '../../components/menu/menu.vue'
+	import {mapState} from 'vuex'
 	export default {
 		components: {
 			menuList
@@ -36,10 +37,12 @@
 		data() {
 			return {
 				config: {},
-				userInfo: null,
+				
 			}
 		},
-		
+		computed: {
+			...mapState(['userInfo'])
+		},
 		methods: {
 			loginClick() {
 				uni.navigateTo({
@@ -48,7 +51,7 @@
 			},
 			infoClick() {
 				uni.navigateTo({
-					url: '/pages/profile/baseInfo'
+					url: '/pages/profile/address'
 				})
 			}
 		},

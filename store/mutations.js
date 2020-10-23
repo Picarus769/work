@@ -89,6 +89,16 @@ export default {
 		console.log('已保存点击的商品')
 		state.currentProduct = product
 	},
+	//保存种类
+	setCate(state, cate) {
+		console.log('保存种类')
+		state.cate = cate
+	},
+	//保存活动
+	setActivity(state, act) {
+		console.log('保存活动')
+		state.activities = act
+	},
 	//订单商品
 	addItem(state, payload) {
 		payload.checked = false

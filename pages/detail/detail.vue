@@ -192,18 +192,19 @@
 			addCart() {
 				const product = {}
 				product.image = 'https://admin.counselor.hzrxkjgs.cn/' + this.currentAttr.itemPic
-				product.title = this.currentAttr.productItemName
+				product.productItemName = this.currentAttr.productItemName
 				product.cateId = this.currentAttr.cateId
 				product.cateName = this.currentAttr.cateName
 				product.totalCount = this.currentAttr.count
 				product.selectCount = this.selectCount!=0?this.selectCount:1
 				product.integral = this.currentAttr.integral
-				product.reIntergal = this.currentAttr.reIntergal
+				product.reIntegral = this.currentAttr.reIntegral
 				product.reShopIntegral = this.currentAttr.reShopIntegral
 				product.shopIntegral = this.currentAttr.shopIntegral
 				product.desc = this.productDetail.info
 				product.price = this.currentAttr.price
 				product.iid = this.currentAttr.id
+				product.productItemId = this.currentAttr.productItemId
 				this.$store.dispatch('addCart', product).then(res => {
 					uni.showToast({
 						title: res
@@ -298,7 +299,7 @@
 			]
 			this.productDetail = this.$store.state.currentProduct
 			console.log(this.productDetail)
-			this.infoPics = this.productDetail.infoPic.split(',')
+			this.infoPics = this.productDetail.infoPic?this.productDetail.infoPic.split(','):[]
 			this.attrId = this.productDetail.shopStore_ProductItems[0].id
 		}
 	}

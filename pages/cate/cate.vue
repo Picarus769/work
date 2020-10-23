@@ -5,11 +5,12 @@
 				<view v-for="(item, index) in cate"
 						:key="item.id"
 						:class="{selected: selectedId === index}"
-						@click="navClick(index)">{{item.message}}</view>
+						@click="navClick(item.id)">{{item.cateName}}</view>
 			</scroll-view>
 		</view>
-		<view class="right" scroll-y="true" >
-			<view class="right-up">
+		<view class="right">
+			<goodsList :goods="filteredItems"></goodsList>
+			<!-- <view class="right-up">
 				<view>
 					<image class="icon" :src="lebalUp.icon" type="">
 					<view class="lebal">{{lebalUp.message}}</view>
@@ -32,28 +33,38 @@
 						<image :src="item.img?item.img:$constData.defaultImg" mode=""></image>
 					</view>
 				</view>
-			</view>
+			</view> -->
 		</view>
 	</view>
 </template>
 <script>
+	import goodsList from '../../components/goodsList/goodsList.vue'
 	import data from '@/data/cate/cate.js'
-	
+	import {mapState} from 'vuex'
 	export default {
+		components: {
+			goodsList
+		},
 		data() {
 			return {
-				cate: [],
+				// cate: [],
 				currentCate: null,
 				selectedId: 0,
 				lebalUp: null,
 				lebalDown: null
 			}
 		},
+		computed: {
+			...mapState(['cate', 'products']),
+			filteredItems() {
+				this.products.filter(item => item.cateId === this.selectedId)
+			}
+		},
 		methods: {
-			navClick(index) {
-				this.selectedId = index
-				this.currentCate = this.cate[index].cateList
-				console.log(this.currentCate)
+			navClick(id) {
+				this.selectedId = id
+				// this.currentCate = this.cate[index].cateList
+				// console.log(this.currentCate)
 			},
 			cateClick(id) {
 				uni.navigateTo({
@@ -64,7 +75,8 @@
 		onLoad() {
 			this.lebalUp = this.$constData.lebalUp
 			this.lebalDown = this.$constData.lebalDown
-			this.cate = data.temp
+			// this.cate = data.temp
+			// console.log(this.cate)
 			this.currentCate = this.cate[this.selectedId].cateList
 		}
 	}
@@ -76,7 +88,9 @@
 	}
 	.cate {
 		
-		
+		scroll-view{
+			height: 100%;
+		}
 		display: flex;
 		.left {
 			background-color: #fff;

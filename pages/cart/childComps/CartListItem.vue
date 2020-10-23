@@ -7,7 +7,7 @@
 			<img :src="item.image" alt="商品图片">
 		</view>
 		<view class="item-info">
-			<view class="item-title">{{item.title}}</view>
+			<view class="item-title">{{item.productItemName}}</view>
 			<view class="item-desc">{{item.desc}}</view>
 			<view class="item-bottom">
 				<view class="item-price">{{item.price}}元</view>

@@ -109,31 +109,31 @@ export default {
 			icon: '../../static/images/my_order.png',
 			url: '/pages/profile/myOrder'
 		},
-		{
-			message: '账户资金',
-			icon: '../../static/images/account_funds.png',
-			url: '/pages/profile/accountFunds'
-		},
+		// {
+		// 	message: '账户资金',
+		// 	icon: '../../static/images/account_funds.png',
+		// 	url: '/pages/profile/accountFunds'
+		// },
 		{
 			message: '我的积分',
 			icon: '../../static/images/my_points.png',
 			url: '/pages/profile/myPoints'
 		},
-		{
-			message: '设置',
-			icon: '../../static/images/settings.png',
-			url: '/pages/profile/settings'
-		},
-		{
-			message: '商家服务',
-			icon: '../../static/images/shop_serve.png',
-			url: '/pages/profile/shopServe'
-		},
-		{
-			message: '商家客服',
-			icon: '../../static/images/shopChat.png',
-			url: ''
-		}
+		// {
+		// 	message: '设置',
+		// 	icon: '../../static/images/settings.png',
+		// 	url: '/pages/profile/settings'
+		// },
+		// {
+		// 	message: '商家服务',
+		// 	icon: '../../static/images/shop_serve.png',
+		// 	url: '/pages/profile/shopServe'
+		// },
+		// {
+		// 	message: '商家客服',
+		// 	icon: '../../static/images/shopChat.png',
+		// 	url: ''
+		// }
 	],
 		
 	

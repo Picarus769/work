@@ -1,80 +1,85 @@
 <template>
-	<view class="main">
-		<view class="order">
-			<view class="address area" @click="addressClick">
-				<view class="left">
-					<image src="../../static/images/position1.svg" mode=""></image>
-				</view>
-				<view class="center">
-					<view class="top">
-						<text class="name">{{address.userName}}</text>
-						<text class="phone">{{address.phone}}</text>
-					</view>
-					<view class="down">
-						{{address.provinceName+address.cityName+address.countieName+address.info}}
-					</view>
-				</view>
-				<view class="right">
-					<image src="../../static/images/arrow1.svg" mode=""></image>
-				</view>
+	<view>
+		<view class="bottom-bar">
+			<view class="btn" @click="submit">
+				提交订单
 			</view>
-			
-			<view class="product area" v-for="item in product">
-				<view class="shop_name"></view>
-				<view class="product_item">
+			<view class="price">{{totalPrice}}</view>
+			<view class="text">合计：</view>
+			<view class="count">共{{count}}件,</view>
+		</view>
+		<view class="main">
+			<view class="order">
+				<view class="address area" @click="addressClick">
 					<view class="left">
-						<image :src="item.itemPic?'https://admin.counselor.hzrxkjgs.cn/'+item.itemPic:'../../static/images/defaultImg.png'" mode=""></image>
+						<image src="../../static/images/position1.svg" mode=""></image>
 					</view>
 					<view class="center">
-						<view class="product_message">
-							{{item.productItemName}}
+						<view class="top">
+							<text class="name">{{address.userName}}</text>
+							<text class="phone">{{address.phone}}</text>
+						</view>
+						<view class="down">
+							{{address.provinceName+address.cityName+address.countieName+address.info}}
 						</view>
 					</view>
 					<view class="right">
-						<view class="price">
-							￥{{item.price}}
-						</view>
-						<view class="count">
-							×{{item.selectCount}}
-						</view>
+						<image src="../../static/images/arrow1.svg" mode=""></image>
 					</view>
 				</view>
-				<view class="distribution">配送方式：普通配送</view>
-				<view class="total_price">
-					
+				
+				<view class="product area" v-for="item in product">
+					<view class="shop_name"></view>
+					<view class="product_item">
+						<view class="left">
+							<image :src="item.itemPic?'https://admin.counselor.hzrxkjgs.cn/'+item.itemPic:'../../static/images/defaultImg.png'" mode=""></image>
+						</view>
+						<view class="center">
+							<view class="product_message">
+								{{item.productItemName}}
+							</view>
+						</view>
+						<view class="right">
+							<view class="price">
+								￥{{item.price}}
+							</view>
+							<view class="count">
+								×{{item.selectCount}}
+							</view>
+						</view>
+					</view>
+					<view class="distribution">配送方式：普通配送</view>
+					<view class="total_price">
+						
+					</view>
 				</view>
-			</view>
-			<!-- <pop-menu 
-				title="积分抵扣"
-				@hide="hideService"
-				:specClass="specClass"
-				@show="toggleSpec"
-				 class="score_area"
-				>
-			</pop-menu> -->
-			<view class="points area">
-				<image class="point_icon" src="../../static/images/score.svg" mode=""></image>
-				<text>可用店铺积分抵扣{{shopIntPrice}}元</text>
-				<image class="check" @click="checkClick(0)" :src="shopIntChecked? '../../static/images/check_active.svg' : '../../static/images/check.svg'" mode=""></image>
-			</view>
-			<view class="points area">
-				<image class="point_icon" src="../../static/images/score.svg" mode=""></image>
-				<text>可用平台积分抵扣{{intPrice}}元</text>
-				<image class="check" @click="checkClick(1)" :src="integralChecked? '../../static/images/check_active.svg' : '../../static/images/check.svg'" mode=""></image>
-			</view>
-			<view class="reIntegral">
-				本次可反平台积分{{reIntegral}}分,店铺积分{{reShopInt}}
-			</view>
-			<view class="bottom-bar">
-				<view class="btn" @click="submit">
-					提交订单
+				<!-- <pop-menu 
+					title="积分抵扣"
+					@hide="hideService"
+					:specClass="specClass"
+					@show="toggleSpec"
+					 class="score_area"
+					>
+				</pop-menu> -->
+				<view class="points area">
+					<image class="point_icon" src="../../static/images/score.svg" mode=""></image>
+					<text>可用店铺积分抵扣{{shopIntPrice}}元</text>
+					<image class="check" @click="checkClick(0)" :src="shopIntChecked? '../../static/images/check_active.svg' : '../../static/images/check.svg'" mode=""></image>
 				</view>
-				<view class="price">{{totalPrice}}</view>
-				<view class="text">合计：</view>
-				<view class="count">共{{count}}件,</view>
+				<view class="points area">
+					<image class="point_icon" src="../../static/images/score.svg" mode=""></image>
+					<text>可用平台积分抵扣{{intPrice}}元</text>
+					<image class="check" @click="checkClick(1)" :src="integralChecked? '../../static/images/check_active.svg' : '../../static/images/check.svg'" mode=""></image>
+				</view>
+				<view class="reIntegral">
+					本次可反平台积分{{reIntegral}}分,店铺积分{{reShopInt}}
+				</view>
+				
 			</view>
+			
 		</view>
 	</view>
+	
 	
 </template>
 
@@ -144,7 +149,7 @@
 						"userId": this.address.userId,
 						"shopId": this.$store.state.shop.id,
 						"payPrice": this.totalPrice,
-						"activitieId": 0,
+						
 						"useShopIntegral": this.shopIntChecked,
 						"useIntegral": this.integralChecked,
 						"productItems": this.orderProduct
@@ -171,7 +176,7 @@
 				}
 				this.product.forEach(item => {
 					this.orderProduct.push({
-						productItems: item.id,
+						productItemId: item.productItemId,
 						count: item.selectCount
 					}) 
 				})
@@ -179,15 +184,7 @@
 			})
 			console.log(this.product)
 			this.address = this.$store.state.oftenAddress
-			// this.product = {
-			// 	"name": "属性1",
-			// 	"price": 20,
-			// 	"info": "产品1属性1",
-			// 	"productId": 16,
-			// 	"itemPic": 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2165531883,1410252634&fm=26&gp=0.jpg',
-			// 	"id": 1
-			// }
-			// this.count = 1
+
 		}
 	}
 </script>
@@ -196,6 +193,36 @@
 	page {
 		
 		background-color: $uni-grey-bg-color;
+	}
+	.bottom-bar {
+		background-color: #fff;
+		position: fixed;
+		width: 100%;
+		height: 100rpx;
+		bottom: 0;
+		display: flex;
+		flex-direction: row-reverse;
+		.btn {
+			height: 80rpx;
+			line-height: 80rpx;
+			background-color: #FE3F13;
+			color: #fff;
+			padding: 0 30rpx;
+			border-radius: 0.5em;
+			font-size: 30rpx;
+			margin: 10rpx;
+		}
+		view {
+			height: 100rpx;
+			line-height: 100rpx;
+		}
+		.price {
+			color: #FE3F13;
+		}
+		.count {
+			color: $font-color-disabled;
+			font-size: 20rpx;
+		}
 	}
 	.main {
 		padding: 20rpx;
@@ -327,35 +354,7 @@
 				margin: 20rpx 30rpx;
 				font-size: 26rpx;
 			}
-			.bottom-bar {
-				background-color: #fff;
-				position: fixed;
-				width: 100%;
-				height: 100rpx;
-				bottom: 0;
-				display: flex;
-				flex-direction: row-reverse;
-				.btn {
-					height: 80rpx;
-					line-height: 80rpx;
-					background-color: #FE3F13;
-					color: #fff;
-					padding: 0 30rpx;
-					border-radius: 0.5em;
-					font-size: 30rpx;
-					margin: 10rpx;
-				}
-				view {
-					height: 100rpx;
-					line-height: 100rpx;
-				}
-				.price {
-					color: #FE3F13;
-				}
-				.count {
-					color: $font-color-disabled;
-					font-size: 20rpx;
-				}
-			}
+			
 		}
+		
 	</style>

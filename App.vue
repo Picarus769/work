@@ -3,28 +3,19 @@
 	export default {
 		onLaunch: function() {
 			console.log('App Launch')
-			store.commit('getCacheData')
-			if (store.state.userInfo) {
-				// this.login()
-				console.log(store.state.userInfo)
-			} else {
-				this.login()
-			}
-			this.getAddress()
+			// store.commit('getCacheData')
+			// if (store.state.userInfo) {
+			// 	// this.login()
+			// 	this.getAddress()
+			// 	console.log(store.state.userInfo)
+			// } else {
+			// 	this.login().then()
+			// }
+			// this.getAddress()
+			this.login()
 		},
 		onShow: function() {
-			if(store.state.location.length === 0) {
-				uni.showModal({
-					content: '添加地址以寻找附近商店',
-					showCancel: false,
-					success() {
-						uni.navigateTo({
-							url: '/pages/profile/setAddress'
-						})
-					}
-				})
-				
-			}
+			
 			console.log('App Show')
 		},
 		onHide: function() {
@@ -72,33 +63,65 @@
 				})
 				console.log(res.data.data[0])
 				store.commit('setUserInfo', res.data.data[0]);
-			},
-			//获取收货地址
-			async getAddress() {
-				const res = await this.$myRequest({
-					url: 'api/Address?UserId=' + store.state.userInfo.id
-				}).then((res)=> {
+				store.commit('setLocation', res.data.data[0].info);
+				if(res.data.data[0].info.length === 0) {
+					uni.showModal({
+						content: '添加地址以寻找附近商店',
+						showCancel: false,
+						success() {
+							uni.navigateTo({
+								url: '/pages/profile/setAddress'
+							})
+						}
+					})
+				} else {
 					let oftenAddr = null
-					for (let item of res.data.data) {
+					for (let item of res.data.data[0].info) {
 						if (item.isOften === true) {
 							oftenAddr = item
 							break
 						}
 					}
-					console.log(res.data.data)
-					store.commit('setLocation', res.data.data)
 					this.getShop(oftenAddr)
-				})
-				
-				
+				}
 			},
+			//获取收货地址
+			// async getAddress() {
+			// 	const res = await this.$myRequest({
+			// 		url: 'api/Address?UserId=' + store.state.userInfo.id
+			// 	}).then((res)=> {
+					// let oftenAddr = null
+					// for (let item of res.data.data) {
+					// 	if (item.isOften === true) {
+					// 		oftenAddr = item
+					// 		break
+					// 	}
+					// }
+					// console.log(res.data.data)
+					// store.commit('setLocation', res.data.data)
+					// this.getShop(oftenAddr)
+			// 	})
+			// 	if(res.data.data.length === 0) {
+			// 		uni.showModal({
+			// 			content: '添加地址以寻找附近商店',
+			// 			showCancel: false,
+			// 			success() {
+			// 				uni.navigateTo({
+			// 					url: '/pages/profile/setAddress'
+			// 				})
+			// 			}
+			// 		})
+					
+			// 	}
+				
+			// },
 			//获取商品
 			async getProduct(shopId) {
 				const res = await this.$myRequest({
 					url: 'api/ShopStore?shopId=' + shopId
 				})
 				console.log(res.data)
-				console.log(res.data.products)
+				store.commit('setCate', res.data.cateDtos)
 				store.commit('setProducts', res.data.products)
 			}
 		}

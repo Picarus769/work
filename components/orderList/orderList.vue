@@ -6,7 +6,7 @@
 			</view>
 			<view class="product_item" v-for="item in order.productItems" :key="item.id">
 				<view class="left">
-					<image :src="item.pic?item.pic:''" mode=""></image>
+					<image :src="item.pic?'https://admin.counselor.hzrxkjgs.cn/'+item.pic:''" mode=""></image>
 				</view>
 				<view class="center">
 					<view class="product_message">
@@ -15,7 +15,7 @@
 				</view>
 				<view class="right">
 					<view class="price">
-						￥{{item.price}}
+						￥{{item.productItemPrice}}
 					</view>
 					<view class="count">
 						×{{item.count}}
@@ -23,14 +23,15 @@
 				</view>
 			</view>
 			<view class="distribution">
-				<view v-if="order.orderState === 0">已付款</view>
-				<view v-if="order.orderState === 1">付款时间：</view>
-				<view v-if="order.orderState === 2">已收货</view>
+				<view v-if="order.orderState === 0">订单异常</view>
+				<view v-if="order.orderState === 1">去付款</view>
+				<view v-if="order.orderState === 2">付款时间：</view>
+				<view v-if="order.orderState === 3">已收货</view>
 			</view>
 			<view class="price">
 				<text>实付款
 					<text class="moneyIcon">￥</text>
-					{{order.price}}
+					{{order.payPrice}}
 				</text>
 				<text class="total_price">
 					<text>总价
@@ -40,9 +41,10 @@
 				</text>
 			</view>
 			<view class="btn">
-				<view v-if="order.orderState === 0" class="btn_item">提醒发货</view>
-				<view v-if="order.orderState === 1" class="btn_item">确认收货</view>
-				<view v-if="order.orderState === 2" class="btn_item">评价</view>
+				<view v-if="order.orderState === 0" class="btn_item">异常</view>
+				<view v-if="order.orderState === 1" class="btn_item">去付款</view>
+				<view v-if="order.orderState === 2" class="btn_item">确认收货</view>
+				<view v-if="order.orderState === 3" class="btn_item">评价</view>
 			</view>
 		</view>
 	</view>
@@ -64,7 +66,7 @@
 				let arr = []
 				for (let i=0; i<this.orderList.length;i++) {
 					let sum = 0
-					this.orderList[i].productItems.forEach(item => sum+=item.count*item.price)
+					this.orderList[i].productItems.forEach(item => sum+=item.count*item.productItemPrice)
 					arr.push(sum)
 				}
 				return arr
