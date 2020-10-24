@@ -79,12 +79,40 @@
 					for (let item of res.data.data[0].info) {
 						if (item.isOften === true) {
 							oftenAddr = item
-							break
+							break;
 						}
 					}
 					this.getShop(oftenAddr)
 				}
 			},
+			//获取收货地址
+			// async getAddress() {
+			// 	const res = await this.$myRequest({
+			// 		url: 'api/Address?UserId=' + store.state.userInfo.id
+			// 	}).then((res)=> {
+			// 		if(res.data.data.length === 0) {
+			// 			uni.showModal({
+			// 				content: '添加地址以寻找附近商店',
+			// 				showCancel: false,
+			// 				success() {
+			// 					uni.navigateTo({
+			// 						url: '/pages/profile/setAddress'
+			// 					})
+			// 				}
+			// 			})
+			// 			return
+			// 		}
+
+					// let oftenAddr = null
+					// for (let item of res.data.data[0].info) {
+					// 	if (item.isOften === true) {
+					// 		oftenAddr = item
+					// 		break
+					// 	}
+					// }
+					// this.getShop(oftenAddr)
+			// 	}
+			// },
 			//获取收货地址
 			// async getAddress() {
 			// 	const res = await this.$myRequest({

@@ -4,5 +4,26 @@ export default {
 	},
 	cartList(state) {
 		return state.cartList
+	},
+	userInfo(state) {
+		return state.userInfo
+	},
+	cate(state) {
+		return state.cate
+	},
+	activities(state) {
+		return state.activities
+	},
+	location(state) {
+		return state.location
+	},
+	oftenAddress(state) {
+		return state.oftenAddress
+	},
+	staff(state) {
+		return state.staff
+	},
+	products(state) {
+		return state.products
 	}
 }
