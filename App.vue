@@ -45,8 +45,7 @@
 					url: 'api/Shop',
 					data: {
 								AddressId: areaId,
-								AreaCate: 2,
-								Id: 5
+								AreaCate: 3
 							}
 				}).then((res) => {
 					console.log('商店信息', res.data.data[0])
@@ -54,7 +53,6 @@
 					let shopId = res.data.data[0].id
 					this.getProduct(shopId)
 				})
-				
 			},
 			//用户登录
 			async login() {
@@ -142,7 +140,7 @@
 					
 			// 	}
 				
-			// },
+			// },..
 			//获取商品
 			async getProduct(shopId) {
 				const res = await this.$myRequest({
