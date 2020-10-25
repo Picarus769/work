@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="goods">
-			<view v-for="item in goods" :key="item.id" class="goodsItem" @click="itemClick(item)">
+			<view v-for="item in goods" :key="item.id" :class="[{goodsItem1: isOneCol},{goodsItem: !isOneCol}]" @click="itemClick(item)">
 				<image :src="'https://admin.counselor.hzrxkjgs.cn/' + item.homePic" mode=""></image>
 				<view class="message">{{item.name}}</view>
 				<view class="price">{{"￥" + item.price}}</view>
@@ -16,7 +16,20 @@
 
 <script>
 	export default {
-		props:['goods'],
+		props:{
+			goods: {
+				type: Array,
+				default () {
+					return []
+				}
+			},
+			isOneCol: {
+				type: Boolean,
+				default () {
+					return false
+				}
+			}
+		},
 		methods: {
 			itemClick(item) {
 				this.$store.commit('setCurrentProduct', item)
@@ -44,7 +57,7 @@
 		flex-wrap: wrap;
 		justify-content: space-between;
 		.goodsItem {
-			height: 500rpx;
+			
 			width: 330rpx;
 			margin:  10rpx 0;
 			padding: 10rpx;
@@ -78,6 +91,43 @@
 			image {
 				height: 330rpx;
 				width: 330rpx;
+			}
+		}
+		.goodsItem1 {
+			
+			width: 100%;
+			margin:  10rpx 0;
+			padding: 10rpx;
+			background-color: #fff;
+			border-radius: 0.2em;
+			.message {
+				font-size: 36rpx;
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-line-clamp: 1;
+				text-overflow: ellipsis;
+				overflow: hidden;
+			}
+			.price {
+				margin: 8rpx 0;
+				font-size: 36rpx;
+				font-weight: 800;
+				color: red;
+			}
+			.master {
+				font-size: 20rpx;
+				color: #ccc;
+				.portrait {
+					float: left;
+					height: 55rpx;
+					width: 55rpx;
+					margin: 6rpx 20rpx 0 10rpx;
+					
+				}
+			}
+			image {
+				height: 440rpx;
+				width: 480rpx;
 			}
 		}
 	}

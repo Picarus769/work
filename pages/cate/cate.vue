@@ -1,17 +1,23 @@
 <template>
 	<view class="cate">
 		<view class="left">
-			<scroll-view scroll-y="true" >
-				<view v-for="(item, index) in cate"
+			<scroll-view scroll-y="true">
+				<view v-for="item in cate"
 						:key="item.id"
-						:class="{selected: selectedId === index}"
+						:class="{selected: selectedId === item.id}"
 						@click="navClick(item.id)">{{item.cateName}}</view>
 			</scroll-view>
 		</view>
 		<view class="right">
-			<goodsList :goods="filteredItems"></goodsList>
-			<!-- <view class="right-up">
+			<scroll-view scroll-y="true"  v-show="selectedId">
 				<view>
+					<goodsList :goods="filteredItems" :isOneCol="isOneCol"></goodsList>
+				</view>
+			</scroll-view>
+			
+			<view class="right-up" v-show="selectedId === 0">
+				暂无活动
+				<!-- <view>
 					<image class="icon" :src="lebalUp.icon" type="">
 					<view class="lebal">{{lebalUp.message}}</view>
 				</view>
@@ -32,22 +38,22 @@
 						<view class="cate-name">{{item.name}}</view>
 						<image :src="item.img?item.img:$constData.defaultImg" mode=""></image>
 					</view>
-				</view>
-			</view> -->
+				</view> -->
+			</view>
 		</view>
 	</view>
 </template>
 <script>
 	import goodsList from '../../components/goodsList/goodsList.vue'
 	import data from '@/data/cate/cate.js'
-	import {mapState} from 'vuex'
+	import {mapGetters} from 'vuex'
 	export default {
 		components: {
 			goodsList
 		},
 		data() {
 			return {
-				// cate: [],
+				isOneCol: true,
 				currentCate: null,
 				selectedId: 0,
 				lebalUp: null,
@@ -55,9 +61,12 @@
 			}
 		},
 		computed: {
-			...mapState(['cate', 'products']),
+			...mapGetters(['products']),
+			cate() {
+				return [{id: 0,cateName:'热门活动'}, ...this.$store.state.cate] 
+			},
 			filteredItems() {
-				this.products.filter(item => item.cateId === this.selectedId)
+				return this.products.filter(item => item.cateId === this.selectedId)
 			}
 		},
 		methods: {

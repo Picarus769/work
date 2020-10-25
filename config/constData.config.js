@@ -46,7 +46,7 @@ export default {
 		},
 		{
 			name: '幸运转盘',
-			icon: '../../static/images/roulette.png',
+			icon: '../../static/images/Roulette.png',
 			url: '/pages/index/Roulette'
 		},
 		{

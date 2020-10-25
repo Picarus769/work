@@ -29,7 +29,7 @@
 
 <script>
 	import menuList from '../../components/menu/menu.vue'
-	import {mapState} from 'vuex'
+	import {mapGetters} from 'vuex'
 	export default {
 		components: {
 			menuList
@@ -41,7 +41,7 @@
 			}
 		},
 		computed: {
-			...mapState(['userInfo'])
+			...mapGetters(['userInfo'])
 		},
 		methods: {
 			loginClick() {
@@ -57,7 +57,6 @@
 		},
 		onLoad() {
 			this.config = this.$constData.profileConfig
-			this.userInfo = this.$store.state.userInfo
 		}
 	}
 </script>
