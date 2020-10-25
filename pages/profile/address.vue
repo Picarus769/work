@@ -2,7 +2,7 @@
 	<view class="address">
 		<view class="address_item" v-for="item in address" :key="item.id">
 			<view>
-				<text class="name">{{item.userName}}</text><text>{{item.phone}}</text>
+				<text class="name">{{item.name}}</text><text>{{item.phone}}</text>
 			</view>
 			<view>
 				{{item.provinceName + '  ' + item.cityName + '  ' + item.countieName}}
@@ -11,7 +11,7 @@
 				{{item.info}}
 			</view>
 			<view class="btn_area">
-				<view class="left" :class="{isOften: item.isOften}" @click="setOften(item.id, item.isOften)">
+				<view class="left" :class="{isOften: item.isOften}" @click="setOften(item.id, item.isOften, item.countiesId)">
 					<image
 					:src="item.isOften ? '../../static/images/check_active.svg' : '../../static/images/check.svg'"
 					mode=""
@@ -32,18 +32,19 @@
 </template>
 
 <script>
+	import {mapGetters} from 'vuex'
 	export default {
 		data() {
 			return {
-				userInfo: {
-					id: 1
-				},
 				address: []
 			}
 		},
+		computed: {
+			...mapGetters(['userInfo']),
+		},
 		onLoad() {
 			// this.getAddress()
-			this.userInfo = this.$store.state.userInfo
+			
 		},
 		onShow() {
 			this.getAddress()
@@ -87,8 +88,9 @@
 				this.address = res.data.data
 				console.log(this.address)
 				this.$store.commit('setLocation', this.address)
+				return res
 			},
-			async setOften(id, isOften) {
+			async setOften(id, isOften, countiesId) {
 				if (isOften) {
 					uni.showToast({
 						title: '已设为默认'
@@ -104,23 +106,25 @@
 					}
 				})
 				.then(() => {
-					for (let value of this.address) {
-						if (value.isOften === true && value.id != id) {
-						  return this.$myRequest({
-								url: 'api/Address/ChangeOften',
-								method : 'POST',
-								data: {
-									"id": value.id,
-									"isOften": false
-								}
-							})
-							value.isOften = false
-						}
+					this.getAddress()
+					// this.$req.getProduct(countiesId)
+				}).then(() => {
+					this.getProduct(countiesId)
+				})
+			},
+			async getProduct(areaId) {
+				console.log(areaId)
+				const res = await this.$myRequest({
+					url: 'api/ShopStore',
+					data: {
+						AreaId: areaId,
+						AreaCate: 3,
 					}
 				})
-				.then(() => {
-					this.getAddress()
-				})
+				console.log(res.data)
+				this.$store.commit('setCate', res.data.cateDtos)
+				this.$store.commit('setProducts', res.data.products)
+				this.$store.commit('setShop', res.data.shopId)
 			},
 			btnClick() {
 				uni.navigateTo({

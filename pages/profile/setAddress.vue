@@ -41,6 +41,12 @@
 				
 			</view>
 			<view class="yt-list-cell b-b">
+				<view class="cell-tit clamp"><text class="red_color"></text>姓名</view>
+				<view class="cell-tip">
+					<input type="text" value="" v-model="name"/>
+				</view>
+			</view>
+			<view class="yt-list-cell b-b">
 				<view class="cell-tit clamp"><text class="red_color"></text>电话</view>
 				<view class="cell-tip">
 					<input type="text" value="" v-model="phone"/>
@@ -52,6 +58,7 @@
 					<input type="text" value="" v-model="info"/>
 				</view>
 			</view>
+			
 		</view>
 		
 		<!-- <text class="notice">
@@ -72,9 +79,11 @@
 
 <script>
 	import provinceData from '@/common/city.data.js';
+	import {mapGetters} from 'vuex'
 	export default {
 		data() {
 			return {
+				name: '',
 				selectProvinceValue: 0,
 				provincesRange: [{name: '选择省',id: -1}],
 				selectCityValue: 0,
@@ -97,10 +106,12 @@
 				countiesId: -1,
 				info: '',
 				phone: null,
-				changeId: null
+				changeId: null,
+				address: null
 			}
 		},
 		computed: {
+			...mapGetters(['userInfo']),
 			provincesName() {
 				let arr = []
 				for (let item of this.provincesRange) {
@@ -184,27 +195,6 @@
 					}
 				}
 			},
-			// async getCityRange() {
-			// 	const res = await this.$myRequest({
-			// 		url: 'api/Province?Name&Id=0'
-			// 	})
-			// 	this.addressData = res.data.data
-			// 	for (let counties of res.data.data) {
-			// 		// this.countiesRange.push(counties.name)
-			// 		// this.prefecturesRange.push(counties.city.name)
-			// 		// this.provincesRange.push(counties.city.provinceDto.name)
-			// 	}
-			// },
-			// toggleMaskLocation(){
-			// 	this.$refs["cityPicker"].show();
-			// },
-			// getpickerParentValue(data){
-			// 	this.provincedata=data;
-			// 	this.addressByPcrs=data[0].text+" "+data[1].text+" "+data[2].text;
-			// 	this.provinceId = data[0].value
-			// 	this.cityId = data[1].value
-			// 	this.countiesId = data[2].value
-			// },
 			async submit() {
 				if(this.provincesRange[this.selectProvinceValue].id === -1 || 
 						this.prefecturesRange[this.selectCityValue].id === -1 || 
@@ -227,7 +217,8 @@
 							"info": this.info,
 							"userId": this.$store.state.userInfo.id,
 							"phone": this.phone,
-							"isOften": isFirst
+							"isOften": isFirst,
+							"name": this.name
 						}
 					}).then(res => {
 						if(res === 0) {
@@ -236,39 +227,80 @@
 							})
 							return
 						}
-						if(res === 1 || isFirst) {
-							let areaId = this.countiesRange[this.selectCountiesValue].id
-							let shopId = null
-							this.$myRequest({
-								url: 'api/Shop',
-								data: {
-											AreaId: areaId,
-											AreaCate: 3,
-										}
-								}
-							).then((res1) => {
-								console.log('商店信息', res1.data.data[0])
-								this.$store.commit('setShop', res1.data.data[0])
-								shopId = res1.data.data[0].id
-								const res2 = this.$myRequest({
-									url: 'api/ShopStore?shopId=' + shopId
-								})
-								console.log(res2.data.products)
-								store.commit('setProducts', res2.data.products)
-							})
-						}
+						this.getAddress().then(res1 =>{
+							console.log(res1.data.data)
+							let areaId = res1.data.data.find(q=> q.isOften === true).countiesId
+							this.getProduct(areaId)
+						})
+						// this.$myRequest({
+						// 	url: 'api/Shop',
+						// 	data: {
+						// 				AreaId: areaId,
+						// 				AreaCate: 3,
+						// 			}
+						// 	}
+						// ).then((res1) => {
+						// 	console.log('商店信息', res1.data.data[0])
+						// 	this.$store.commit('setShop', res1.data.data[0])
+						// 	shopId = res1.data.data[0].id
+						// 	const res2 = this.$myRequest({
+						// 		url: 'api/ShopStore?shopId=' + shopId
+						// 	})
+						// 	console.log(res2.data.products)
+						// 	store.commit('setProducts', res2.data.products)
+						// })
+						
 						uni.navigateBack({
 							
 						})
 					})
 				}
+				},
+				async getAddress() {
+					const res = await this.$myRequest({
+						url: 'api/Address?UserId=' + this.userInfo.id
+					})
+					this.address = res.data.data
+					console.log(this.address)
+					this.$store.commit('setLocation', this.address)
+					return res
+				},
+				async getProduct(areaId) {
+					console.log(areaId)
+					const res = await this.$myRequest({
+						url: 'api/ShopStore',
+						data: {
+							AreaId: areaId,
+							AreaCate: 3,
+						}
+					})
+					console.log(res.data)
+					this.$store.commit('setCate', res.data.cateDtos)
+					this.$store.commit('setProducts', res.data.products)
+					this.$store.commit('setShop', res.data.shopId)
+				}
+				// async getProduct(oftenAddr) {
+				// 	console.log(oftenAddr)
+				// 	let areaId = oftenAddr.countiesId
+				// 	const res = await this.$myRequest({
+				// 		url: 'api/ShopStore',
+				// 		data: {
+				// 			AreaId: areaId,
+				// 			AreaCate: 3,
+				// 		}
+				// 	})
+				// 	console.log(res.data)
+				// 	store.commit('setCate', res.data.cateDtos)
+				// 	store.commit('setProducts', res.data.products)
+				// 	store.commit('setShop', res.data.shopId)
+				// }
 				// console.log(this.phone)
 				// console.log(this.provincesRange[this.selectProvinceValue].id)
 				// console.log(this.prefecturesRange[this.selectCityValue].id)
 				// console.log(this.countiesRange[this.selectCountiesValue].id)
 				
 			}
-		}
+		
 	}
 </script>
 <style lang="scss" scoped>

@@ -47,12 +47,16 @@
                 this.animateFlag = true;
 				this.timer = setInterval(() => {
 					uni.showToast({
-						title:"很遗憾 未中奖"
+						title:"很遗憾 未中奖",
+						icon: "none"
 					})
 					this.animateFlag = false;
 					clearInterval(this.timer);
 				},3000)
 			}
+		},
+		onLoad() {
+			this.total = this.$store.getters.userInfo.integral
 		}
 	}
 </script>

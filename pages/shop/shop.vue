@@ -5,16 +5,18 @@
 				<image :src="shopInfo.shopAvatar || '../../static/images/defaultImg.png'" mode=""></image>
 			</view>
 			<view class="right">
-				<view class="shop_name">{{shopInfo.name}}</view>
-				<view class="shop_address">{{shopInfo.adressInfo}}</view>
+				<view class="shop_name">{{shopInfo.shopName}}</view>
+				<view class="shop_address">{{shopInfo.shopAddress}}</view>
 			</view>
 		</view>
-		<view class="nav_bar">
-			<view class="nav_item" @click="navClick(item.id)" :class="{is_selected : selectId == item.id}" v-for="item in nav" :key="item.id">
+		<!-- <view class="nav_bar">
+			<view class="nav_item" 
+						@click="navClick(item.id)"
+						:class="{is_selected : selectId == item.id}" v-for="item in nav" :key="item.id">
 				{{item.message}}
 			</view>
-		</view>
-		<goods-list :goods="products"></goods-list>
+		</view> -->
+		<goods-list :goods="product"></goods-list>
 	</view>
 </template>
 
@@ -38,12 +40,9 @@
 						id: 1,
 						message: '新品'
 					},
+					
 					{
 						id: 2,
-						message: '销量'
-					},
-					{
-						id: 3,
 						message: '价格'
 					}
 				]
@@ -56,6 +55,7 @@
 		},
 		onLoad() {
 			this.shopInfo = this.$store.state.shop
+			console.log(this.shopInfo)
 			this.products = this.$store.state.products
 		},
 		computed: {
@@ -64,15 +64,50 @@
 			},
 			product() {
 				return this.$store.state.products
-			}
+			},
+			// filteredItem() {
+			// 	if (this.selectId === 0) {
+			// 		return this.product
+			// 	}
+			// 	else if(this.selectId === 1)
+			// 	{
+			// 		let arr = new Array();
+			// 		arr = this.product.splice(0,this.product.length);
+			// 		arr.sort((pre,cur)=>{
+								
+			// 			if(new Date(pre.createTime) > new Date(cur.createTime))
+			// 				{
+			// 					return -1;
+			// 				}else{
+			// 					return 1
+			// 				}
+			// 		});
+			// 		return arr
+			// 	}else{
+			// 		let arr = new Array();
+					
+			// 		arr = this.product.splice(0,this.product.length);
+					
+			// 		arr.sort((pre,cur)=>{
+								
+			// 			if(pre.price > cur.price)
+			// 				{
+			// 					return -1;
+			// 				}else{
+			// 					return 1
+			// 				}
+			// 		});
+			// 		return arr
+			// 	}
+			// }
 		},
 		watch: {
-			shop() {
-				this.shopInfo = this.$store.state.shop
-			},
-			product() {
-				this.products = this.$store.state.products
-			}
+			// shop() {
+			// 	this.shopInfo = this.$store.state.shop
+			// },
+			// product() {
+			// 	this.products = this.$store.state.products
+			// }
 		}
 	}
 </script>
@@ -104,7 +139,7 @@ page {
 			.shop_name {
 				height: 50rpx;
 				line-height: 50rpx;
-				font-size: 34rpx;
+				font-size: 24rpx;
 			}
 			.shop_address{
 				height: 50rpx;

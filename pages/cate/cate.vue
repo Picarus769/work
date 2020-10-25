@@ -2,19 +2,16 @@
 	<view class="cate">
 		<view class="left">
 			<scroll-view scroll-y="true">
-				<view v-for="item in cate"
-						:key="item.id"
-						:class="{selected: selectedId === item.id}"
-						@click="navClick(item.id)">{{item.cateName}}</view>
+				<view v-for="item in cate" :key="item.id" :class="{selected: selectedId === item.id}" @click="navClick(item.id)">{{item.cateName}}</view>
 			</scroll-view>
 		</view>
 		<view class="right">
-			<scroll-view scroll-y="true"  v-show="selectedId">
+			<scroll-view scroll-y="true" v-show="selectedId">
 				<view>
 					<goodsList :goods="filteredItems" :isOneCol="isOneCol"></goodsList>
 				</view>
 			</scroll-view>
-			
+
 			<view class="right-up" v-show="selectedId === 0">
 				暂无活动
 				<!-- <view>
@@ -46,7 +43,9 @@
 <script>
 	import goodsList from '../../components/goodsList/goodsList.vue'
 	import data from '@/data/cate/cate.js'
-	import {mapGetters} from 'vuex'
+	import {
+		mapGetters
+	} from 'vuex'
 	export default {
 		components: {
 			goodsList
@@ -55,7 +54,7 @@
 			return {
 				isOneCol: true,
 				currentCate: null,
-				selectedId: 0,
+				selectedId: 1,
 				lebalUp: null,
 				lebalDown: null
 			}
@@ -63,7 +62,12 @@
 		computed: {
 			...mapGetters(['products']),
 			cate() {
-				return [{id: 0,cateName:'热门活动'}, ...this.$store.state.cate] 
+				// return [{
+				// 	id: 0,
+				// 	cateName: '热门活动'
+				// }, ...this.$store.state.cate]
+				
+				return this.$store.state.cate;
 			},
 			filteredItems() {
 				return this.products.filter(item => item.cateId === this.selectedId)
@@ -95,19 +99,24 @@
 	page {
 		background-color: $uni-grey-bg-color;
 	}
+
 	.cate {
-		
-		scroll-view{
+
+		scroll-view {
 			height: 100%;
 		}
+
 		display: flex;
+
 		.left {
 			background-color: #fff;
 			width: 180rpx;
-			height: calc(100vh - 94px);
+			height: calc(100vh - 50px);
+
 			.selected {
 				background-color: $uni-grey-bg-color;
 			}
+
 			view {
 				width: 180rpx;
 				height: 100rpx;
@@ -116,30 +125,34 @@
 				font-size: 32rpx;
 			}
 		}
+
 		.right {
-			height: calc(100vh - 94px);
+			height: calc(100vh - 50px);
 			display: flex;
 			flex-direction: column;
 			overflow: hidden;
 			box-sizing: border-box;
 			padding: 20rpx;
-			
+
 			.icon {
 				width: 50rpx;
 				height: 50rpx;
 				vertical-align: middle;
 			}
+
 			.lebal {
 				display: inline-block;
 				line-height: 50rpx;
 				height: 50rpx;
 			}
+
 			.right-up {
-				
+
 				padding: 20rpx;
 				background-color: #fff;
 				width: 490rpx;
 			}
+
 			.right-down {
 				flex: 1;
 				padding: 20rpx;
@@ -147,20 +160,24 @@
 				margin-top: 40rpx;
 				width: 490rpx;
 			}
+
 			.cate-icon {
 				display: flex;
-				flex-wrap:wrap;
+				flex-wrap: wrap;
+
 				.cate-item {
 					background-color: $uni-grey-bg-color;
 					margin: 20rpx;
 					text-align: center;
 					width: 120rpx;
+
 					image {
 						margin-top: 10rpx;
 						width: 90rpx;
 						height: 90rpx;
 						line-height: 90rpx;
 					}
+
 					.cate-name {
 						height: 100rpx;
 						line-height: 100rpx;
@@ -169,7 +186,7 @@
 					}
 				}
 			}
-			
+
 		}
 	}
 </style>

@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/Picarus769/work#readme",
   "dependencies": {
-    "gb2260": "^0.6.0"
+    "gb2260": "^0.6.0",
+    "qrcode.vue": "^1.7.0"
   }
 }

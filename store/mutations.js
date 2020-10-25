@@ -56,10 +56,11 @@ export default {
 	},
 	//保存地址
 	setLocation(state, location) {
+
 		console.log("已保存地址")
 		state.location = location
 		for (let item of location) {
-			if (item.isOften === true) {
+			if (item.isoften === true) {
 				state.oftenAddress = item
 				break
 			}
@@ -74,9 +75,15 @@ export default {
 		uni.setStorageSync('staff', state.staff);
 	},
 	//保存商店
+	
+	
+	
+	
 	setShop(state, shop) {
 		console.log("已保存商店")
+		
 		state.shop = shop
+		console.log(state.shop)
 		// uni.setStorageSync('staff', state.staff);
 	},
 	//保存商品

@@ -8,9 +8,9 @@
 		<view class="header area">
 			<view class="info">
 				<view class="describe">{{productDetail.name}}</view>
-				<view class="share">
+				<view class="share" @click="share">
 					<image :src="config.shareIcon" type="">
-					<view>分享</view>
+						<view>分享</view>
 				</view>
 			</view>
 			<view class="price_area">
@@ -38,19 +38,15 @@
 				</view>
 			</view> -->
 			<view class="option">
-				<pop-menu
-					title="购买类型"
-					@hide="hideService"
-					:specClass="specClass"
-					@show="toggleSpec"
-				>
+				<pop-menu title="购买类型" @hide="hideService" :specClass="specClass" @show="toggleSpec">
 					<view slot="content">
 						<text class="selected-text">请选择规格</text>
 					</view>
 					<view slot="popup" @click.stop="stopPrevent">
 						<view class="popup_content">
 							<view class="popup_info">
-								<image :src="currentAttr.itemPic?'https://admin.counselor.hzrxkjgs.cn/'+currentAttr.itemPic:$constData.defaultImg" mode=""></image>
+								<image :src="currentAttr.itemPic?'https://admin.counselor.hzrxkjgs.cn/'+currentAttr.itemPic:$constData.defaultImg"
+								 mode=""></image>
 								<view class="info">
 									<view class="name">{{currentAttr.name}}</view>
 									<view class="price">￥{{selectCount === 0 ? currentAttr.price : totalPrice}}</view>
@@ -58,11 +54,7 @@
 								</view>
 							</view>
 							<view class="popup_attr">
-								<view v-for="item in productDetail.shopStore_ProductItems"
-											:key="item.id"
-											class="attr_item"
-											@click="selectAttr(item.id)"
-											>
+								<view v-for="item in productDetail.shopStore_ProductItems" :key="item.id" class="attr_item" @click="selectAttr(item.id)">
 									<view type="default" size="mini" :class="{is_selected: item.id===currentAttr.id}">{{item.productItemName}}</view>
 								</view>
 							</view>
@@ -84,19 +76,20 @@
 			<view class="title">
 				<view class="left">{{config.comment}}({{productDetail.comments?productDetail.comments.length : 0}})</view>
 				<view class="right">{{config.allComment}}
-				<image :src="$constData.arrowIcon2" type=""></view>
+					<image :src="$constData.arrowIcon2" type="">
+				</view>
 			</view>
 			<view class="comment_content">
-				
+
 			</view>
 		</view>
 		<view class="shop area" @click="shopClick">
 			<view class="shop_info">
 				<view class="left">
-					<image :src="$constData.defaultImg" mode=""></image>
+					<image :src="shop.shopAvatar?'https://admin.counselor.hzrxkjgs.cn/'+shop.shopAvatar:$constData.defaultImg" mode=""></image>
 				</view>
 				<view class="center">
-					{{}}
+					{{shop.shopName}}
 				</view>
 				<view class="right">进店逛逛</view>
 			</view>
@@ -117,29 +110,19 @@
 		</view>
 		<view class="bottom_bar">
 			<view class="left">
-				<navigator
-					url="/pages/index/index"
-					open-type="switchTab"
-					class="navi"
-				>
+				<navigator url="/pages/index/index" open-type="switchTab" class="navi">
 					<view>
 						<image :src="config.homeIcon" type="">
-						<view>首页</view>
+							<view>首页</view>
 					</view>
 				</navigator>
-				<navigator
-					url="/pages/chat/chat"
-					open-type="navigate"
-					class="navi">
+				<navigator url="/pages/chat/chat" open-type="navigate" class="navi">
 					<image :src="config.chatIcon" type="">
-					<view>客服</view>
+						<view>客服</view>
 				</navigator>
-				<navigator
-					url="/pages/cart/cart"
-					open-type="switchTab"
-					class="navi">
+				<navigator url="/pages/cart/cart" open-type="switchTab" class="navi">
 					<image :src="config.cartIcon" type="">
-					<view>购物车</view>
+						<view>购物车</view>
 				</navigator>
 			</view>
 			<view class="right">
@@ -154,10 +137,14 @@
 	import popMenu from '@/components/rf-item-popup/index.vue';
 	import config from '@/config/detailData.js';
 	import data from '@/data/detail/detail.js';
-	
+	import {
+		mapGetters
+	} from 'vuex'
 	export default {
+
 		components: {
-			popMenu
+			popMenu,
+
 		},
 		data() {
 			return {
@@ -168,12 +155,32 @@
 				config: config.detailConfig,
 				attrSelected: false,
 				selectCount: 0,
-				shopComment: [],
+				shopComment: []
 			}
 		},
 		computed: {
+			...mapGetters(['shop']),
 			currentAttr() {
-				return this.productDetail.shopStore_ProductItems.filter((item) => this.attrId == item.id)[0]
+
+				if (this.productDetail.shopStore_ProductItems) {
+					return this.productDetail.shopStore_ProductItems.filter((item) => this.attrId == item.id)[0]
+				} else {
+					return {
+						cateId: 1,
+						cateName: "种类1",
+						count: 23,
+						id: 3,
+						integral: 10,
+						itemPic: "ProductItem/1/alsxso5k.z25.png",
+						price: 29,
+						productId: 2,
+						productItemId: 1,
+						productItemName: "产品属性名称",
+						reIntegral: 10,
+						reShopIntegral: 50,
+						shopIntegral: 0
+					}
+				}
 			},
 			totalPrice() {
 				return this.currentAttr.price * this.selectCount
@@ -182,12 +189,17 @@
 			// productClick() {
 			// 	return this.$store.state.currentProduct
 			// }
-			
+
 		},
 		watch: {
-			
+
 		},
 		methods: {
+			share() {
+				uni.navigateTo({
+					url: './share'
+				})
+			},
 			//加入购物车
 			addCart() {
 				const product = {}
@@ -196,7 +208,7 @@
 				product.cateId = this.currentAttr.cateId
 				product.cateName = this.currentAttr.cateName
 				product.totalCount = this.currentAttr.count
-				product.selectCount = this.selectCount!=0?this.selectCount:1
+				product.selectCount = this.selectCount != 0 ? this.selectCount : 1
 				product.integral = this.currentAttr.integral
 				product.reIntegral = this.currentAttr.reIntegral
 				product.reShopIntegral = this.currentAttr.reShopIntegral
@@ -212,23 +224,27 @@
 					// this.$toast.show(res, 1500)
 				})
 			},
-			buyClick(currentAttr,selectCount) {
+			buyClick(currentAttr, selectCount) {
 				uni.navigateTo({
 					url: '/pages/order/order',
-					
 					success(res) {
-						res.eventChannel.emit('acceptDataFromOpenerPage', {data: {product:currentAttr, count:selectCount}})
+						res.eventChannel.emit('acceptDataFromOpenerPage', {
+							data: {
+								product: currentAttr,
+								count: selectCount
+							}
+						})
 					}
 				})
 			},
 			//增加数量
 			increment() {
-				if(this.selectCount >= this.currentAttr.count) return
+				if (this.selectCount >= this.currentAttr.count) return
 				this.selectCount++
 			},
 			//减少数量
 			decrement() {
-				if(this.selectCount === 0) return
+				if (this.selectCount === 0) return
 				this.selectCount--
 			},
 			attrChecked() {
@@ -238,7 +254,7 @@
 			hideService() {
 				this.specClass = 'none';
 			},
-			
+
 			//规格窗口开启
 			toggleSpec(row) {
 				if (!this.productDetail) return;
@@ -248,7 +264,7 @@
 					this.currentSkuName = row.skuName;
 					this.currentCartCount = row.cartCount;
 					const skuId = row.skuId;
-					
+
 					// if (this.cartType === 'cart') {
 					// 	this.handleCartItemCreate(skuId);
 					// } else if (this.cartType === 'buy') {
@@ -281,10 +297,11 @@
 		onLoad(option) {
 			const eventChannel = this.getOpenerEventChannel()
 			eventChannel.on('acceptDataFromOpenerPage', function(data) {
-			    this.productDetail = data.data
+
+
+				this.productDetail = data.data
 			})
-			this.shopComment = [
-				{
+			this.shopComment = [{
 					name: '宝贝描述',
 					score: 4.8
 				},
@@ -297,10 +314,51 @@
 					score: 4.8
 				}
 			]
-			this.productDetail = this.$store.state.currentProduct
-			console.log(this.productDetail)
-			this.infoPics = this.productDetail.infoPic?this.productDetail.infoPic.split(','):[]
-			this.attrId = this.productDetail.shopStore_ProductItems[0].id
+			
+			if(!this.$store.state.currentProduct.cateId)
+			{
+			
+			this.productDetail = {
+				cateId: 1,
+				cateName: "种类1",
+				createTime: "2020-10-18T13:02:00.363",
+				homePic: "Product/2/Home/ssqqbwmo.nwk.jpeg",
+				info: "产品内容介绍",
+				infoPic: "Product/2/Info/53bfokrc.jz2.jpeg,Product/2/Info/a4ovycjm.b4v.jpeg,Product/2/Info/euriwjmb.zl4.png",
+				name: "产品名称",
+				price: 29,
+				productId: 2,
+				shopId: 5,
+				shopStore_ProductItems: [{
+					cateId: 1,
+					cateName: "种类1",
+					count: 23,
+					id: 3,
+					integral: 10,
+					itemPic: "ProductItem/1/alsxso5k.z25.png",
+					price: 29,
+					productId: 2,
+					productItemId: 1,
+					productItemName: "产品属性名称",
+					reIntegral: 10,
+					reShopIntegral: 50,
+					shopIntegral: 0
+				}]
+			}
+			
+			}else{
+				this.productDetail = this.$store.state.currentProduct
+			}
+
+			this.infoPics = this.productDetail.infoPic ? this.productDetail.infoPic.split(',') : []
+
+			if (!this.productDetail.shopStore_ProductItems) {
+				this.attrId = 1
+			} else {
+				this.attrId = this.productDetail.shopStore_ProductItems[0].id
+			}
+
+			console.log(this.shop)
 		}
 	}
 </script>
@@ -309,29 +367,35 @@
 	.detail {
 		padding-bottom: 20rpx;
 		background-color: $uni-grey-bg-color;
+
 		swiper {
 			width: 750rpx;
 			height: 750rpx;
+
 			image {
 				width: 100%;
 				height: 100%;
 			}
 		}
+
 		.area {
 			margin: 20rpx;
 			padding: 20rpx;
 			background-color: #fff;
 			border-radius: 0.5em;
 		}
+
 		.header {
-			
+
 			.info {
 				margin-bottom: 10rpx;
+
 				.describe {
 					display: inline-block;
 					width: 550rpx;
 					height: auto;
 				}
+
 				.share {
 					vertical-align: top;
 					display: inline-block;
@@ -339,33 +403,42 @@
 					width: 120rpx;
 					height: 120rpx;
 					font-size: 20rpx;
+
 					image {
 						width: 70rpx;
 						height: 70rpx;
 					}
 				}
 			}
+
 			.price_area {
 				display: flex;
+
 				text {
 					font-size: 20rpx;
 				}
+
 				.price {
 					flex: 1;
 					font-size: 40rpx;
 				}
+
 				.price1 {
 					color: $price1;
 				}
-				.price2{
+
+				.price2 {
 					color: $price2;
 				}
+
 				.price3 {
 					color: $price3;
 				}
 			}
+
 			.price_describe {
 				display: flex;
+
 				view {
 					flex: 1;
 					font-size: 20rpx;
@@ -373,55 +446,67 @@
 				}
 			}
 		}
+
 		.options {
 			.option {
 				.left {
 					display: inline-block;
 					color: $font-color-disabled;
 				}
+
 				.center {
 					display: inline-block;
 					margin-left: 20rpx;
 				}
+
 				.right {
 					display: inline-block;
 				}
 			}
+
 			.popup_content {
 				width: 100%;
 				height: auto;
 				box-sizing: border-box;
 				padding: 40rpx;
+
 				.popup_info {
 					padding-bottom: 40rpx;
 					border-bottom: 1px solid #eee;
+
 					image {
 						border-radius: 0.3em;
 						width: 180rpx;
 						height: 180rpx;
-						
+
 					}
+
 					.info {
 						display: inline-block;
 						vertical-align: top;
 						padding-left: 40rpx;
 						width: 450rpx;
 						height: 180rpx;
+
 						.name {
 							margin-bottom: 20rpx;
 						}
+
 						.price {
 							font-size: 34rpx;
 							color: red;
 						}
+
 						.count {
 							color: $font-color-disabled;
 						}
 					}
 				}
+
 				.popup_attr {
 					display: flex;
 					flex-wrap: wrap;
+
 					.attr_item {
 						view {
 							display: inline-block;
@@ -431,21 +516,24 @@
 							font-size: 22rpx;
 							background-color: $uni-grey-bg-color;
 						}
+
 						.is_selected {
 							background-color: #ccc;
 						}
 					}
-					
+
 				}
-				
+
 				.select_count {
 					margin-top: 20rpx;
 					height: 80rpx;
 					font-size: 38rpx;
+
 					.lebal {
 						height: 80rpx;
 						line-height: 80rpx;
 					}
+
 					.button_area {
 						background-color: $uni-grey-bg-color;
 						display: inline-block;
@@ -453,6 +541,7 @@
 						right: 20rpx;
 						height: 80rpx;
 						line-height: 80rpx;
+
 						.btn {
 							padding: 0 40rpx;
 						}
@@ -460,17 +549,20 @@
 				}
 			}
 		}
+
 		.comment {
 			.title {
 				.left {
 					display: inline-block;
 					font-weight: 600;
 				}
+
 				.right {
 					display: inline-block;
 					position: absolute;
 					right: 50rpx;
 					color: $uni-color-primary;
+
 					image {
 						width: 20rpx;
 						height: 20rpx;
@@ -478,25 +570,31 @@
 				}
 			}
 		}
+
 		.block_area {
 			height: $bottom_bar_height;
 		}
+
 		.shop {
 			.shop_info {
 				height: 100rpx;
+
 				.left {
 					display: inline-block;
+
 					image {
 						width: 100rpx;
 						height: 100rpx;
 					}
 				}
+
 				.center {
 					width: 360rpx;
 					vertical-align: top;
 					display: inline-block;
 					font-weight: 600;
 				}
+
 				.right {
 					margin: 19rpx 0;
 					padding: 5rpx 20rpx;
@@ -509,9 +607,11 @@
 					color: $uni-color-primary;
 				}
 			}
+
 			.shop_comment {
 				margin: 10rpx;
 				display: flex;
+
 				.score {
 					text-align: center;
 					flex: 1;
@@ -519,17 +619,20 @@
 				}
 			}
 		}
+
 		.split {
 			text-align: center;
 			margin: 20rpx 0;
 			font-size: 28rpx;
 			color: $font-color-disabled;
 		}
+
 		.detail_img {
 			image {
 				width: 100%;
 			}
 		}
+
 		.bottom_bar {
 			position: fixed;
 			bottom: 0;
@@ -537,24 +640,29 @@
 			width: 100%;
 			background-color: #fff;
 			display: flex;
-			
+
 			.left {
 				display: flex;
+
 				.navi {
 					flex: 1;
 					text-align: center;
+
 					image {
 						width: 45rpx;
 						height: 45rpx;
 						vertical-align: middle;
 						margin: 5rpx 0;
 					}
+
 					view {
 						font-size: 30rpx;
 					}
 				}
+
 				flex: 1;
 			}
+
 			.right {
 				flex: 1;
 				display: flex;
@@ -562,10 +670,12 @@
 				text-align: center;
 				color: #fff;
 				font-size: 32rpx;
+
 				.add_cart {
 					flex: 1;
 					background-color: $add_cart;
 				}
+
 				.buy_now {
 					flex: 1;
 					background-color: $buy_now;
@@ -573,5 +683,4 @@
 			}
 		}
 	}
-	
 </style>

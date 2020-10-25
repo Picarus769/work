@@ -26,7 +26,7 @@
 				return this.$store.state.cartList.filter(item => {
 					return item.checked
 				}).reduce((pre, item) => {
-					return pre + item.price * item.count
+					return pre + item.price * item.selectCount
 				}, 0).toFixed(2)
 			},
 			checkLength() {
@@ -72,6 +72,7 @@
 		height: 40px;
 		background-color: #eee;
 		position: fixed;
+		bottom: 50px;
 		width: 100%;
 		line-height: 40px;
 		display: flex;

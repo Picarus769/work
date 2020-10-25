@@ -53,11 +53,17 @@ export default {
 		await getStaff(oftenAddr)
 	},
 	//获取商品
-	async getProduct(shopId) {
-		const res = await $myRequest({
-			url: 'api/Product?ShopId=' + shopId
+	async getProduct(areaId) {
+		const res = await this.$myRequest({
+			url: 'api/ShopStore',
+			data: {
+				AreaId: areaId,
+				AreaCate: 3,
+			}
 		})
-		console.log(res.data.data)
-		store.commit('setProducts', res.data.data)
+		console.log(res.data)
+		store.commit('setCate', res.data.cateDtos)
+		store.commit('setProducts', res.data.products)
+		store.commit('setShop', res.data.shopId)
 	}
 }

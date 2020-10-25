@@ -6,12 +6,12 @@
 			</view>
 			<view class="center">
 				<view>
-					<text class="num">1000</text>
+					<text class="num">{{points}}</text>
 					<text class="text1">积分></text>
 				</view>
 				<text class="text2">购物赚积分，积分万能兑</text>
 			</view>
-			<view class="right">规则</view>
+			<!-- <view class="right">规则</view> -->
 		</view>
 		<view class="change">
 			<view class="lebal">权益兑换</view>
@@ -25,6 +25,11 @@
 			return {
 				
 			};
+		},
+		computed: {
+			points() {
+				return this.$store.getters.userInfo.shopIntegral
+			}
 		}
 	}
 </script>

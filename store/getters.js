@@ -20,8 +20,8 @@ export default {
 	oftenAddress(state) {
 		return state.oftenAddress
 	},
-	staff(state) {
-		return state.staff
+	shop(state) {
+		return state.shop
 	},
 	products(state) {
 		return state.products

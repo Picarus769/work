@@ -13,7 +13,7 @@
 	export default {
 		data() {
 			return {
-				two_code:"../../static/images/Roulette1.png"
+				two_code:"../../static/images/defaultImg.png"
 			}
 		},
 		methods: {

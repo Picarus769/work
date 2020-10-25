@@ -1,135 +1,156 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-		{
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": ""
-			}
-		}
+				{
+					"path": "pages/index/index",
+					"style": {
+						"navigationStyle": "custom"
+					}
+				}
         ,{
             "path" : "pages/profile/profile",
             "style" : {
-							"navigationBarTitleText": "我的"
+							"navigationStyle": "custom"
 						}
         }
         ,{
             "path" : "pages/message/message",
             "style" : {
-							"navigationBarTitleText": "消息"
+							"navigationStyle": "custom"
 						}
         }
         ,{
             "path" : "pages/cate/cate",
             "style" : {
-							"navigationBarTitleText": "分类"
+							"navigationStyle": "custom"
 						}
         },
 		{
 			"path" : "pages/cart/cart",
 			"style" : {
-				"navigationBarTitleText": "购物车"
+				"navigationStyle": "custom"
 			}
 		}
         ,{
             "path" : "pages/index/Roulette",
             "style" : {
-							"navigationBarTitleText": "大转盘"
+							"navigationStyle": "custom"
 						}
         },
 				{
 					"path" : "pages/index/conscribe",
 					"style" : {
-						"navigationBarTitleText": "加入我们"
+						"navigationStyle": "custom"
 					}
 				}
         ,{
             "path" : "pages/detail/detail",
             "style" : {
-							"navigationBarTitleText": "详情"
+							"navigationStyle": "custom"
 						}
         }
         ,{
             "path" : "pages/chat/chat",
             "style" : {
-							"navigationBarTitleText": "客服"
+							"navigationStyle": "custom"
 						}
         }
         ,{
             "path" : "pages/cate/category_list",
             "style" : {
-							"navigationBarTitleText": ""
+							"navigationStyle": "custom"
 						}
         }
         ,{
             "path" : "pages/profile/settings",
             "style" : {
-							"navigationBarTitleText": "设置"
+							"navigationStyle": "custom"
 						}
         }
         ,{
             "path" : "pages/order/order",
             "style" : {
-							"navigationBarTitleText": "提交订单"
+							"navigationStyle": "custom"
 						}
         }
         ,{
             "path" : "pages/profile/myOrder",
             "style" : {
-							"navigationBarTitleText": "我的订单"
+							"navigationStyle": "custom"
 						}
         }
         ,{
             "path" : "pages/profile/myPoints",
             "style" : {
-							"navigationBarTitleText": "我的积分"
+							"navigationStyle": "custom"
 						}
         }
         ,{
             "path" : "pages/profile/shopServe",
             "style" : {
-							"navigationBarTitleText": "商家服务"
+							"navigationStyle": "custom"
 						}
         }
         ,{
             "path" : "pages/profile/accountFunds",
             "style" : {
-							"navigationBarTitleText": ""
+							"navigationStyle": "custom"
 						}
         }
         ,{
             "path" : "pages/profile/baseInfo",
             "style" : {
-							"navigationBarTitleText": "基本信息"
+							"navigationStyle": "custom"
 						}
         }
         ,{
             "path" : "pages/profile/setAddress",
             "style" : {
-							"navigationBarTitleText": "填写地址"
+							"navigationStyle": "custom"
 						}
         }
         ,{
             "path" : "pages/index/shopLocation",
-            "style" : {}
+            "style" : {
+							"navigationStyle": "custom"
+						}
         }
         ,{
             "path" : "pages/shop/shop",
-            "style" : {}
+            "style" : {
+							"navigationStyle": "custom"
+						}
         }
         ,{
             "path" : "pages/profile/address",
-            "style" : {}
+            "style" : {
+							"navigationStyle": "custom"
+						}
         }
-        ,{
-            "path" : "pages/profile/address",
-            "style" : {}
-        }
+        
         ,{
             "path" : "pages/profile/shopPoints",
-            "style" : {}
+            "style" : {
+							"navigationStyle": "custom"
+						}
         }
         ,{
             "path" : "pages/profile/rootPoints",
+            "style" : {
+							"navigationStyle": "custom"
+						}
+        }
+        ,{
+            "path" : "pages/detail/share",
+            "style" : {
+							"navigationStyle": "custom"
+						}
+        }
+        ,{
+            "path" : "pages/activity/activity",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/activity/activity2",
             "style" : {}
         }
     ],

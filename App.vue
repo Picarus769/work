@@ -2,17 +2,46 @@
 	import store from '@/store/index.js';
 	export default {
 		onLaunch: function() {
-			console.log('App Launch')
-			// store.commit('getCacheData')
-			// if (store.state.userInfo) {
-			// 	// this.login()
-			// 	this.getAddress()
-			// 	console.log(store.state.userInfo)
-			// } else {
-			// 	this.login().then()
-			// }
-			// this.getAddress()
-			this.login()
+			console.log('App Launch');
+			// let res = JSON.parse(this.getCookie("current"));
+			let res = {
+				name: null,
+				openId: null,
+				avatar: null,
+				integral: 0,
+				shopIntegral: 0,
+				info: [
+					{
+						provinceid: 2,
+						provincename: "北京市",
+						cityid: 4,
+						cityname: "朝阳区",
+						countiesid: 4,
+						countiename: "朝阳区",
+						info: "32123",
+						userid: 0,
+						name: "343",
+						phone: "3463",
+						isoften: true,
+						id: 93
+					}
+				],
+				id: 4
+			}
+			this.login(res).then(()=>{
+				console.log("app.vue完成")
+				// uni.reLaunch({
+				// 	url: '/pages/index/index',
+					
+				// 	success() {
+				// 	},
+				// 	fail(e) {
+				// 		console.log("aaa")
+				// 		console.log(e)
+				// 	}
+				// })
+				
+			})
 		},
 		onShow: function() {
 			
@@ -22,133 +51,121 @@
 			console.log('App Hide')
 		},
 		methods: {
-			//请求商家
-			// async getStaff(oftenAddr) {
-			// 	console.log(oftenAddr)
-			// 	let areaId = oftenAddr.countiesId
-			// 	const res = await this.$myRequest({
-			// 		url: 'api/Staff',
-			// 		data: {
-			// 			AreaId: areaId,
-			// 			AreaCate: 3,
-			// 		}
-			// 	})
-			// 	console.log('商家信息', res.data.data[0])
-			// 	store.commit('setStaff', res.data.data[0])
-			// 	this.getShop(res.data.data[0].id)
-			// },
-			//根据商家请求商店
-			async getShop(oftenAddr) {
-				console.log(oftenAddr)
-				let areaId = oftenAddr.countiesId
-				const res = await this.$myRequest({
-					url: 'api/Shop',
-					data: {
-								AddressId: areaId,
-								AreaCate: 2,
-								Id: 5
-							}
-				}).then((res) => {
-					console.log('商店信息', res.data.data[0])
-					store.commit('setShop', res.data.data[0])
-					let shopId = res.data.data[0].id
-					this.getProduct(shopId)
-				})
-				
-			},
+			  // 获取cookie
+			  getCookie(cname) {
+			    let name = cname + "=";
+			    let decodedCookie = decodeURIComponent(document.cookie);
+			    let ca = decodedCookie.split(";");
+			    for (let i = 0; i < ca.length; i++) {
+			      let c = ca[i];
+			      while (c.charAt(0) == " ") {
+			        c = c.substring(1);
+			      }
+			      if (c.indexOf(name) == 0) {
+			        return c.substring(name.length, c.length);
+			      }
+			    }
+			    return undefined;
+			  },
 			//用户登录
-			async login() {
-				const res = await this.$myRequest({
-					url: 'api/User?Id=2&OpenId'
-				})
-				console.log(res.data.data[0])
-				store.commit('setUserInfo', res.data.data[0]);
-<<<<<<< HEAD
-				store.commit('setLocation', res.data.data[0].info);
-				if(res.data.data[0].info.length === 0) {
-					uni.showModal({
-						content: '添加地址以寻找附近商店',
-						showCancel: false,
+			async login(r) {
+				store.commit('setUserInfo', r);
+				console.log(r)
+				// const res = await this.$myRequest({
+				// 	url: 'api/User?Id=2&OpenId'
+				// })
+				// console.log(res.data.data[0])
+				// store.commit('setUserInfo', res.data.data[0]);
+				
+				if(r.info.length === 0) {
+					console.log("aaaaa")
+					uni.navigateTo({
+						url: '/pages/profile/setAddress',
 						success() {
-							uni.navigateTo({
-								url: '/pages/profile/setAddress'
-							})
+							console.log("ccc")
+						},
+						fail(e) {
+							
+							console.log(e)
 						}
 					})
+					// uni.showModal({
+					// 	content: '添加地址以寻找附近商店',
+					// 	showCancel: false,
+					// 	success() {
+					// 		uni.navigateTo({
+					// 			url: '/pages/profile/setAddress',
+					// 			success() {
+					// 				console.log("ccc")
+					// 			},
+					// 			fail(e) {
+					// 				console.log('dddd')
+					// 				console.log(e)
+					// 			}
+					// 		})
+					// 	},
+					// 	fail(e) {
+					// 		console.log(e)
+					// 	}
+					// })
 				} else {
-=======
-			},
-			//获取收货地址
-			async getAddress() {
-				const res = await this.$myRequest({
-					url: 'api/Address?UserId=' + store.state.userInfo.id
-				}).then((res)=> {
-					if(res.data.data.length === 0) {
-						uni.showModal({
-							content: '添加地址以寻找附近商店',
-							showCancel: false,
+					
+					store.commit('setLocation', r.info);
+				let oftenAddr = r.info.find(q=>q.isoften === true)
+				
+						this.getProduct(oftenAddr)
+						uni.switchTab({
+							url: '/pages/index/index',
 							success() {
-								uni.navigateTo({
-									url: '/pages/profile/setAddress'
-								})
+								console.log("bbbbbb")
+							},
+							fail(e) {
+								console.log("bbb")
+								console.log(e)
 							}
 						})
-						return
+						console.log("重定向完成")
 					}
->>>>>>> 6b835af60a2dd2c354a851e65fd4fb5c203a9e9e
-					let oftenAddr = null
-					for (let item of res.data.data[0].info) {
-						if (item.isOften === true) {
-							oftenAddr = item
-							break
+				},
+				//按地址获取商店和商品
+				async getProduct(oftenAddr) {
+					console.log(oftenAddr)
+					let areaId = oftenAddr.countiesid
+					const res = await this.$myRequest({
+						url: 'api/ShopStore',
+						data: {
+							AreaId: areaId,
+							AreaCate: 3,
 						}
+					})
+					console.log(res.data)
+					store.commit('setCate', res.data.cateDtos)
+					store.commit('setProducts', res.data.products)
+					let temp = {
+						shopRate:  res.data.shopRate,
+						shopId: res.data.shopId,
+						shopName: res.data.shopName,
+						shopAvatar: res.data.shopAvatar,
+						shopAddress: res.data.shopAddress,
+						
 					}
-					this.getShop(oftenAddr)
-				}
+					console.log(temp)
+					store.commit('setShop', temp)
+					this.getActivity(res.data.shopId)
 			},
-			//获取收货地址
-			// async getAddress() {
-			// 	const res = await this.$myRequest({
-			// 		url: 'api/Address?UserId=' + store.state.userInfo.id
-			// 	}).then((res)=> {
-					// let oftenAddr = null
-					// for (let item of res.data.data) {
-					// 	if (item.isOften === true) {
-					// 		oftenAddr = item
-					// 		break
-					// 	}
-					// }
-					// console.log(res.data.data)
-					// store.commit('setLocation', res.data.data)
-					// this.getShop(oftenAddr)
-			// 	})
-			// 	if(res.data.data.length === 0) {
-			// 		uni.showModal({
-			// 			content: '添加地址以寻找附近商店',
-			// 			showCancel: false,
-			// 			success() {
-			// 				uni.navigateTo({
-			// 					url: '/pages/profile/setAddress'
-			// 				})
-			// 			}
-			// 		})
-					
-			// 	}
-				
-			// },
-			//获取商品
-			async getProduct(shopId) {
+			async getActivity(id) {
 				const res = await this.$myRequest({
-					url: 'api/ShopStore?shopId=' + shopId
+					url: 'api/Activity?ShopId=' + id
 				})
-				console.log(res.data)
-				store.commit('setCate', res.data.cateDtos)
-				store.commit('setProducts', res.data.products)
+				console.log(res.data.data)
+				store.commit('setActivity', res.data.data)
 			}
 		}
 	}
 </script>
 
 <style>
-	/*每个页面公共css */
+::-webkit-scrollbar {
+  display: none; /* Chrome Safari */
+}
 </style>

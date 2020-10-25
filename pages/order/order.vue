@@ -16,11 +16,11 @@
 					</view>
 					<view class="center">
 						<view class="top">
-							<text class="name">{{address.userName}}</text>
+							<text class="name">{{address.name}}</text>
 							<text class="phone">{{address.phone}}</text>
 						</view>
 						<view class="down">
-							{{address.provinceName+address.cityName+address.countieName+address.info}}
+							{{address.provincename+address.cityname+address.countiename+address.info}}
 						</view>
 					</view>
 					<view class="right">
@@ -32,7 +32,7 @@
 					<view class="shop_name"></view>
 					<view class="product_item">
 						<view class="left">
-							<image :src="item.itemPic?'https://admin.counselor.hzrxkjgs.cn/'+item.itemPic:'../../static/images/defaultImg.png'" mode=""></image>
+							<image :src="item.image?item.image:'../../static/images/defaultImg.png'" mode=""></image>
 						</view>
 						<view class="center">
 							<view class="product_message">
@@ -106,7 +106,6 @@
 				let sPrice = this.shopIntChecked?this.shopIntPrice : 0
 				let iPrice = this.integralChecked?this.intPrice : 0
 				return this.product.reduce((sum, item) => {return sum + item.price * item.selectCount},0) - sPrice - iPrice
-				
 			},
 			shopIntPrice() {
 				return this.product.reduce((sum, item) => {return sum + item.shopIntegral * this.userInfo.shopIntegral},0)
@@ -136,8 +135,8 @@
 				})
 			},
 			async submit() {
-				console.log(this.address.userId)
-				console.log(this.$store.state.shop.id)
+				console.log(this.userInfo.id)
+				console.log(this.$store.state.shop.shopId)
 				console.log(this.totalPrice)
 				console.log(this.shopIntChecked)
 				console.log(this.integralChecked)
@@ -146,8 +145,8 @@
 					url: 'api/UserOrders',
 					method: 'POST',
 					data: {
-						"userId": this.address.userId,
-						"shopId": this.$store.state.shop.id,
+						"userId": this.userInfo.id,
+						"shopId": this.$store.state.shop.shopId,
 						"payPrice": this.totalPrice,
 						
 						"useShopIntegral": this.shopIntChecked,
@@ -156,6 +155,11 @@
 					}
 				})
 				console.log(res)
+				if(res.data>0) {
+					uni.navigateTo({
+						url: '/pages/profile/myOrder'
+					})
+				}
 			}
 		},
 		onLoad(option) {

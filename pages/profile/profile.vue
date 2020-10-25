@@ -100,7 +100,7 @@
 				flex-direction: column;
 				justify-content: space-around;
 				.gray_font{
-					font-size: 28rpx;
+					font-size: 30rpx;
 					color: #c8c7cc;
 				}
 			}

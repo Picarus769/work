@@ -1,7 +1,11 @@
 <template>
   <view>
-    <cart-list></cart-list>
-		<cart-bottom-bar></cart-bottom-bar>
+		<view v-if="isEmpty" class="is_empty">空空如也</view>
+		<view v-else>
+			<cart-list></cart-list>
+			<cart-bottom-bar>
+			</cart-bottom-bar>
+		</view>
   </view>
 </template>
 
@@ -19,10 +23,21 @@
 			console.log(this.cartList)
 		},
 		computed:{
-			...mapGetters(['cartList'])
+			...mapGetters(['cartList']),
+			isEmpty() {
+				return this.cartList.length === 0?true:false
+			}
 		}
   }
 </script>
 
-<style>
+<style scoped lang="scss">
+	.is_empty {
+		color: $font-color-disabled;
+		position: absolute;
+		text-align: center;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
 </style>

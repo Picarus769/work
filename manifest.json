@@ -50,7 +50,9 @@
             /* ios打包配置 */
             "ios" : {},
             /* SDK配置 */
-            "sdkConfigs" : {}
+            "sdkConfigs" : {
+                "ad" : {}
+            }
         }
     },
     /* 快应用特有相关 */
@@ -77,10 +79,16 @@
     },
     "h5" : {
         "router" : {
-            "mode" : "history"
+            "mode" : "history",
+            "base" : ""
         },
         "sdkConfigs" : {
             "maps" : {}
+        },
+        "title" : "美容分销",
+        "domain" : "https://admin.counselor.hzrxkjgs.cn/",
+        "devServer" : {
+            "https" : true
         }
     }
 }
