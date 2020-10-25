@@ -63,6 +63,7 @@
 				})
 				console.log(res.data.data[0])
 				store.commit('setUserInfo', res.data.data[0]);
+<<<<<<< HEAD
 				store.commit('setLocation', res.data.data[0].info);
 				if(res.data.data[0].info.length === 0) {
 					uni.showModal({
@@ -75,6 +76,26 @@
 						}
 					})
 				} else {
+=======
+			},
+			//获取收货地址
+			async getAddress() {
+				const res = await this.$myRequest({
+					url: 'api/Address?UserId=' + store.state.userInfo.id
+				}).then((res)=> {
+					if(res.data.data.length === 0) {
+						uni.showModal({
+							content: '添加地址以寻找附近商店',
+							showCancel: false,
+							success() {
+								uni.navigateTo({
+									url: '/pages/profile/setAddress'
+								})
+							}
+						})
+						return
+					}
+>>>>>>> 6b835af60a2dd2c354a851e65fd4fb5c203a9e9e
 					let oftenAddr = null
 					for (let item of res.data.data[0].info) {
 						if (item.isOften === true) {
