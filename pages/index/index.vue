@@ -9,8 +9,8 @@
 						</view>
 						<view class="header_right">
 							<view class="input">
-								<input type="text">
-								<image src="../../static/images/search.svg" class="search" type="" @click="searchClick">
+								<input type="text" v-model="inputValue">
+								<image src="../../static/images/search.svg" class="search" type="" @click="searchClick(inputValue)">
 							</view>
 						</view>
 					</view>
@@ -85,7 +85,8 @@
 				activity_products: [],
 				bigImg: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2087149704,1454267624&fm=15&gp=0.jpg',
 				activityImg: '',
-				goodsList: []
+				goodsList: [],
+				inputValue: ''
 			}
 		},
 		onLoad() {
@@ -137,6 +138,7 @@
 					// uni.navigateTo({
 					// 	url: '../activity/activity2'
 					// })
+					
 					uni.showToast({
 						title: "敬请期待",
 						icon: "none"
@@ -144,10 +146,17 @@
 				}
 				
 			},
-			searchClick() {
-				uni.showToast({
-					title: '暂不支持搜索',
-					icon: 'none'
+			searchClick(inputValue) {
+				// uni.showToast({
+				// 	title: '暂不支持搜索',
+				// 	icon: 'none'
+				// })
+				this.$store.commit('setSearchValue', inputValue)
+				uni.navigateTo({
+					url: './search',
+					success(res) {
+						res.eventChannel.emit('acceptDataFromOpenerPage', { data: inputValue })
+					}
 				})
 			},
 			getLocation() {

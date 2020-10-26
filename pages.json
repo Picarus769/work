@@ -147,18 +147,37 @@
         }
         ,{
             "path" : "pages/activity/activity",
-            "style" : {}
+            "style" : {
+							"navigationStyle": "custom"
+						}
         }
         ,{
             "path" : "pages/activity/activity2",
             "style" : {}
         }
+        ,{
+            "path" : "pages/index/search",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/index/areaAgent",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/index/extension",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/index/vip",
+            "style" : {}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
+		"navigationBarTitleText": "芙美伊",
 		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
+		"backgroundColor": "#F8F8F8",
+		"navigationStyle": "custom"
 	},
 	"tabBar": {
 		"selectedColor": "#FF3F01",

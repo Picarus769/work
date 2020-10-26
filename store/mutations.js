@@ -111,6 +111,11 @@ export default {
 		payload.checked = false
 		state.cartList.push(payload)
 	},
+	//保存搜索内容
+	setSearchValue(state, searchValue) {
+		console.log(searchValue)
+		state.searchValue = searchValue
+	},
 	addCounter(state, payload) {
 		payload.selectCount++
 	},

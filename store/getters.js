@@ -25,5 +25,8 @@ export default {
 	},
 	products(state) {
 		return state.products
+	},
+	searchValue(state) {
+		return state.searchValue
 	}
 }

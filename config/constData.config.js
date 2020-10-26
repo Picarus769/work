@@ -42,7 +42,7 @@ export default {
 		{
 			name: '区域代理',
 			icon: '../../static/images/agent.png',
-			url: ''
+			url: '/pages/index/areaAgent'
 		},
 		{
 			name: '幸运转盘',
@@ -57,7 +57,12 @@ export default {
 		{
 			name: '营销推广',
 			icon: '../../static/images/extension.png',
-			url: ''
+			url: '/pages/index/extension'
+		},
+		{
+			name: '会员专区',
+			icon: '../../static/images/vip.png',
+			url: '/pages/index/vip'
 		}
 	],
 	//分类页面配置
@@ -138,9 +143,43 @@ export default {
 			url: ''
 		}
 	],
-		
-	
-	
-	
+	vipOptions: [
+		{
+			id: 0,
+			title: 'VIP',
+			info: '购买VIP套餐升级',
+			icon: '../../static/images/vip1.png'
+		},
+		{
+			id: 1,
+			title: '伊客',
+			info: '购买伊客套餐升级',
+			icon: '../../static/images/vip2.png'
+		}
+	],
+	vipInfo: [
+		{
+			id: 0,
+			title: '权益一',
+			info: '权益一说明'
+		},
+		{
+			id: 1,
+			title: '权益二',
+			info: '权益二说明'
+		}
+	],
+	sVipInfo: [
+		{
+			id: 0,
+			title: '权益一',
+			info: '权益一说明'
+		},
+		{
+			id: 1,
+			title: '权益二',
+			info: '权益二说明'
+		}
+	]
 	
 }
