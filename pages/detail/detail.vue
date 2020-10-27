@@ -2,7 +2,7 @@
 	<view class="detail">
 		<swiper indicator-dots="true" autoplay="true">
 			<swiper-item v-for="(item,index) in infoPics" :key="item.index">
-				<image :src="'https://admin.counselor.hzrxkjgs.cn/'+item"></image>
+				<image :src="$constData.imageServer+item"></image>
 			</swiper-item>
 		</swiper>
 		<view class="header area">
@@ -45,7 +45,7 @@
 					<view slot="popup" @click.stop="stopPrevent">
 						<view class="popup_content">
 							<view class="popup_info">
-								<image :src="currentAttr.itemPic?'https://admin.counselor.hzrxkjgs.cn/'+currentAttr.itemPic:$constData.defaultImg"
+								<image :src="currentAttr.itemPic?$constData.imageServer+currentAttr.itemPic:$constData.defaultImg"
 								 mode=""></image>
 								<view class="info">
 									<view class="name">{{currentAttr.name}}</view>
@@ -86,7 +86,7 @@
 		<view class="shop area" @click="shopClick">
 			<view class="shop_info">
 				<view class="left">
-					<image :src="shop.shopAvatar?'https://admin.counselor.hzrxkjgs.cn/'+shop.shopAvatar:$constData.defaultImg" mode=""></image>
+					<image :src="shop.shopAvatar?$constData.imageServer+shop.shopAvatar:$constData.defaultImg" mode=""></image>
 				</view>
 				<view class="center">
 					{{shop.shopName}}
@@ -103,7 +103,7 @@
 		<view class="split">——————宝贝详情——————</view>
 		<view class="detail_img">
 			<view v-for="(item, index) in infoPics" :key="index">
-				<image :src="'https://admin.counselor.hzrxkjgs.cn/'+item" mode=""></image>
+				<image :src="$constData.imageServer+item" mode=""></image>
 			</view>
 		</view>
 		<view class="block_area">
@@ -166,19 +166,18 @@
 					return this.productDetail.shopStore_ProductItems.filter((item) => this.attrId == item.id)[0]
 				} else {
 					return {
-						cateId: 1,
-						cateName: "种类1",
-						count: 23,
-						id: 3,
-						integral: 10,
-						itemPic: "ProductItem/1/alsxso5k.z25.png",
-						price: 29,
-						productId: 2,
-						productItemId: 1,
-						productItemName: "产品属性名称",
-						reIntegral: 10,
-						reShopIntegral: 50,
-						shopIntegral: 0
+						activityId: this.productDetail.activityId,
+						count: this.productDetail.count,
+						id: this.productDetail.id,
+						integral: this.productDetail.integral,
+						itemPic: this.productDetail.productItemPic,
+						price: this.productDetail.price,
+						productId: this.productDetail.productId,
+						productItemId: this.productDetail.productItemId,
+						productItemName: this.productDetail.productItemName,
+						reIntegral: this.productDetail.reIntegral,
+						reShopIntegral: this.productDetail.reShopIntegral,
+						shopIntegral: this.productDetail.shopIntegral
 					}
 				}
 			},
@@ -203,10 +202,9 @@
 			//加入购物车
 			addCart() {
 				const product = {}
-				product.image = 'https://admin.counselor.hzrxkjgs.cn/' + this.currentAttr.itemPic
+				product.activityId = this.currentAttr.activityId
+				product.image = this.$constData.imageServer + this.currentAttr.itemPic
 				product.productItemName = this.currentAttr.productItemName
-				product.cateId = this.currentAttr.cateId
-				product.cateName = this.currentAttr.cateName
 				product.totalCount = this.currentAttr.count
 				product.selectCount = this.selectCount != 0 ? this.selectCount : 1
 				product.integral = this.currentAttr.integral
@@ -295,61 +293,61 @@
 			stopPrevent() {}
 		},
 		onLoad(option) {
-			const eventChannel = this.getOpenerEventChannel()
-			eventChannel.on('acceptDataFromOpenerPage', function(data) {
+			// const eventChannel = this.getOpenerEventChannel()
+			// eventChannel.on('acceptDataFromOpenerPage', function(data) {
 
 
-				this.productDetail = data.data
-			})
-			this.shopComment = [{
-					name: '宝贝描述',
-					score: 4.8
-				},
-				{
-					name: '卖家服务',
-					score: 4.8
-				},
-				{
-					name: '物流服务',
-					score: 4.8
-				}
-			]
+			// 	this.productDetail = data.data
+			// })
+			// this.shopComment = [{
+			// 		name: '宝贝描述',
+			// 		score: 4.8
+			// 	},
+			// 	{
+			// 		name: '卖家服务',
+			// 		score: 4.8
+			// 	},
+			// 	{
+			// 		name: '物流服务',
+			// 		score: 4.8
+			// 	}
+			// ]
 			
-			if(!this.$store.state.currentProduct.cateId)
-			{
+			// if(!this.$store.state.currentProduct.cateId)
+			// {
 			
-			this.productDetail = {
-				cateId: 1,
-				cateName: "种类1",
-				createTime: "2020-10-18T13:02:00.363",
-				homePic: "Product/2/Home/ssqqbwmo.nwk.jpeg",
-				info: "产品内容介绍",
-				infoPic: "Product/2/Info/53bfokrc.jz2.jpeg,Product/2/Info/a4ovycjm.b4v.jpeg,Product/2/Info/euriwjmb.zl4.png",
-				name: "产品名称",
-				price: 29,
-				productId: 2,
-				shopId: 5,
-				shopStore_ProductItems: [{
-					cateId: 1,
-					cateName: "种类1",
-					count: 23,
-					id: 3,
-					integral: 10,
-					itemPic: "ProductItem/1/alsxso5k.z25.png",
-					price: 29,
-					productId: 2,
-					productItemId: 1,
-					productItemName: "产品属性名称",
-					reIntegral: 10,
-					reShopIntegral: 50,
-					shopIntegral: 0
-				}]
-			}
+			// this.productDetail = {
+			// 	cateId: 1,
+			// 	cateName: "种类1",
+			// 	createTime: "2020-10-18T13:02:00.363",
+			// 	homePic: "Product/2/Home/ssqqbwmo.nwk.jpeg",
+			// 	info: "产品内容介绍",
+			// 	infoPic: "Product/2/Info/53bfokrc.jz2.jpeg,Product/2/Info/a4ovycjm.b4v.jpeg,Product/2/Info/euriwjmb.zl4.png",
+			// 	name: "产品名称",
+			// 	price: 29,
+			// 	productId: 2,
+			// 	shopId: 5,
+			// 	shopStore_ProductItems: [{
+			// 		cateId: 1,
+			// 		cateName: "种类1",
+			// 		count: 23,
+			// 		id: 3,
+			// 		integral: 10,
+			// 		itemPic: "ProductItem/1/alsxso5k.z25.png",
+			// 		price: 29,
+			// 		productId: 2,
+			// 		productItemId: 1,
+			// 		productItemName: "产品属性名称",
+			// 		reIntegral: 10,
+			// 		reShopIntegral: 50,
+			// 		shopIntegral: 0
+			// 	}]
+			// }
 			
-			}else{
-				this.productDetail = this.$store.state.currentProduct
-			}
-
+			// }else{
+				
+			// }
+			this.productDetail = this.$store.state.currentProduct
 			this.infoPics = this.productDetail.infoPic ? this.productDetail.infoPic.split(',') : []
 
 			if (!this.productDetail.shopStore_ProductItems) {
@@ -358,7 +356,6 @@
 				this.attrId = this.productDetail.shopStore_ProductItems[0].id
 			}
 
-			console.log(this.shop)
 		}
 	}
 </script>

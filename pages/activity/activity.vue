@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<goodsList :goods="activities[0].activity_ProductItemDtos"></goodsList>
+		<goodsList :goods="goods"></goodsList>
 	</view>
 </template>
 
@@ -17,7 +17,20 @@
 			goodsList
 		},
 		computed: {
-			...mapGetters(['activities'])
+			...mapGetters(['activities']),
+			goods() {
+				let arr = this.activities[0].activity_ProductItemDtos.map(item => {
+					if(item.productItemPic === null) {
+						item.homePic = null
+						return item
+					} else {
+						item.homePic = item.productItemPic.split(',')[0]
+						return item
+					}
+				})
+				return arr
+			}
+			
 		},
 		methods: {
 			

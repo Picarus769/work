@@ -10,7 +10,7 @@
 </template>
 
 <script>
-	import CheckButton from 'components/checkButton/CheckButton.vue'
+	import CheckButton from '@/components/checkButton/CheckButton.vue'
 	export default {
 		name: "CartBottomBar",
 		components: {
@@ -100,6 +100,7 @@
 		background-color: red;
 	}
 	.check {
-		background-color: #FF0000
+		background-color: #FF0000;
+		border: none;
 	}
 </style>

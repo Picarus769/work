@@ -1,7 +1,7 @@
 <template>
 	<view class="vip">
 		<view class="header area">
-			<text class="level"></text>
+			<text class="level">当前会员身份</text>
 		</view>
 		<view class="upgrade area">
 			<view class="title">套餐升级</view>
@@ -11,7 +11,7 @@
 						<view class="title">{{item.title}}</view>
 						<view class="info">{{item.info}}</view>
 					</view>
-					<view class="image" :class="{isFirst: item.id === 0}"><image :src="$constData.defaultImg" mode=""></image></view>
+					<view class="image" :class="{isFirst: item.id === 0}"><image :src="item.icon" mode=""></image></view>
 				</view>
 			</view>
 		</view>
@@ -19,31 +19,37 @@
 			<view class="title">会员权益</view>
 			<view class="main">
 				<view>VIP会员</view>
-				<view v-for="item in $constData.vipInfo" :key="item.id">
-					<view>
-						<text>{{item.title}}:</text><text>{{item.info}}</text>
+				<view>
+					<view v-for="item in $constData.vipInfo" :key="item.id">
+						<view>
+							<text>{{item.title}}:</text><text>{{item.info}}</text>
+						</view>
 					</view>
 				</view>
+				
 				<view>伊客会员</view>
-				<view v-for="item in $constData.sVipInfo" :key="item.id">
-					<view>
-						<text>{{item.title}}:</text><text>{{item.info}}</text>
+				<view>
+					<view v-for="item in $constData.sVipInfo" :key="item.id">
+						<view>
+							<text>{{item.title}}:</text><text>{{item.info}}</text>
+						</view>
 					</view>
 				</view>
+				
 			</view>
 		</view>
 		<view class="welfare area">
 			<view class="title">
 				福利区
 			</view>
-			<view v-for="item in welfareItem" :key="item.id" class="welfare_item">
+			<!-- <view v-for="item in welfareItem" :key="item.id" class="welfare_item">
 				<image :src="item.image||$constData.defaultImg" mode=""></image>
 				<view class="right">
 					<view class="item_title"></view>
 					<view class="item_info"></view>
 					<view class="btn">去看看</view>
 				</view>
-			</view>
+			</view> -->
 		</view>
 	</view>
 </template>
@@ -80,9 +86,14 @@
 		}
 	}
 	.header {
-		height: 300rpx;
+		height: 250rpx;
 		color: #fff;
-		background-color: #F0665A;
+		background: url(../../static/images/vip_cart.png);
+		background-size: 100% 100%;
+		padding: 40rpx;
+		.level {
+			
+		}
 	}
 	.upgrade {
 		

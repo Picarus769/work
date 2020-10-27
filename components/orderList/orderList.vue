@@ -6,7 +6,7 @@
 			</view>
 			<view class="product_item" v-for="item in order.productItems" :key="item.id">
 				<view class="left">
-					<image :src="item.pic?'https://admin.counselor.hzrxkjgs.cn/'+item.pic:''" mode=""></image>
+					<image :src="item.pic?$constData.imageServer+item.pic:''" mode=""></image>
 				</view>
 				<view class="center">
 					<view class="product_message">
@@ -24,7 +24,7 @@
 			</view>
 			<view class="distribution">
 				<view v-if="order.orderState === 0">订单异常</view>
-				<view v-if="order.orderState === 1">去付款</view>
+				<view v-if="order.orderState === 1">未付款</view>
 				<view v-if="order.orderState === 2">付款时间：</view>
 				<view v-if="order.orderState === 3">已收货</view>
 			</view>
@@ -42,9 +42,10 @@
 			</view>
 			<view class="btn">
 				<view v-if="order.orderState === 0" class="btn_item">异常</view>
-				<view v-if="order.orderState === 1" class="btn_item">去付款</view>
-				<view v-if="order.orderState === 2" class="btn_item">确认收货</view>
-				<view v-if="order.orderState === 3" class="btn_item">评价</view>
+				<view v-if="order.orderState === 1" @click="btnClick" class="btn_item">去付款</view>
+				<view v-if="order.orderState === 2" @click="btnClick" class="btn_item">确认收货</view>
+				<view v-if="order.orderState === 1" @click="btnClick('/pages/order/logistics', order)" class="btn_item">查看物流</view>
+				<view v-if="order.orderState === 3" @click="btnClick" class="btn_item">评价</view>
 			</view>
 		</view>
 	</view>
@@ -70,6 +71,16 @@
 					arr.push(sum)
 				}
 				return arr
+			}
+		},
+		methods: {
+			btnClick(url ,order) {
+				uni.navigateTo({
+					url,
+					success: function(res) {
+					  res.eventChannel.emit('acceptDataFromOpenerPage', { data: order })
+					}
+				})
 			}
 		}
 	}
@@ -139,6 +150,7 @@
 			flex-direction: row-reverse;
 			margin-top: 40rpx;
 			.btn_item {
+				margin-left: 20rpx;
 				padding: 10rpx 20rpx;
 				font-size: 30rpx;
 				border-radius: 1em;

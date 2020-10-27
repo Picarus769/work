@@ -142,8 +142,9 @@
 					store.commit('setCate', res.data.cateDtos)
 					store.commit('setProducts', res.data.products)
 					let temp = {
-						shopRate:  res.data.shopRate,
+						
 						shopId: res.data.shopId,
+						shopRate:  res.data.shopRate,
 						shopName: res.data.shopName,
 						shopAvatar: res.data.shopAvatar,
 						shopAddress: res.data.shopAddress,

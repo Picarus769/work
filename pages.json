@@ -171,6 +171,10 @@
             "path" : "pages/index/vip",
             "style" : {}
         }
+        ,{
+            "path" : "pages/order/logistics",
+            "style" : {}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

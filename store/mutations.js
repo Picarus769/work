@@ -77,8 +77,6 @@ export default {
 	//保存商店
 	
 	
-	
-	
 	setShop(state, shop) {
 		console.log("已保存商店")
 		
@@ -89,7 +87,7 @@ export default {
 	//保存商品
 	setProducts(state, products) {
 		console.log("已保存商品")
-		state.products = products
+		state.products = products.filter(item => item.shopStore_ProductItems.filter(i => i.count>0).length>0)
 	},
 	//保存点击的商品
 	setCurrentProduct(state, product) {

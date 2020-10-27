@@ -80,7 +80,8 @@
 					border-radius: 50%;
 					vertical-align: middle;
 					image {
-						margin-top: 10rpx;
+						margin-top: 15rpx;
+						margin-left: 5rpx;
 						vertical-align: middle;
 						text-align: center;
 						width: 50rpx;

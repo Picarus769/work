@@ -3,6 +3,8 @@ export default {
 	appName: '**商城',
 	//首页搜索栏前的文字
 	lebalText: '货源',
+	//图片服务器地址
+	imageServer: 'https://admin.counselor.hzrxkjgs.cn/',
 	//默认图片
 	defaultImg: '../../static/images/defaultImg.png',
 	//小箭头图标(灰色)

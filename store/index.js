@@ -14,6 +14,7 @@ export default new Vuex.Store({
 		activities: [],
 		location: [],
 		oftenAddress: null,
+		searchValue: '',
 		userInfo: {},
 		currentProduct: null,
 		products: [],

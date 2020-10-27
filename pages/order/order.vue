@@ -148,7 +148,7 @@
 						"userId": this.userInfo.id,
 						"shopId": this.$store.state.shop.shopId,
 						"payPrice": this.totalPrice,
-						
+						"activitieId": null,
 						"useShopIntegral": this.shopIntChecked,
 						"useIntegral": this.integralChecked,
 						"productItems": this.orderProduct

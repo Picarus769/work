@@ -2,9 +2,12 @@
 	<view>
 		<view class="goods">
 			<view v-for="item in goods" :key="item.id" :class="[{goodsItem1: isOneCol},{goodsItem: !isOneCol}]" @click="itemClick(item)">
-				<image :src="'https://admin.counselor.hzrxkjgs.cn/' + item.homePic" mode=""></image>
+				<image :src="$constData.imageServer + item.homePic" mode=""></image>
 				<view class="message">{{item.name||item.productItemName}}</view>
-				<view class="price">{{"￥" + item.price}}</view>
+				<view>
+					<view class="price">{{"￥" + item.price}}</view>
+				</view>
+				
 				<!-- <view class="master">
 					<image :src="item.portrait" mode="aspectFit" class="portrait"></image>
 					<view>{{item.master}}</view>
@@ -46,7 +49,7 @@
 					// },
 					success(res) {
 						let para 
-						if(!item.cateId)
+						if(!item.activityCate)
 						{
 							
 							 para = {
@@ -110,6 +113,7 @@
 				overflow: hidden;
 			}
 			.price {
+				display: inline-block;
 				margin: 8rpx 0;
 				font-size: 36rpx;
 				font-weight: 800;
