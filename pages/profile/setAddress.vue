@@ -20,7 +20,7 @@
 					 </gb-picker>
 				</view> -->
 				<view class="my_picker">
-					<picker mode="selector" :value="selectProvinceValue" :range="provincesName" @change="provinceChange">
+					<picker mode="selector" :value="selectProvinceValue" :range="provincesName" @change.prevent="provinceChange">
 						<view> <text>{{provincesRange[selectProvinceValue].name}}</text></view>
 					</picker>
 					<picker mode="selector" :value="selectCityValue" :range="prefecturesName" @change="cityChange">
@@ -38,24 +38,24 @@
 				<!-- <view class="btn">
 					<button type="default" size="mini">确认</button>
 				</view> -->
-				
+				 <!-- @click="labelClick(0)" -->
 			</view>
 			<view class="yt-list-cell b-b">
 				<view class="cell-tit clamp"><text class="red_color"></text>姓名</view>
 				<view class="cell-tip">
-					<input type="text" value="" v-model="name"/>
+					<input type="text" id="name" :focus="name_f" value="" v-model="name"/>
 				</view>
 			</view>
 			<view class="yt-list-cell b-b">
 				<view class="cell-tit clamp"><text class="red_color"></text>电话</view>
 				<view class="cell-tip">
-					<input type="text" value="" v-model="phone"/>
+					<input type="text" id="phone" :focus="phone_f" value="" v-model="phone"/>
 				</view>
 			</view>
 			<view class="yt-list-cell b-b">
 				<view class="cell-tit clamp"><text class="red_color"></text>详细地址</view>
 				<view class="cell-tip">
-					<input type="text" value="" v-model="info"/>
+					<input type="text" id="info" :focus="info_f" value="" v-model="info"/>
 				</view>
 			</view>
 			
@@ -83,6 +83,9 @@
 	export default {
 		data() {
 			return {
+				name_f: false,
+				phone_f: false,
+				info_f: false,
 				name: '',
 				selectProvinceValue: 0,
 				provincesRange: [{name: '选择省',id: -1}],
@@ -141,6 +144,25 @@
 			this.getProvinceRange()
 		},
 		methods: {
+			// labelClick(id) {
+			// 	if(id === 0) {
+			// 		this.name_f = true
+			// 		this.phone_f = false
+			// 		this.info_f = false
+			// 	} else if (id === 1) {
+			// 		this.phone_f = true
+			// 		this.name_f = false
+			// 		this.info_f = false
+			// 	} else if (id === 2) {
+			// 		this.name_f = false
+			// 		this.phone_f = false
+			// 		this.info_f = true
+			// 	} else if (id === 3) {
+			// 		this.name_f = false
+			// 		this.phone_f = false
+			// 		this.info_f = false
+			// 	}
+			// },
 			provinceChange(e) {
 				this.selectProvinceValue = e.detail.value
 				this.getCityRange()
@@ -250,8 +272,8 @@
 						// 	store.commit('setProducts', res2.data.products)
 						// })
 						
-						uni.navigateBack({
-							
+						uni.switchTab({
+							url: '/pages/index/index'
 						})
 					})
 				}
@@ -417,6 +439,7 @@
 			display: inline-block;
 		}
 		.cell-tip {
+			width: 500rpx;
 			font-size: 26px;
 			color: #000;
 			flex-direction: column;

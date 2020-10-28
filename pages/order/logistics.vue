@@ -39,6 +39,10 @@
 				that.order = data.data.productItems[0]
 			})
 			console.log(this.order)
+			
+		},
+		methods: {
+			// async getExpressage
 		}
 	}
 </script>

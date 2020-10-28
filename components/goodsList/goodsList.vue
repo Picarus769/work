@@ -5,7 +5,7 @@
 				<image :src="$constData.imageServer + item.homePic" mode=""></image>
 				<view class="message">{{item.name||item.productItemName}}</view>
 				<view>
-					<view class="price">{{"￥" + item.price}}</view>
+					<view class="price">{{"￥" + item.price}}</view><view class="old_price" v-if="item.oldPrice">{{"￥" + item.oldPrice}}</view>
 				</view>
 				
 				<!-- <view class="master">
@@ -111,6 +111,14 @@
 				-webkit-line-clamp: 1;
 				text-overflow: ellipsis;
 				overflow: hidden;
+			}
+			.old_price {
+				display: inline-block;
+				margin: 8rpx 0;
+				font-size: 36rpx;
+				font-weight: 800;
+				color: #ccc;
+				text-decoration: line-through;
 			}
 			.price {
 				display: inline-block;

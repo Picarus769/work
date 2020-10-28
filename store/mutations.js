@@ -16,6 +16,22 @@ export default {
 			// // #endif
 		}
 	},
+	// setCart(state, data) {
+	// 	if (data) {
+	// 		console.log("保存购物车信息")
+	// 		state.userInfo =  Object.assign({}, state.setCart,data);
+			
+	// 		uni.setStorageSync('cart', state.userInfo);
+	// 		// // #ifdef H5
+	// 		// console.log("保存信息1")
+	// 		// window.sessionStorage.setItem('userInfo', JSON.stringify(state.userInfo));
+	// 		// // #endif
+	// 		// // #ifndef H5
+	// 		// console.log("保存信息2")
+			
+	// 		// // #endif
+	// 	}
+	// },
 	// 退出APP
 	emptyUserInfo(state) {
 		state.userInfo = {};
@@ -33,26 +49,15 @@ export default {
 		// #endif
 	},
 	//取缓存
-	getCacheData(state) {
-		for (let name of state.cacheNameList) {
-		let data;
-		data = uni.getStorageSync(name);
-			// #ifndef H5
-			
-			// // #endif
-			// // #ifdef H5
-			// data = sessionStorage.getItem(name) || localStorage.getItem(name);
-			// // #endif
-			// if (data) {
-			// 	// #ifdef H5
-			// 	try {
-			// 		data = JSON.parse(data);
-			// 	} catch (e) {
-			// 	}
-				// #endif
-				state[name] = data;
-			}
-		
+	getCacheData(state, user) {
+		// for (let name of state.cacheNameList) {
+		// 	console.log(name)
+
+		let cart = uni.getStorageSync('cart')
+		let userInfo = uni.getStorageSync('userInfo')
+		if(user.id === userInfo.id) {
+			state.cartList = cart
+		}
 	},
 	//保存地址
 	setLocation(state, location) {
@@ -66,17 +71,15 @@ export default {
 			}
 		}
 		console.log('常用地址', state.oftenAddress)
-		uni.setStorageSync('location', state.location);
+		// uni.setStorageSync('location', state.location);
 	},
 	//保存商家
 	setStaff(state, staff) {
 		console.log("已保存商家")
 		state.staff = staff
-		uni.setStorageSync('staff', state.staff);
+		// uni.setStorageSync('staff', state.staff);
 	},
 	//保存商店
-	
-	
 	setShop(state, shop) {
 		console.log("已保存商店")
 		
@@ -104,20 +107,27 @@ export default {
 		console.log('保存活动')
 		state.activities = act
 	},
-	//订单商品
-	addItem(state, payload) {
-		payload.checked = false
-		state.cartList.push(payload)
-	},
+
 	//保存搜索内容
 	setSearchValue(state, searchValue) {
 		console.log(searchValue)
 		state.searchValue = searchValue
 	},
-	addCounter(state, payload) {
-		payload.selectCount++
+	//添加购物车
+	addItem(state, payload) {
+		payload.checked = false
+		state.cartList.push(payload)
+		uni.setStorageSync('cart',state.cartList)
 	},
+	//添加购物车商品数量
+	addCounter(state, payload) {
+		console.log(payload.count)
+		payload.oldProduct.selectCount+=payload.count
+		uni.setStorageSync('cart',state.cartList)
+	},
+	//删除购物车商品
 	deleteItem(state, iid) {
 		state.cartList = state.cartList.filter(item => item.iid != iid)
+		uni.setStorageSync('cart',state.cartList)
 	}
 }

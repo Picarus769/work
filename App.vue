@@ -5,6 +5,7 @@
 			console.log('App Launch');
 			// let res = JSON.parse(this.getCookie("current"));
 			let res = {
+				vipcate: 1,
 				name: null,
 				openId: null,
 				avatar: null,
@@ -28,6 +29,7 @@
 				],
 				id: 4
 			}
+			
 			this.login(res).then(()=>{
 				console.log("app.vue完成")
 				// uni.reLaunch({
@@ -69,6 +71,7 @@
 			  },
 			//用户登录
 			async login(r) {
+				store.commit('getCacheData', r)
 				store.commit('setUserInfo', r);
 				console.log(r)
 				// const res = await this.$myRequest({
@@ -141,6 +144,7 @@
 					console.log(res.data)
 					store.commit('setCate', res.data.cateDtos)
 					store.commit('setProducts', res.data.products)
+					
 					let temp = {
 						
 						shopId: res.data.shopId,

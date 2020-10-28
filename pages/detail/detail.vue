@@ -175,8 +175,8 @@
 						productId: this.productDetail.productId,
 						productItemId: this.productDetail.productItemId,
 						productItemName: this.productDetail.productItemName,
-						reIntegral: this.productDetail.reIntegral,
-						reShopIntegral: this.productDetail.reShopIntegral,
+						reIntegral: this.productDetail.returnIntegral,
+						reShopIntegral: this.productDetail.returnShopIntegral,
 						shopIntegral: this.productDetail.shopIntegral
 					}
 				}
@@ -201,9 +201,16 @@
 			},
 			//加入购物车
 			addCart() {
+				if (this.currentAttr.activityId) {
+					uni.showToast({
+						title: '活动商品不支持加入购物车',
+						icon:"none"
+					})
+					return
+				}
 				const product = {}
 				product.activityId = this.currentAttr.activityId
-				product.image = this.$constData.imageServer + this.currentAttr.itemPic
+				product.image = this.currentAttr.itemPic ? this.$constData.imageServer + this.currentAttr.itemPic:this.$constData.defaultImg
 				product.productItemName = this.currentAttr.productItemName
 				product.totalCount = this.currentAttr.count
 				product.selectCount = this.selectCount != 0 ? this.selectCount : 1
@@ -215,7 +222,7 @@
 				product.price = this.currentAttr.price
 				product.iid = this.currentAttr.id
 				product.productItemId = this.currentAttr.productItemId
-				this.$store.dispatch('addCart', product).then(res => {
+				this.$store.dispatch('addCart', {product, count:this.selectCount===0?1:this.selectCount}).then(res => {
 					uni.showToast({
 						title: res
 					})

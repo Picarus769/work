@@ -135,14 +135,14 @@
 						url: '../activity/activity'
 					})
 				} else if(index ===1 ){
-					// uni.navigateTo({
-					// 	url: '../activity/activity2'
-					// })
-					
-					uni.showToast({
-						title: "敬请期待",
-						icon: "none"
+					uni.navigateTo({
+						url: '../activity/voucher'
 					})
+					
+					// uni.showToast({
+					// 	title: "敬请期待",
+					// 	icon: "none"
+					// })
 				}
 				
 			},

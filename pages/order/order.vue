@@ -32,7 +32,7 @@
 					<view class="shop_name"></view>
 					<view class="product_item">
 						<view class="left">
-							<image :src="item.image?item.image:'../../static/images/defaultImg.png'" mode=""></image>
+							<image :src="item.itemPic?$constData.imageServer + item.itemPic:$constData.defaultImg" mode=""></image>
 						</view>
 						<view class="center">
 							<view class="product_message">
@@ -137,18 +137,19 @@
 			async submit() {
 				console.log(this.userInfo.id)
 				console.log(this.$store.state.shop.shopId)
-				console.log(this.totalPrice)
 				console.log(this.shopIntChecked)
 				console.log(this.integralChecked)
 				console.log(this.orderProduct)
+				console.log(this.product[0].activityId)
+				console.log(this.address.id)
 				const res = await this.$myRequest({
 					url: 'api/UserOrders',
 					method: 'POST',
 					data: {
+						"userAddressId": this.address.id,
 						"userId": this.userInfo.id,
 						"shopId": this.$store.state.shop.shopId,
-						"payPrice": this.totalPrice,
-						"activitieId": null,
+						"activitieId": this.product[0].activityId||null,
 						"useShopIntegral": this.shopIntChecked,
 						"useIntegral": this.integralChecked,
 						"productItems": this.orderProduct

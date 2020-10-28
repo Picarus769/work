@@ -4,7 +4,7 @@
 			<CheckButton @click.native="checkedChange" :isChecked="item.checked"></CheckButton>
 		</view>
 		<view class="item-img">
-			<img :src="item.image" alt="商品图片">
+			<image :src="item.image" alt="商品图片">
 		</view>
 		<view class="item-info">
 			<view class="item-title">{{item.productItemName}}</view>
@@ -70,14 +70,15 @@
 	.item-img {
 		padding: 10rpx;
 	}
-	.item-img img {
+	.item-img image {
 		width: 160rpx;
 		height: 200rpx;
 		display: block;
 		border-radius: 10rpx;
 	}
 	.item-info {
-		font-size: 34rpx;
+		width: 350rpx;
+		font-size: 32rpx;
 		color: #333;
 		padding: 10rpx 20rpx;
 		position: relative;
@@ -86,16 +87,18 @@
 	.item-info .item-desc {
 		font-size: 28rpx;
 		color: #666;
-		margin-top: 30rpx;
+		
 	}
 	.item-bottom {
-		margin-top: 20rpx;
+		
 		position: absolute;
 		bottom: 20rpx;
 		left: 20rpx;
 		right: 20rpx;
 	}
 	.item-price {
+		white-space: nowrap;
+		
 		color: orangered;
 	}
 	.delete {

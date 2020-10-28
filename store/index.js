@@ -19,7 +19,8 @@ export default new Vuex.Store({
 		currentProduct: null,
 		products: [],
 		cartList: [],
-		cacheNameList: ["userInfo","location","staff"],
+		// cacheNameList: ["userInfo","location","staff",'cart'],
+		cacheNameList: ['cart'],
 		staff: null
   },
   mutations,
