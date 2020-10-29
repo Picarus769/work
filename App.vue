@@ -6,9 +6,9 @@
 			// let res = JSON.parse(this.getCookie("current"));
 			let res = {
 				vipcate: 1,
-				name: null,
+				name: '昵称',
 				openId: null,
-				avatar: null,
+				avatar: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1373560079,871367259&fm=26&gp=0.jpg',
 				integral: 0,
 				shopIntegral: 0,
 				info: [
@@ -119,11 +119,7 @@
 						this.getProduct(oftenAddr)
 						uni.switchTab({
 							url: '/pages/index/index',
-							success() {
-								console.log("bbbbbb")
-							},
 							fail(e) {
-								console.log("bbb")
 								console.log(e)
 							}
 						})

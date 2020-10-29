@@ -7,7 +7,9 @@
 				<view>
 					<view class="price">{{"￥" + item.price}}</view><view class="old_price" v-if="item.oldPrice">{{"￥" + item.oldPrice}}</view>
 				</view>
-				
+				<view>
+					
+				</view>
 				<!-- <view class="master">
 					<image :src="item.portrait" mode="aspectFit" class="portrait"></image>
 					<view>{{item.master}}</view>
@@ -20,6 +22,12 @@
 <script>
 	export default {
 		props:{
+			cate: {
+				type: Number,
+				default () {
+					return null
+				}
+			},
 			goods: {
 				type: Array,
 				default () {
@@ -92,18 +100,21 @@
 </script>
 
 <style lang="scss">
+	
 	.goods {
 		padding: 0 15rpx;
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: space-between;
+		
 		.goodsItem {
-			
+			position: relative;
 			width: 330rpx;
 			margin:  10rpx 0;
 			padding: 10rpx;
 			background-color: #fff;
 			border-radius: 0.2em;
+
 			.message {
 				font-size: 36rpx;
 				display: -webkit-box;

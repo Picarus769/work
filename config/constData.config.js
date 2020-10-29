@@ -119,7 +119,7 @@ export default {
 		{
 			message: '账户资金',
 			icon: '../../static/images/account_funds.png',
-			url: '',
+			url: '/pages/profile/accountFunds',
 			// url: '/pages/profile/accountFunds'
 		},
 		{

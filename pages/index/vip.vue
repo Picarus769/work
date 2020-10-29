@@ -42,6 +42,7 @@
 			<view class="title">
 				福利区
 			</view>
+			<giftsList></giftsList>
 			<!-- <view v-for="item in welfareItem" :key="item.id" class="welfare_item">
 				<image :src="item.image||$constData.defaultImg" mode=""></image>
 				<view class="right">

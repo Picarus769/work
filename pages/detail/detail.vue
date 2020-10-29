@@ -10,7 +10,7 @@
 				<view class="describe">{{productDetail.name}}</view>
 				<view class="share" @click="share">
 					<image :src="config.shareIcon" type="">
-						<view>分享</view>
+					<view>分享</view>
 				</view>
 			</view>
 			<view class="price_area">
@@ -25,20 +25,8 @@
 			</view>
 		</view>
 		<view class="options area">
-			<!-- <view class="option">
-				<view class="left">
-					{{config.select}}
-				</view>
-				<view class="center">
-					<picker mode="selector" :value="attrIndex" :range="productDetail.attribution" @change="selectAttr">
-						<view>{{attrSelected ? productDetail.attribution[attrIndex] : config.selectValue}}</view>
-					</picker>
-				</view>
-				<view class="right">
-				</view>
-			</view> -->
-			<view class="option">
-				<pop-menu title="购买类型" @hide="hideService" :specClass="specClass" @show="toggleSpec">
+
+			<pop-menu title="购买类型" @hide="hideService" :specClass="specClass" @show="toggleSpec">
 					<view slot="content">
 						<text class="selected-text">请选择规格</text>
 					</view>
@@ -70,6 +58,10 @@
 						<button type="default" @click="attrChecked">完成</button>
 					</view>
 				</pop-menu>
+
+			<view class="option">
+				<view class="left">发货</view>
+				<view class="center">青岛 快递15元</view>
 			</view>
 		</view>
 		<view class="comment area">
@@ -80,7 +72,6 @@
 				</view>
 			</view>
 			<view class="comment_content">
-
 			</view>
 		</view>
 		<view class="shop area" @click="shopClick">
@@ -424,6 +415,7 @@
 
 				.price {
 					flex: 1;
+					
 					font-size: 40rpx;
 				}
 
@@ -453,14 +445,19 @@
 
 		.options {
 			.option {
+				display: flex;
+				align-items: center;
+				padding: 20rpx 30rpx;
+				position: relative;
+				font-size: $font-sm + 2upx;
 				.left {
-					display: inline-block;
-					color: $font-color-disabled;
+						width: 140rpx;
+						color: $font-color-disabled;
 				}
 
 				.center {
 					display: inline-block;
-					margin-left: 20rpx;
+					flex: 1;
 				}
 
 				.right {

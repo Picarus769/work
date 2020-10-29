@@ -5,12 +5,12 @@
 			<view class="layof" :style="{color:theme}">￥{{item.money}}</view>
 			<view class="end_time">{{item.end_time}}前使用</view>
 			<view v-if="!types">
-				<view class="tit">券号：{{item.ticket}}</view>
+				<!-- <view class="tit">券号：{{item.ticket}}</view> -->
 				<view class="demand">{{item.title}}</view>
 			</view>
 		</view>
-		<view class="get-btn" v-if="types" :style="{color:color, borderColor:color, background:solid}">选择使用</view>
-		<navigator class="get-btn" v-if="!types" :style="{color:color, borderColor:color, background:solid}" :url='item.url'>立即使用</navigator>
+		<view class="get-btn" v-if="types" :style="{color:color, borderColor:color, background:solid}">{{btn}}</view>
+		<navigator class="get-btn" v-if="!types" :style="{color:color, borderColor:color, background:solid}" :url='item.url'>{{btn}}</navigator>
 	</view>
 </template>
 
@@ -25,6 +25,10 @@
 			}
 		},
 		props: {
+			btn: {
+				type: String,
+				default: '使用'
+			},
 			item: {
 				type: Object
 			},

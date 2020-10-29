@@ -6,32 +6,10 @@ export default {
 			state.userInfo =  Object.assign({}, state.userInfo,data);
 			
 			uni.setStorageSync('userInfo', state.userInfo);
-			// // #ifdef H5
-			// console.log("保存信息1")
-			// window.sessionStorage.setItem('userInfo', JSON.stringify(state.userInfo));
-			// // #endif
-			// // #ifndef H5
-			// console.log("保存信息2")
-			
-			// // #endif
+
 		}
 	},
-	// setCart(state, data) {
-	// 	if (data) {
-	// 		console.log("保存购物车信息")
-	// 		state.userInfo =  Object.assign({}, state.setCart,data);
-			
-	// 		uni.setStorageSync('cart', state.userInfo);
-	// 		// // #ifdef H5
-	// 		// console.log("保存信息1")
-	// 		// window.sessionStorage.setItem('userInfo', JSON.stringify(state.userInfo));
-	// 		// // #endif
-	// 		// // #ifndef H5
-	// 		// console.log("保存信息2")
-			
-	// 		// // #endif
-	// 	}
-	// },
+
 	// 退出APP
 	emptyUserInfo(state) {
 		state.userInfo = {};
@@ -96,6 +74,11 @@ export default {
 	setCurrentProduct(state, product) {
 		console.log('已保存点击的商品')
 		state.currentProduct = product
+	},
+	//保存运费
+	setFreight(state, freight) {
+		console.log('已保存邮费')
+		state.freight = freight
 	},
 	//保存种类
 	setCate(state, cate) {

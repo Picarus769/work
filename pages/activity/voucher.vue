@@ -28,7 +28,7 @@
 							url: "/pages/brand/index/id/1",
 							money: "150",
 							title: "满2000减150元",
-							ticket: "YMC_5c929fbf47235",
+							
 							seller_name: "百达翡丽官方旗舰店",
 							end_time: "2019-04-20 01:51:20",
 							state: "1"
@@ -37,7 +37,7 @@
 							url: "/pages/brand/index/id/1",
 							money: "50",
 							title: "满1000减50元",
-							ticket: "YMC_5c929fbf47235",
+							
 							seller_name: "百达翡丽官方旗舰店",
 							end_time: "2019-04-20 01:51:20",
 							state: "1"

@@ -132,7 +132,10 @@
 			actClick(index) {
 				if(index === 0) {
 					uni.navigateTo({
-						url: '../activity/activity'
+						url: '../activity/activity',
+						success: function(res) {
+						  res.eventChannel.emit('acceptData', { cate: 2})
+						}
 					})
 				} else if(index ===1 ){
 					uni.navigateTo({

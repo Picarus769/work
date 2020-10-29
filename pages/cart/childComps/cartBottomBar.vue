@@ -101,6 +101,6 @@
 	}
 	.check {
 		background-color: #FF0000;
-		border: none;
+		border: 2px solid #FF0000;
 	}
 </style>
