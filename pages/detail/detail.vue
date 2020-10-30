@@ -61,7 +61,7 @@
 
 			<view class="option">
 				<view class="left">发货</view>
-				<view class="center">青岛 快递15元</view>
+				<view class="center">快递15元</view>
 			</view>
 		</view>
 		<view class="comment area">

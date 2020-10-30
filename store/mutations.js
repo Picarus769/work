@@ -37,13 +37,26 @@ export default {
 			state.cartList = cart
 		}
 	},
+	setLocationFromCookie(state, location) {
+	
+		console.log("已保存地址")
+		state.location = location
+		for (let item of location) {
+			if (item.isoften === true) {
+				state.oftenAddress = item
+				break
+			}
+		}
+		console.log('常用地址', state.oftenAddress)
+		// uni.setStorageSync('location', state.location);
+	},
 	//保存地址
 	setLocation(state, location) {
 
 		console.log("已保存地址")
 		state.location = location
 		for (let item of location) {
-			if (item.isoften === true) {
+			if (item.isOften === true) {
 				state.oftenAddress = item
 				break
 			}

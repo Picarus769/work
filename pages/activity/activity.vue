@@ -1,11 +1,11 @@
 <template>
 	<view>
-		<view v-if="cate === 2" class="activity_icon">
+		<!-- <view v-if="cate === 2" class="activity_icon">
 			<image src="../../static/images/seckill.svg" mode=""></image>
 		</view>
 		<view v-if="cate === 3" class="activity_icon">
 			<image src="../../static/images/seckill.svg" mode=""></image>
-		</view>
+		</view> -->
 		<view class="block"></view>
 		<goodsList :goods="goods" :cate="cate"></goodsList>
 		<countdown-timer class="timer" ref="countdown" :time="time" @finish="onFinish" autoStart>
@@ -38,6 +38,7 @@
 			activity() {
 				return this.activities
 				.filter(item => new Date(item.endTime).getTime() - new Date().getTime())
+				.filter(item => item.activity_ProductItemDtos.length>0)
 				.filter(item => item.activityCate === this.cate)[0]
 			},
 			goods() {

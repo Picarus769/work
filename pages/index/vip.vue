@@ -5,7 +5,7 @@
 		</view>
 		<view class="upgrade area">
 			<view class="title">套餐升级</view>
-			<view class="upgrade_area">
+			<view class="upgrade_area" @click="actClick(7)">
 				<view class="upgrade_item" v-for="item in $constData.vipOptions" :key="item.id">
 					<view class="text">
 						<view class="title">{{item.title}}</view>
@@ -26,7 +26,6 @@
 						</view>
 					</view>
 				</view>
-				
 				<view>伊客会员</view>
 				<view>
 					<view v-for="item in $constData.sVipInfo" :key="item.id">
@@ -35,7 +34,6 @@
 						</view>
 					</view>
 				</view>
-				
 			</view>
 		</view>
 		<view class="welfare area">
@@ -63,7 +61,16 @@
 			}
 		},
 		methods: {
-			
+			actClick(id) {
+				if(id === 7) {
+					uni.navigateTo({
+						url: '../activity/activity',
+						success: function(res) {
+						  res.eventChannel.emit('acceptData', { cate: 7})
+						}
+					})
+				}
+			}
 		}
 	}
 </script>

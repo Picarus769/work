@@ -3,32 +3,32 @@
 	export default {
 		onLaunch: function() {
 			console.log('App Launch');
-			// let res = JSON.parse(this.getCookie("current"));
-			let res = {
-				vipcate: 1,
-				name: '昵称',
-				openId: null,
-				avatar: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1373560079,871367259&fm=26&gp=0.jpg',
-				integral: 0,
-				shopIntegral: 0,
-				info: [
-					{
-						provinceid: 2,
-						provincename: "北京市",
-						cityid: 4,
-						cityname: "朝阳区",
-						countiesid: 4,
-						countiename: "朝阳区",
-						info: "32123",
-						userid: 0,
-						name: "343",
-						phone: "3463",
-						isoften: true,
-						id: 93
-					}
-				],
-				id: 4
-			}
+			let res = JSON.parse(this.getCookie("current"));
+			// let res = {
+			// 	vipcate: 1,
+			// 	name: '昵称',
+			// 	openId: null,
+			// 	avatar: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1373560079,871367259&fm=26&gp=0.jpg',
+			// 	integral: 0,
+			// 	shopIntegral: 0,
+			// 	info: [
+			// 		{
+			// 			provinceid: 2,
+			// 			provincename: "北京市",
+			// 			cityid: 4,
+			// 			cityname: "朝阳区",
+			// 			countiesid: 4,
+			// 			countiename: "朝阳区",
+			// 			info: "32123",
+			// 			userid: 0,
+			// 			name: "343",
+			// 			phone: "3463",
+			// 			isoften: true,
+			// 			id: 115
+			// 		}
+			// 	],
+			// 	id: 4
+			// }
 			
 			this.login(res).then(()=>{
 				console.log("app.vue完成")
@@ -113,7 +113,7 @@
 					// })
 				} else {
 					
-					store.commit('setLocation', r.info);
+					store.commit('setLocationFromCookie', r.info);
 				let oftenAddr = r.info.find(q=>q.isoften === true)
 				
 						this.getProduct(oftenAddr)
