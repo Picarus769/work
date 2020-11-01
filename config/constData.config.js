@@ -41,11 +41,11 @@ export default {
 	],
 	//首页图标导航
 	homeIconNavigation: [
-		{
-			name: '区域代理',
-			icon: '../../static/images/agent.png',
-			url: '/pages/index/areaAgent'
-		},
+		// {
+		// 	name: '区域代理',
+		// 	icon: '../../static/images/agent.png',
+		// 	url: '/pages/index/areaAgent'
+		// },
 		{
 			name: '幸运转盘',
 			icon: '../../static/images/roulette.png',

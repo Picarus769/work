@@ -28,5 +28,8 @@ export default {
 	},
 	searchValue(state) {
 		return state.searchValue
+	},
+	freight(state) {
+		return state.freight
 	}
 }

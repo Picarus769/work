@@ -12,7 +12,8 @@
 			<template v-slot="{day, hour, minute, second, remain, time}">
 				<!-- 基本样式 -->
 				<view class="case">
-					<view class="title">活动倒计时：</view>
+					<view class="title" v-if="!isBegin">活动开始倒计时：</view>
+					<view class="title" v-else>活动倒计时：</view>
 					<view>{{day}}天{{hour}}时{{minute}}分{{second}}秒</view>				
 				</view>
 			</template>
@@ -27,7 +28,7 @@
 		data() {
 			return {
 				cate: null,
-				time: new Date('2020/04/24 01:00:00').getTime() - new Date('2020/04/24 00:00:00').getTime()
+				currentTime: new Date().getTime()
 			}
 		},
 		components: {
@@ -53,7 +54,19 @@
 						return item
 					}
 				})
+			},
+			isBegin() {
+				return new Date (this.activity.beginTime).getTime() < this.currentTime? true : false
+			},
+			time() {
+				if (new Date (this.activity.beginTime).getTime() < this.currentTime) {
+					return this.currentTime - new Date (this.activity.beginTime).getTime()
+				} else {
+					return new Date(this.activity.endTime).getTime() - this.currentTime
+				}
+				
 			}
+			
 			
 		},
 		methods: {

@@ -33,7 +33,7 @@
 					<view slot="popup" @click.stop="stopPrevent">
 						<view class="popup_content">
 							<view class="popup_info">
-								<image :src="currentAttr.itemPic?$constData.imageServer+currentAttr.itemPic:$constData.defaultImg"
+								<image :src="currentAttr.itemPic?$constData.imageServer+currentItemImg:$constData.defaultImg"
 								 mode=""></image>
 								<view class="info">
 									<view class="name">{{currentAttr.name}}</view>
@@ -61,7 +61,7 @@
 
 			<view class="option">
 				<view class="left">发货</view>
-				<view class="center">快递15元</view>
+				<view class="center">{{shop.areaName+' '}}快递{{freight}}元</view>
 			</view>
 		</view>
 		<view class="comment area">
@@ -80,7 +80,7 @@
 					<image :src="shop.shopAvatar?$constData.imageServer+shop.shopAvatar:$constData.defaultImg" mode=""></image>
 				</view>
 				<view class="center">
-					{{shop.shopName}}
+					{{shop.areaName}}
 				</view>
 				<view class="right">进店逛逛</view>
 			</view>
@@ -150,9 +150,9 @@
 			}
 		},
 		computed: {
-			...mapGetters(['shop']),
+			...mapGetters(['shop', 'freight']),
 			currentAttr() {
-
+				
 				if (this.productDetail.shopStore_ProductItems) {
 					return this.productDetail.shopStore_ProductItems.filter((item) => this.attrId == item.id)[0]
 				} else {
@@ -175,6 +175,9 @@
 			totalPrice() {
 				return this.currentAttr.price * this.selectCount
 			},
+			currentItemImg() {
+				return this.currentAttr.itemPic.split(',')[0]
+			}
 			//监听点击商品
 			// productClick() {
 			// 	return this.$store.state.currentProduct

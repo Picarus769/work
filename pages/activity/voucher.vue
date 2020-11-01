@@ -1,21 +1,14 @@
 <template>
 	<view class="coupon_box">
 		<view class="other_type">
-			<view class="text"><span>全面型优惠券</span></view>
+			<!-- <view class="text"><span>全面型优惠券</span></view> -->
 		</view>
-		<coupon v-for="(item, index) in coupon[0].list" :key="index" v-bind:item="item" theme="#ff0000"></coupon>
-		<view class="other_type">
-			<view class="text"><span>简洁型优惠券</span></view>
-		</view>
-		<view>
-			<coupon v-for="(item, index) in coupon[0].list" :key="index" v-bind:item="item" types="carts" theme="#ff6c00" color="#ffffff"
-			 solid="#ff6c00"></coupon>
-		</view>
-
+		<coupon v-for="(item, index) in vouchers" :key="index" :btn="state(item.state)" :item="item" theme="#ff0000"></coupon>
 	</view>
 </template>
 
 <script>
+	import {mapGetters} from 'vuex'
 	import coupon from '@/components/coolc-coupon/coolc-coupon';
 	export default {
 		components: {
@@ -23,35 +16,42 @@
 		},
 		data() {
 			return {
-				coupon: [{
-					list: [{
-							url: "/pages/brand/index/id/1",
-							money: "150",
-							title: "满2000减150元",
-							
-							seller_name: "百达翡丽官方旗舰店",
-							end_time: "2019-04-20 01:51:20",
-							state: "1"
-						},
-						{
-							url: "/pages/brand/index/id/1",
-							money: "50",
-							title: "满1000减50元",
-							
-							seller_name: "百达翡丽官方旗舰店",
-							end_time: "2019-04-20 01:51:20",
-							state: "1"
-						}
-					]
-				}]
+				vouchers: null,
 			}
 		},
+		computed: {
+			...mapGetters(['shop','userInfo']),
+			// vouchersFilter() {
+			// 	return this.vouchers.map(item =>)
+			// }
+			
+		},
 		onLoad() {
-
+			this.getVoucher()
 		},
 		methods: {
-
-		}
+			state(n) {
+				if(n===0) {
+					return '领取'
+				} else if (n === 1) {
+					return '已拥有'
+				} else if (n === 2) {
+					return '已使用'
+				}
+			},
+			async getVoucher() {
+				console.log(this.shop.shopId)
+				const res = await this.$myRequest({
+					url: 'api/Voucher',
+					data: {
+						ShopId: this.shop.shopId,
+						userId: this.userInfo.id
+					}
+				})
+				console.log(res.data)
+				this.vouchers = res.data
+			}
+		}	
 	}
 </script>
 

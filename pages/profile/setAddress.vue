@@ -299,7 +299,17 @@
 					console.log(res.data)
 					this.$store.commit('setCate', res.data.cateDtos)
 					this.$store.commit('setProducts', res.data.products)
-					this.$store.commit('setShop', res.data.shopId)
+					this.$store.commit('setFreight', res.data.cost)
+					let temp = {
+						
+						shopId: res.data.shopId,
+						shopRate:  res.data.shopRate,
+						shopName: res.data.shopName,
+						shopAvatar: res.data.shopAvatar,
+						shopAddress: res.data.shopAddress,
+						areaName: res.data.areaName
+					}
+					this.$store.commit('setShop', temp)
 				}
 				// async getProduct(oftenAddr) {
 				// 	console.log(oftenAddr)

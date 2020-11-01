@@ -3,32 +3,32 @@
 	export default {
 		onLaunch: function() {
 			console.log('App Launch');
-			let res = JSON.parse(this.getCookie("current"));
-			// let res = {
-			// 	vipcate: 1,
-			// 	name: '昵称',
-			// 	openId: null,
-			// 	avatar: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1373560079,871367259&fm=26&gp=0.jpg',
-			// 	integral: 0,
-			// 	shopIntegral: 0,
-			// 	info: [
-			// 		{
-			// 			provinceid: 2,
-			// 			provincename: "北京市",
-			// 			cityid: 4,
-			// 			cityname: "朝阳区",
-			// 			countiesid: 4,
-			// 			countiename: "朝阳区",
-			// 			info: "32123",
-			// 			userid: 0,
-			// 			name: "343",
-			// 			phone: "3463",
-			// 			isoften: true,
-			// 			id: 115
-			// 		}
-			// 	],
-			// 	id: 4
-			// }
+			// let res = JSON.parse(this.getCookie("current"));
+			let res = {
+				vipcate: 1,
+				name: '昵称',
+				openid: null,
+				avatar: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1373560079,871367259&fm=26&gp=0.jpg',
+				integral: 0,
+				shopintegral: 20,
+				info: [
+					{
+						provinceid: 2,
+						provincename: "北京市",
+						cityid: 4,
+						cityname: "朝阳区",
+						countiesid: 4,
+						countiename: "朝阳区",
+						info: "123123123123",
+						userid: 4,
+						name: "123",
+						phone: "123123123",
+						isoften: true,
+						id: 127
+					}
+				],
+				id: 4
+			}
 			
 			this.login(res).then(()=>{
 				console.log("app.vue完成")
@@ -43,6 +43,7 @@
 				// 	}
 				// })
 				
+
 			})
 		},
 		onShow: function() {
@@ -55,6 +56,7 @@
 		methods: {
 			  // 获取cookie
 			  getCookie(cname) {
+					
 			    let name = cname + "=";
 			    let decodedCookie = decodeURIComponent(document.cookie);
 			    let ca = decodedCookie.split(";");
@@ -70,17 +72,54 @@
 			    return undefined;
 			  },
 			//用户登录
+					
 			async login(r) {
-				store.commit('getCacheData', r)
-				store.commit('setUserInfo', r);
-				console.log(r)
+				uni.showLoading({
+					title: '加载中...',
+					mask: true,
+					success() {
+						console.log('aaa')
+					},
+					fail(e) {
+						console.log(e)
+					}
+				})
+				let  rr = {
+				vipCate: r.vipcate,
+				name: r.name,
+				openId: r.openid,
+				avatar: r.avatar,
+				integral: r.integral,
+				shopIntegral: r.shopintegral,
+				info: r.info.map(item => {
+					let temp = {
+						provinceId: item.provinceid,
+						provinceName: item.provincename,
+						cityId: item.cityid,
+						cityName: item.cityname,
+						countiesId: item.countiesid,
+						countieName: item.countiename,
+						info: item.info,
+						userId: item.userid,
+						name: item.name,
+						phone: item.phone,
+						isOften: item.isoften,
+						id: item.id
+					}
+					return temp
+				}),
+				id: r.id
+			}
+				store.commit('getCacheData', rr)
+				store.commit('setUserInfo', rr);
+				console.log(rr)
 				// const res = await this.$myRequest({
 				// 	url: 'api/User?Id=2&OpenId'
 				// })
 				// console.log(res.data.data[0])
 				// store.commit('setUserInfo', res.data.data[0]);
 				
-				if(r.info.length === 0) {
+				if(rr.info.length === 0) {
 					console.log("aaaaa")
 					uni.navigateTo({
 						url: '/pages/profile/setAddress',
@@ -113,8 +152,8 @@
 					// })
 				} else {
 					
-					store.commit('setLocationFromCookie', r.info);
-				let oftenAddr = r.info.find(q=>q.isoften === true)
+					store.commit('setLocation', rr.info);
+				let oftenAddr = rr.info.find(q=>q.isOften === true)
 				
 						this.getProduct(oftenAddr)
 						uni.switchTab({
@@ -129,7 +168,7 @@
 				//按地址获取商店和商品
 				async getProduct(oftenAddr) {
 					console.log(oftenAddr)
-					let areaId = oftenAddr.countiesid
+					let areaId = oftenAddr.countiesId
 					const res = await this.$myRequest({
 						url: 'api/ShopStore',
 						data: {
@@ -140,7 +179,7 @@
 					console.log(res.data)
 					store.commit('setCate', res.data.cateDtos)
 					store.commit('setProducts', res.data.products)
-					
+					store.commit('setFreight', res.data.cost)
 					let temp = {
 						
 						shopId: res.data.shopId,
@@ -148,7 +187,7 @@
 						shopName: res.data.shopName,
 						shopAvatar: res.data.shopAvatar,
 						shopAddress: res.data.shopAddress,
-						
+						areaName: res.data.areaName
 					}
 					console.log(temp)
 					store.commit('setShop', temp)
@@ -160,6 +199,7 @@
 				})
 				console.log(res.data.data)
 				store.commit('setActivity', res.data.data)
+				uni.hideLoading();
 			}
 		}
 	}

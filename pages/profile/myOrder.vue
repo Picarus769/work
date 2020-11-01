@@ -56,11 +56,22 @@
 				this.state = id
 			},
 			async getOrders() {
+				uni.showLoading({
+					title: '加载中...',
+					mask: true,
+					success() {
+						console.log('aaa')
+					},
+					fail(e) {
+						console.log(e)
+					}
+				})
 				const res = await this.$myRequest({
 					url: 'api/UserOrders?UserId=' + this.$store.state.userInfo.id,
 				})
 				this.product = res.data.data
 				console.log(res.data.data)
+				uni.hideLoading();
 			}
 		},
 		computed: {

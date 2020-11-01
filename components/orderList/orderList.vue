@@ -6,7 +6,7 @@
 			</view>
 			<view class="product_item" v-for="item in order.productItems" :key="item.id">
 				<view class="left">
-					<image :src="item.pic?$constData.imageServer+item.pic:''" mode=""></image>
+					<image :src="item.pic?$constData.imageServer+item.pic.split(',')[0]:''" mode=""></image>
 				</view>
 				<view class="center">
 					<view class="product_message">

@@ -108,7 +108,8 @@
 		.upgrade_area{
 			display: flex;
 			.text {
-				
+				width: 192rpx;
+				overflow: hidden;
 				margin: 15rpx 0;
 				display: inline-block;
 				.title {

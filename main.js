@@ -15,6 +15,7 @@ Vue.prototype.$myRequest = myRequest
 Vue.prototype.$base = $base
 Vue.prototype.$req = $req
 
+
 App.mpType = 'app'
 
 const app = new Vue({

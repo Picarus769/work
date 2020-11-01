@@ -20,7 +20,7 @@
 							<text class="phone">{{address.phone}}</text>
 						</view>
 						<view class="down">
-							{{address.provincename+address.cityname+address.countiename+address.info}}
+							{{address.provinceName+address.cityName+address.countieName+address.info}}
 						</view>
 					</view>
 					<view class="right">
@@ -32,7 +32,7 @@
 					<view class="shop_name"></view>
 					<view class="product_item">
 						<view class="left">
-							<image :src="item.itemPic?$constData.imageServer + item.itemPic:$constData.defaultImg" mode=""></image>
+							<image :src="item.itemPic?$constData.imageServer + item.itemPic.split(',')[0]:$constData.defaultImg" mode=""></image>
 						</view>
 						<view class="center">
 							<view class="product_message">
@@ -49,18 +49,12 @@
 						</view>
 					</view>
 					<view class="distribution">配送方式：普通配送</view>
+					<view class="distribution">快递费用：{{freight}}</view>
 					<view class="total_price">
 						
 					</view>
 				</view>
-				<!-- <pop-menu 
-					title="积分抵扣"
-					@hide="hideService"
-					:specClass="specClass"
-					@show="toggleSpec"
-					 class="score_area"
-					>
-				</pop-menu> -->
+				
 				<view class="points area">
 					<image class="point_icon" src="../../static/images/score.svg" mode=""></image>
 					<text>可用店铺积分抵扣{{shopIntPrice}}元</text>
@@ -71,6 +65,13 @@
 					<text>可用平台积分抵扣{{intPrice}}元</text>
 					<image class="check" @click="checkClick(1)" :src="integralChecked? '../../static/images/check_active.svg' : '../../static/images/check.svg'" mode=""></image>
 				</view>
+				<view class="area" @click="open">使用优惠券</view>
+				<uni-popup ref="popup" type="bottom">
+					<view class="vouchers">
+						<coupon v-for="(item, index) in vouchers" :key="index" :btn="state(item.state)" :item="item" @useVoucher="useVoucher" theme="#ff0000"></coupon>
+					</view>
+					
+				</uni-popup>
 				<view class="reIntegral">
 					本次可反平台积分{{reIntegral}}分,店铺积分{{reShopInt}}
 				</view>
@@ -84,10 +85,19 @@
 </template>
 
 <script>
+	import coupon from '@/components/coolc-coupon/coolc-coupon';
+	import uniPopup from '@/components/uni-popup/uni-popup.vue'
+	import uniPopupMessage from '@/components/uni-popup/uni-popup-message.vue'
+	import uniPopupDialog from '@/components/uni-popup/uni-popup-dialog.vue'
 	import popMenu from '@/components/rf-item-popup/index.vue';
+	import {mapGetters} from 'vuex'
 	export default {
 		components: {
-			popMenu
+			popMenu,
+			uniPopup,
+			uniPopupMessage,
+			uniPopupDialog,
+			coupon
 		},
 		data() {
 			return {
@@ -95,17 +105,25 @@
 				shopIntChecked: false,
 				product: [],
 				orderProduct: [],
-				count: null,
 				specClass: 'none',
 				address: {},
-				userInfo: null
+				vouchers: [],
+				currentVoucherId: null,
 			}
 		},
 		computed: {
+			...mapGetters(['userInfo', 'shop', 'freight']),
+			
+			filteredVouchers() {
+				return this.vouchers.filter(item => item.state === 1)
+			},
+			count() {
+				return this.product.reduce((sum, item) => {return sum + item.selectCount},0)
+			},
 			totalPrice() {
 				let sPrice = this.shopIntChecked?this.shopIntPrice : 0
 				let iPrice = this.integralChecked?this.intPrice : 0
-				return this.product.reduce((sum, item) => {return sum + item.price * item.selectCount},0) - sPrice - iPrice
+				return this.product.reduce((sum, item) => {return sum + item.price * item.selectCount},0) - sPrice - iPrice + this.freight
 			},
 			shopIntPrice() {
 				return this.product.reduce((sum, item) => {return sum + item.shopIntegral * this.userInfo.shopIntegral},0)
@@ -121,6 +139,35 @@
 			}
 		},
 		methods: {
+			state(n) {
+				if(n===0) {
+					return '领取'
+				} else if (n === 1) {
+					return '使用'
+				} else if (n === 2) {
+					return '已使用'
+				}
+			},
+			open(){
+				this.$refs.popup.open()
+			},
+			useVoucher(id) {
+				this.currentVoucherId = id
+				console.log(this.currentVoucherId)
+				this.$refs.popup.close()
+			},
+			async getVoucher() {
+				console.log(this.shop.shopId)
+				const res = await this.$myRequest({
+					url: 'api/Voucher',
+					data: {
+						ShopId: this.shop.shopId,
+						userId: this.userInfo.id
+					}
+				})
+				console.log(res.data)
+				this.vouchers = res.data
+			},
 			checkClick(flag) {
 				if(flag === 0) {
 					this.shopIntChecked = !this.shopIntChecked
@@ -152,7 +199,8 @@
 						"activitieId": this.product[0].activityId||null,
 						"useShopIntegral": this.shopIntChecked,
 						"useIntegral": this.integralChecked,
-						"productItems": this.orderProduct
+						"productItems": this.orderProduct,
+						"voucherId": this.currentVoucherId
 					}
 				})
 				console.log(res)
@@ -164,7 +212,7 @@
 			}
 		},
 		onLoad(option) {
-			
+			this.getVoucher()
 			const eventChannel = this.getOpenerEventChannel()
 			eventChannel.on('acceptDataFromOpenerPage', data => {
 				if (data.data.length) {
@@ -188,7 +236,6 @@
 				console.log(this.orderProduct)
 			})
 			console.log(this.product)
-			this.userInfo = this.$store.state.userInfo
 			this.address = this.$store.state.oftenAddress
 
 		}
@@ -275,7 +322,7 @@
 						line-height: 50rpx;
 					}
 					.phone {
-						font-size: 20rpx;
+						font-size: 26rpx;
 						color: $font-color-disabled;
 					}
 				}
@@ -285,7 +332,7 @@
 					-webkit-line-clamp: 1;
 					text-overflow: ellipsis;
 					overflow: hidden;
-					font-size: 20rpx;
+					font-size: 26rpx;
 					height: 50rpx;
 				}
 			}
@@ -333,7 +380,8 @@
 				}
 				}
 				.distribution {
-					margin: 20rpx;
+					color: $font-color-disabled;
+					margin: 10rpx 20rpx;
 					font-size: 28rpx;
 				}
 			}
@@ -355,6 +403,10 @@
 					height: 40rpx;
 					
 				}
+			}
+			.vouchers {
+				padding: 20rpx;
+				background-color: #fff;
 			}
 			.reIntegral {
 				margin: 20rpx 30rpx;
