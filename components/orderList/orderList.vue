@@ -28,7 +28,7 @@
 				<view v-if="order.orderState === 2">付款时间：</view>
 				<view v-if="order.orderState === 3">已收货</view>
 			</view>
-			<view class="freight distribution">邮费：{{order.payPrice - totalPrice[index]}}</view>
+			<view class="freight distribution">邮费：{{freight}}</view>
 			<view class="price">
 				<text>实付款
 					<text class="moneyIcon">￥</text>
@@ -54,6 +54,7 @@
 </template>
 
 <script>
+	import {mapGetters} from 'vuex'
 	export default {
 		props:{
 			orderList: {
@@ -64,6 +65,7 @@
 			}
 		},
 		computed: {
+			...mapGetters(['freight']),
 			totalPrice() {
 				let arr = []
 				for (let i=0; i<this.orderList.length;i++) {

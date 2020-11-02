@@ -11,6 +11,17 @@ export default {
 	arrowIcon1: '../../static/images/arrow1.svg',
 	//小箭头图标(主题色)
 	arrowIcon2: '../../static/images/arrow2.svg',
+	//首页活动图
+	activities: [
+		{
+			id: 5,
+			image: '../../static/images/activity_group.png'
+		},
+		{
+			id: 8,
+			image: '../../static/images/activity_seckill.png'
+		}
+	],
 	//首页搜索栏下方导航栏
 	homeNavigation: [
 		{
@@ -127,23 +138,23 @@ export default {
 			icon: '../../static/images/my_points.png',
 			url: '/pages/profile/myPoints'
 		},
-		{
-			message: '设置',
-			icon: '../../static/images/settings.png',
-			url: '',
-			// url: '/pages/profile/settings'
-		},
-		{
-			message: '商家服务',
-			icon: '../../static/images/shop_serve.png',
-			// url: '/pages/profile/shopServe'
-			url: ''
-		},
-		{
-			message: '商家客服',
-			icon: '../../static/images/shopChat.png',
-			url: ''
-		}
+		// {
+		// 	message: '设置',
+		// 	icon: '../../static/images/settings.png',
+		// 	url: '',
+		// 	// url: '/pages/profile/settings'
+		// },
+		// {
+		// 	message: '商家服务',
+		// 	icon: '../../static/images/shop_serve.png',
+		// 	// url: '/pages/profile/shopServe'
+		// 	url: ''
+		// },
+		// {
+		// 	message: '商家客服',
+		// 	icon: '../../static/images/shopChat.png',
+		// 	url: ''
+		// }
 	],
 	vipOptions: [
 		{

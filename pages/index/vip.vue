@@ -1,7 +1,8 @@
 <template>
 	<view class="vip">
 		<view class="header area">
-			<text class="level">当前会员身份</text>
+			<text class="level">当前会员身份:</text>
+			<view class="level">{{vipCate}}</view>
 		</view>
 		<view class="upgrade area">
 			<view class="title">套餐升级</view>
@@ -40,7 +41,7 @@
 			<view class="title">
 				福利区
 			</view>
-			<giftsList></giftsList>
+			<goodsList :goods="vipEnjoy"></goodsList>
 			<!-- <view v-for="item in welfareItem" :key="item.id" class="welfare_item">
 				<image :src="item.image||$constData.defaultImg" mode=""></image>
 				<view class="right">
@@ -54,10 +55,24 @@
 </template>
 
 <script>
+	import {mapGetters} from 'vuex'
 	export default {
 		data() {
 			return {
 				
+			}
+		},
+		computed: {
+			...mapGetters(['activities','userInfo']),
+			vipEnjoy() {
+				return this.activities
+				.filter(item => item.activityCate === 6)
+				.filter(item => item.activity_ProductItemDtos.length>0)[0]
+			},
+			vipCate() {
+				if(this.userInfo.vipCate === 1) return '普通会员'
+				else if(this.userInfo.vipCate === 2) return '伊客会员'
+				else return '非会员'
 			}
 		},
 		methods: {

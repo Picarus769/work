@@ -123,7 +123,7 @@
 			totalPrice() {
 				let sPrice = this.shopIntChecked?this.shopIntPrice : 0
 				let iPrice = this.integralChecked?this.intPrice : 0
-				return this.product.reduce((sum, item) => {return sum + item.price * item.selectCount},0) - sPrice - iPrice + this.freight
+				return this.product.reduce((sum, item) => {return sum + item.price * item.selectCount},0).toFixed(2) - sPrice - iPrice + this.freight
 			},
 			shopIntPrice() {
 				return this.product.reduce((sum, item) => {return sum + item.shopIntegral * this.userInfo.shopIntegral},0)

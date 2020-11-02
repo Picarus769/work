@@ -71,8 +71,8 @@
 		padding: 10rpx;
 	}
 	.item-img image {
-		width: 160rpx;
-		height: 200rpx;
+		width: 180rpx;
+		height: 180rpx;
 		display: block;
 		border-radius: 10rpx;
 	}

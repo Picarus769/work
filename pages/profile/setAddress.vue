@@ -21,13 +21,13 @@
 				</view> -->
 				<view class="my_picker">
 					<picker mode="selector" :value="selectProvinceValue" :range="provincesName" @change.prevent="provinceChange">
-						<view> <text>{{provincesRange[selectProvinceValue].name}}</text></view>
+						<view> <text>{{provincesRange[selectProvinceValue].areaName}}</text></view>
 					</picker>
 					<picker mode="selector" :value="selectCityValue" :range="prefecturesName" @change="cityChange">
-						<view> <text>{{prefecturesRange[selectCityValue].name}}</text></view>
+						<view> <text>{{prefecturesRange[selectCityValue].areaName}}</text></view>
 					</picker>
 					<picker mode="selector" :value="selectCountiesValue" :range="countiesName" @change="countiesChange">
-						<view><text>{{countiesRange[selectCountiesValue].name}}</text></view>
+						<view><text>{{countiesRange[selectCountiesValue].areaName}}</text></view>
 					</picker>
 				</view>
 				
@@ -88,11 +88,11 @@
 				info_f: false,
 				name: '',
 				selectProvinceValue: 0,
-				provincesRange: [{name: '选择省',id: -1}],
+				provincesRange: [{areaName: '选择省',areaId: -1}],
 				selectCityValue: 0,
-				prefecturesRange: [{name:'选择市',id: -1}],
+				prefecturesRange: [{areaName:'选择市',areaId: -1}],
 				selectCountiesValue: 0,
-				countiesRange: [{name:'选择区',id: -1}],
+				countiesRange: [{areaName:'选择区',areaId: -1}],
 				addressData: [],
 				text: '',
 				// provincedata:[
@@ -118,21 +118,21 @@
 			provincesName() {
 				let arr = []
 				for (let item of this.provincesRange) {
-					arr.push(item.name)
+					arr.push(item.areaName)
 				}
 				return arr
 			},
 			prefecturesName() {
 				let arr = []
 				for (let item of this.prefecturesRange) {
-					arr.push(item.name)
+					arr.push(item.areaName)
 				}
 				return arr
 			},
 			countiesName() {
 				let arr = []
 				for (let item of this.countiesRange) {
-					arr.push(item.name)
+					arr.push(item.areaName)
 				}
 				return arr
 			}
@@ -183,22 +183,30 @@
 			// },
 			async getProvinceRange() {
 				const res = await this.$myRequest({
-					url: 'api/Counties?Name&Id=0'
+					url: 'api/Province/All'
 				})
-				this.addressData = res.data.data
-				console.log(this.addressData)
-				for (let counties of res.data.data) {
-					// this.countiesRange.push(counties.name)
-					// this.prefecturesRange.push(counties.city.name)
-					// let flag = this.provincesRange.some((item) => {
-					// 		return item.name === counties.city.provinceDto.name
-					// 	})
-					if (this.provincesRange.some((item) => {
-							return item.name === counties.city.provinceDto.name
-						})) return
-					this.provincesRange.push(counties.city.provinceDto)
-					console.log(this.provincesRange)
-				}
+				console.log(res)
+				this.provincesRange = res.data
+				// .map(item => {
+				// 	let temp = {
+				// 		name: '
+				// 	}
+				// 	return temp
+				// })
+				// this.addressData = res.data.data
+				// console.log(this.addressData)
+				// for (let counties of res.data.data) {
+				// 	// this.countiesRange.push(counties.name)
+				// 	// this.prefecturesRange.push(counties.city.name)
+				// 	// let flag = this.provincesRange.some((item) => {
+				// 	// 		return item.name === counties.city.provinceDto.name
+				// 	// 	})
+				// 	if (this.provincesRange.some((item) => {
+				// 			return item.name === counties.city.provinceDto.name
+				// 		})) return
+				// 	this.provincesRange.push(counties.city.provinceDto)
+				// 	console.log(this.provincesRange)
+				// }
 			},
 			getCityRange() {
 				this.prefecturesRange = []

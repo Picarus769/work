@@ -7,14 +7,15 @@
 			<image src="../../static/images/seckill.svg" mode=""></image>
 		</view> -->
 		<view class="block"></view>
-		<goodsList :goods="goods" :cate="cate"></goodsList>
+		<goodsList :isBegin="isBegin" :goods="goods" :cate="cate"></goodsList>
 		<countdown-timer class="timer" ref="countdown" :time="time" @finish="onFinish" autoStart>
 			<template v-slot="{day, hour, minute, second, remain, time}">
 				<!-- 基本样式 -->
 				<view class="case">
-					<view class="title" v-if="!isBegin">活动开始倒计时：</view>
-					<view class="title" v-else>活动倒计时：</view>
-					<view>{{day}}天{{hour}}时{{minute}}分{{second}}秒</view>				
+					<view class="title">{{activity.name}}</view>
+					<text class="title" v-if="!isBegin">活动开始倒计时：</text>
+					<text class="title" v-else>活动倒计时：</text>
+					<text>{{day}}天{{hour}}时{{minute}}分{{second}}秒</text>				
 				</view>
 			</template>
 		</countdown-timer>

@@ -1,7 +1,7 @@
 <template>
 	<view class="detail">
-		<swiper indicator-dots="true" autoplay="true">
-			<swiper-item v-for="(item,index) in infoPics" :key="item.index">
+		<swiper indicator-dots="true" circular="true" autoplay="true">
+			<swiper-item  v-for="(item,index) in infoPics" :key="item.index">
 				<image :src="$constData.imageServer+item"></image>
 			</swiper-item>
 		</swiper>

@@ -75,8 +75,6 @@ export default {
 		console.log("已保存商店")
 		
 		state.shop = shop
-		console.log(state.shop)
-		// uni.setStorageSync('staff', state.staff);
 	},
 	//保存商品
 	setProducts(state, products) {
@@ -106,7 +104,6 @@ export default {
 
 	//保存搜索内容
 	setSearchValue(state, searchValue) {
-		console.log(searchValue)
 		state.searchValue = searchValue
 	},
 	//添加购物车

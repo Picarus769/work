@@ -40,6 +40,9 @@
 				}
 			},
 			async getVoucher() {
+				uni.showLoading({
+					title:'加载中。。。'
+				})
 				console.log(this.shop.shopId)
 				const res = await this.$myRequest({
 					url: 'api/Voucher',
@@ -50,8 +53,9 @@
 				})
 				console.log(res.data)
 				this.vouchers = res.data
+				uni.hideLoading()
 			}
-		}	
+		}
 	}
 </script>
 

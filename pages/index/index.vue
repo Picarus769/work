@@ -9,7 +9,7 @@
 						</view>
 						<view class="header_right">
 							<view class="input">
-								<input type="text" v-model="inputValue">
+								<input type="text" v-model="inputValue" @confirm="searchClick(inputValue)" @focus="hideTabbar" @blur="showTabbar">
 								<image src="../../static/images/search.svg" class="search" type="" @click="searchClick(inputValue)">
 							</view>
 						</view>
@@ -21,9 +21,14 @@
 							</view>
 						</view>
 					</view> -->
-					<view class="big_img" @click="actClick(0)">
-						<image :src="bigImg" mode=""></image>
-					</view>
+					<swiper :indicator-dots="true" circular="true" :autoplay="true" :interval="3000" :duration="1000">
+						<swiper-item v-for="item in $constData.activities" :key="item.id">
+							<view class="big_img" @click="actClick(item.id)">
+								<image :src="item.image" mode=""></image>
+							</view>
+						</swiper-item>
+					</swiper>
+					
 				</view>
 				<view class="block"></view>
 				<view class="body">
@@ -35,7 +40,7 @@
 							</view>
 						</view>
 					</view>
-					<view class="activity_img" @click="actClick(1)">
+					<view class="activity_img" @click="voucherClick">
 						<image :src="activityImg" mode=""></image>
 					</view>
 					<!-- <view class="activity_area">
@@ -61,7 +66,7 @@
 					</view> -->
 				</view>
 				<view class="goods-list">
-					<goodsList :goods="goodsList"></goodsList>
+					<goodsList :goods="products"></goodsList>
 				</view>
 				
 			</view>
@@ -83,9 +88,9 @@
 				headerNavigation: [],
 				iconNavigation: [],
 				activity_products: [],
-				bigImg: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2087149704,1454267624&fm=15&gp=0.jpg',
-				activityImg: '',
-				goodsList: [],
+				bigImg: '../../static/images/activity_banner',
+				activityImg: '../../static/images/voucher_banner.png',
+				
 				inputValue: ''
 			}
 		},
@@ -95,7 +100,6 @@
 			this.lebalText = this.$constData.lebalText
 			this.headerNavigation = this.$constData.homeNavigation
 			this.iconNavigation = this.$constData.homeIconNavigation
-			this.activityImg = '../../static/images/activity_img.png'
 			this.activity_products = [
 				{
 					id: 0,
@@ -106,7 +110,7 @@
 					message: '暂无活动',
 					}
 			]
-			this.goodsList = this.$store.state.products
+			
 			
 		},
 		onShow() {
@@ -117,37 +121,40 @@
 			// }
 		},
 		computed: {
-			...mapGetters(['activities']),
-		  isFollow () {
-		    return this.$store.state.products　　//需要监听的数据
-		  }
+			...mapGetters(['activities','products']),
+		 
 		},
-		watch: {
-		  isFollow (newVal, oldVal) {
-				this.goodsList = this.$store.state.products
-				console.log(this.goodsList)
-		  }
-		},
+		
 		methods: {
-			actClick(index) {
-				if(index === 0) {
-					uni.navigateTo({
-						url: '../activity/activity',
-						success: function(res) {
-						  res.eventChannel.emit('acceptData', { cate: 2})
-						}
-					})
-				} else if(index ===1 ){
-					uni.navigateTo({
-						url: '../activity/voucher'
-					})
+			hideTabbar() {
+				uni.hideTabBar({
 					
-					// uni.showToast({
-					// 	title: "敬请期待",
-					// 	icon: "none"
-					// })
+				})
+			},
+			showTabbar() {
+				uni.showTabBar({
+					
+				})
+			},
+			voucherClick() {
+				uni.navigateTo({
+					url: '../activity/voucher',
+				})
+			},
+			actClick(id) {
+				if(this.activities.find(item=>item.activityCate === id)===undefined) {
+					uni.showToast({
+						title: '店铺未参与活动！',
+						icon:'none'
+					})
+					return
 				}
-				
+				uni.navigateTo({
+					url: '../activity/activity',
+					success: function(res) {
+						res.eventChannel.emit('acceptData', { cate: id})
+					}
+				})
 			},
 			searchClick(inputValue) {
 				// uni.showToast({
@@ -278,8 +285,8 @@
 				height: 150rpx;
 				margin: 20rpx;
 				image{
-					height: 150rpx;
-					width: 690rpx;
+					height: 130rpx;
+					width: 710rpx;
 				}
 			}
 			.activity_area {
