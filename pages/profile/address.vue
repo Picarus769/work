@@ -21,7 +21,7 @@
 				<view class="center"></view>
 				<view class="right">
 					<text @click="deleteAddress(item.id, item.isOften)">删除</text>
-					<text @click="changeAddress(item.id)">修改</text>
+					<text @click="changeAddress(item.id, item)">修改</text>
 				</view>
 			</view>
 		</view>
@@ -51,13 +51,13 @@
 		},
 		methods: {
 			async deleteAddress(id, isOften) {
-				// if (this.address.length === 1) {
-				// 	uni.showToast({
-				// 		title: '不能删除最后一条数据',
-				// 		icon: 'none'
-				// 	})
-				// 	return
-				// }
+				if (this.address.length === 1) {
+					uni.showToast({
+						title: '不能删除最后一个地址',
+						icon: 'none'
+					})
+					return
+				}
 				const res = await this.$myRequest({
 					url: 'api/Address/' + id,
 					method : 'DELETE'
@@ -76,9 +76,12 @@
 					this.getAddress()
 				})
 			},
-			changeAddress(id) {
+			changeAddress(id,item) {
 				uni.navigateTo({
-					url: '/pages/profile/setAddress?id='+ id
+					url: '/pages/profile/setAddress?id='+ id,
+					success(res) {
+						res.eventChannel.emit('acceptData', { ...item})
+					}
 				})
 			},
 			async getAddress() {
@@ -126,13 +129,13 @@
 				this.$store.commit('setProducts', res.data.products)
 				this.$store.commit('setFreight', res.data.cost)
 				let temp = {
-					
+					rate: res.data.rate,
 					shopId: res.data.shopId,
 					shopRate:  res.data.shopRate,
 					shopName: res.data.shopName,
 					shopAvatar: res.data.shopAvatar,
 					shopAddress: res.data.shopAddress,
-					areaName: res.data.areaNames
+					areaName: res.data.areaName
 				}
 				this.$store.commit('setShop', temp)
 			},

@@ -1,8 +1,8 @@
-<template>
+<!-- <template>
 	<view>
 		<view class="info area">
 			<view class="good_img">
-				<image :src="order.pic? $constData.imageServer+''+order.pic:$constData.defaultImg" mode=""></image>
+				<image :src="order.pic? $constData.imageServer+''+order.pic.split(',')[0]:$constData.defaultImg" mode=""></image>
 				<view>{{order.productItemName}}</view>
 			</view>
 			<view class="orange_area">
@@ -19,6 +19,7 @@
 			<uni-steps active-color="#FE8E22" :options="[{title:'买家下单',desc:'2018-11-11'},{title:'卖家发货',desc:'2018-11-12'},{title:'买家签收',desc:'2018-11-13'},{title:'交易完成',desc:'2018-11-14'}]" direction="column" :active="2"></uni-steps>
 		</view>
 	</view>
+	
 </template>
 
 <script>
@@ -106,3 +107,4 @@
 	}
 	
 </style>
+ -->

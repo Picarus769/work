@@ -1,9 +1,9 @@
 <template>
-	<view class="home">
+	<view class="home" @click="check">
 		<scroll-view show-scrollbar="false" scroll-y="true" >
 			<view>
 				<view class="header">
-					<view class="search_content">
+					<!-- <view class="search_content">
 						<view class="header_left">
 							<view class="header_text">{{lebalText}}</view>
 						</view>
@@ -13,7 +13,7 @@
 								<image src="../../static/images/search.svg" class="search" type="" @click="searchClick(inputValue)">
 							</view>
 						</view>
-					</view>
+					</view> -->
 					<!-- <view class="home_header_navigation">
 						<view v-for="(item, index) in headerNavigation" :key="item.name" class="home_navigation_bar" @click="navClick(index)">
 							<view>
@@ -22,7 +22,7 @@
 						</view>
 					</view> -->
 					<swiper :indicator-dots="true" circular="true" :autoplay="true" :interval="3000" :duration="1000">
-						<swiper-item v-for="item in $constData.activities" :key="item.id">
+						<swiper-item v-for="item in swiper" :key="item.id">
 							<view class="big_img" @click="actClick(item.id)">
 								<image :src="item.image" mode=""></image>
 							</view>
@@ -33,7 +33,7 @@
 				<view class="block"></view>
 				<view class="body">
 					<view class="icon_navigation">
-						<view v-for="item in iconNavigation" class="icon_navi_bar" :key="item.name" @click="iconNavClick(item.url)">
+						<view v-for="item in homeIconNavigation" class="icon_navi_bar" :key="item.name" @click="iconNavClick(item.url)">
 							<view>
 								<image :src="item.icon" mode=""></image>
 								<view>{{item.name}}</view>
@@ -68,7 +68,7 @@
 				<view class="goods-list">
 					<goodsList :goods="products"></goodsList>
 				</view>
-				
+				<!-- <view class="block"></view> -->
 			</view>
 		</scroll-view>
 
@@ -86,20 +86,57 @@
 			return {
 				lebalText: '',
 				headerNavigation: [],
-				iconNavigation: [],
 				activity_products: [],
 				bigImg: '../../static/images/activity_banner',
 				activityImg: '../../static/images/voucher_banner.png',
-				
-				inputValue: ''
+				inputValue: '',
+				swiper: [
+					{
+						id: 5,
+						image: '../../static/images/activity_group.png'
+					},
+					{
+						id: 8,
+						image: '../../static/images/activity_seckill.png'
+					}
+				],
+				homeIconNavigation: [
+					// {
+					// 	name: '区域代理',
+					// 	icon: '../../static/images/agent.png',
+					// 	url: '/pages/index/areaAgent'
+					// },
+					{
+						name: '幸运转盘',
+						icon: '../../static/images/roulette.png',
+						url: '/pages/index/Roulette'
+					},
+					{
+						name: '招募计划',
+						icon: '../../static/images/join_in.png',
+						// url: '/pages/index/conscribe'
+						url: ''
+					},
+					{
+						name: '营销推广',
+						icon: '../../static/images/extension.png',
+						url: '/pages/index/extension'
+					},
+					{
+						name: '会员专区',
+						icon: '../../static/images/vip.png',
+						url: '/pages/index/vip'
+					}
+				],
 			}
 		},
 		onLoad() {
 			console.log("aaa")
-			this.getLocation()
+			// this.getLocation()
+			this.getBanner()
 			this.lebalText = this.$constData.lebalText
 			this.headerNavigation = this.$constData.homeNavigation
-			this.iconNavigation = this.$constData.homeIconNavigation
+			
 			this.activity_products = [
 				{
 					id: 0,
@@ -119,13 +156,25 @@
 			// 		url: 'pages/index/index'
 			// 	})
 			// }
-		},
+		}, 
 		computed: {
-			...mapGetters(['activities','products']),
+			...mapGetters(['activities','products','oftenAddress']),
 		 
 		},
-		
+		onTabItemTap() {
+			this.$check()
+		},
 		methods: {
+			async getBanner() {
+				const res = await this.$myRequest({
+					url: 'api/Banners'
+				})
+				console.log('banners',res.data)
+			},
+			check() {
+				this.$check()
+				console.log(this.oftenAddress)
+			},
 			hideTabbar() {
 				uni.hideTabBar({
 					
@@ -169,10 +218,10 @@
 					}
 				})
 			},
-			getLocation() {
-				// console.log(this.$store.state.location)
+			// getLocation() {
+			// 	// console.log(this.$store.state.location)
 				
-			},
+			// },
 			navClick(index) {
 				console.log(index)
 			},
@@ -197,7 +246,7 @@
 	}
 	.home {
 		.header {
-			height: 300rpx;
+			height: 400rpx;
 			background-color: $uni-color-primary;
 			
 			.search_content {
@@ -253,18 +302,23 @@
 					}
 				}
 			}
-			.big_img {
-				margin: 20rpx;
-				height: 290rpx;
-				image {
-					border-radius: 0.5em;
-					width: 710rpx;
-					height: 250rpx;
+			swiper{
+				width: 100%;
+				height: 400rpx;
+				.big_img {
+					margin: 20rpx;
+					height: 290rpx;
+					image {
+						border-radius: 0.5em;
+						width: 710rpx;
+						height: 366rpx;
+					}
 				}
 			}
+			
 		}
 		.block {
-			height: 120rpx;
+			height: 60rpx;
 		}
 		.body {
 			

@@ -66,7 +66,6 @@ export default {
 <style lang="scss">
 .rf-item-popup {
 	font-size: $font-sm + 2upx;
-	
 	background: #fff;
 	.c-row {
 		display: flex;

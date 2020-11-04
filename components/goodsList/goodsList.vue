@@ -1,14 +1,16 @@
 <template>
 	<view>
 		<view class="goods">
-			<view v-for="item in goods" :key="item.id" class="goodsItem" :class="[{goodsItem1: isOneCol},{goodsItem2: !isOneCol}]" @click="itemClick(item)">
+			<view v-for="(item, index) in goods" :key="item.id" class="goodsItem" :class="[{goodsItem1: isOneCol},{goodsItem2: !isOneCol}]" @click="itemClick(item, index)">
 				<image :src="$constData.imageServer + item.homePic" mode=""></image>
 				<view class="message">{{item.name||item.productItemName}}</view>
-				<view>
+				<!-- <view>
 					<view class="price">{{"￥" + item.price}}</view><view class="old_price" v-if="item.oldPrice">{{"￥" + item.oldPrice}}</view>
+				</view> -->
+				<view>
+					<view class="price">{{price[index][0].price}}</view>
 				</view>
 				<view>
-					
 				</view>
 				<!-- <view class="master">
 					<image :src="item.portrait" mode="aspectFit" class="portrait"></image>
@@ -23,6 +25,7 @@
 </template>
 
 <script>
+	import {mapGetters} from 'vuex'
 	export default {
 		props:{
 			cate: {
@@ -50,8 +53,37 @@
 				}
 			}
 		},
+		computed: {
+			...mapGetters(['vipCate']),
+			price() {
+				let list = []
+				for (let item of this.goods) {
+					let price = []
+					item.shopStore_ProductItems.forEach(productItem=>{
+						if(productItem.productItemStr === null) {
+							console.log("sss")
+							price.push({
+								price: productItem.price,
+								integral: productItem.integral,
+								returnIntegral: productItem.reIntegral,
+								returnShopIntegral: productItem.reShopIntegral,
+								shopIntegral: productItem.shopIntegral
+							})
+						} else {
+							console.log(JSON.parse(productItem.productItemStr))
+							console.log(JSON.parse(productItem.productItemStr).filter(i=>i.vipCate === this.vipCate)[0])
+							price.push(JSON.parse(productItem.productItemStr).filter(i=>i.vipCate === this.vipCate)[0].price)
+						}
+					})
+					console.log(price)
+					list.push(price)
+				}
+				console.log(list)
+				return list
+			}
+		},
 		methods: {
-			itemClick(item) {
+			itemClick(item, index) {
 				if (!this.isBegin) {
 					uni.showToast({
 						title: "活动未开始！",
@@ -60,7 +92,14 @@
 					return
 				}
 				console.log(item)
-				
+				console.log(this.price[index])
+				for(let i in item.shopStore_ProductItems) {
+					item.shopStore_ProductItems[i].price = this.price[index][i].price
+					item.shopStore_ProductItems[i].integral = this.price[index][i].integral
+					item.shopStore_ProductItems[i].reIntegral = this.price[index][i].returnIntegral
+					item.shopStore_ProductItems[i].reShopIntegral = this.price[index][i].returnShopIntegral
+					item.shopStore_ProductItems[i].shopIntegral = this.price[index][i].shopIntegral
+				}
 				this.$store.commit('setCurrentProduct', item)
 				uni.navigateTo({
 					url: '/pages/detail/detail?id=' + item.productId,

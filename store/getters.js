@@ -1,4 +1,7 @@
 export default {
+	vipCate(state) {
+		return state.userInfo.vipCate
+	},
 	cartLength(state) {
 		return state.cartList.length
 	},

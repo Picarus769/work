@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<view class="agent">
 		<view class="button_area">
 			<view class="buttons" :class="{selectet: selectId === item.id}" v-for="item in buttons" :key="item.id" @click="buttonsClick(item.id)">
@@ -223,3 +223,4 @@
 	
 }
 </style>
+ -->

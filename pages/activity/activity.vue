@@ -7,13 +7,13 @@
 			<image src="../../static/images/seckill.svg" mode=""></image>
 		</view> -->
 		<view class="block"></view>
-		<goodsList :isBegin="isBegin" :goods="goods" :cate="cate"></goodsList>
+		<goodsList :isBegin="isBeginf" :goods="goods" :cate="cate"></goodsList>
 		<countdown-timer class="timer" ref="countdown" :time="time" @finish="onFinish" autoStart>
 			<template v-slot="{day, hour, minute, second, remain, time}">
 				<!-- 基本样式 -->
 				<view class="case">
 					<view class="title">{{activity.name}}</view>
-					<text class="title" v-if="!isBegin">活动开始倒计时：</text>
+					<text class="title" v-if="!isBeginf">活动开始倒计时：</text>
 					<text class="title" v-else>活动倒计时：</text>
 					<text>{{day}}天{{hour}}时{{minute}}分{{second}}秒</text>				
 				</view>
@@ -29,7 +29,10 @@
 		data() {
 			return {
 				cate: null,
-				currentTime: new Date().getTime()
+				currentTime: null,
+				time: null,
+				isBeginf: false,
+				toVip: null
 			}
 		},
 		components: {
@@ -38,10 +41,18 @@
 		computed: {
 			...mapGetters(['activities']),
 			activity() {
-				return this.activities
+				let act = this.activities
 				.filter(item => new Date(item.endTime).getTime() - new Date().getTime())
 				.filter(item => item.activity_ProductItemDtos.length>0)
-				.filter(item => item.activityCate === this.cate)[0]
+				if(this.toVip) {
+					return act
+					.filter(item => item.activityCate == this.cate)
+					.filter(item => item.toVip == this.toVip)[0]
+				} else {
+					return act
+					.filter(item => item.activityCate === this.cate)[0]
+				}
+
 			},
 			goods() {
 				return this.activity
@@ -56,32 +67,41 @@
 					}
 				})
 			},
-			isBegin() {
-				return new Date (this.activity.beginTime).getTime() < this.currentTime? true : false
-			},
-			time() {
-				if (new Date (this.activity.beginTime).getTime() < this.currentTime) {
-					return this.currentTime - new Date (this.activity.beginTime).getTime()
-				} else {
-					return new Date(this.activity.endTime).getTime() - this.currentTime
-				}
-				
-			}
 			
 			
 		},
 		methods: {
 			onFinish() {
-				uni.showModal({
-					title: '活动已结束',
-					showCancel: false,
-					success() {
-						uni.navigateBack({
-							
-						})
-					}
-				})
-			}
+				if(isBeginf) {
+					uni.showModal({
+						title: '活动已结束',
+						showCancel: false,
+						success() {
+							uni.navigateBack({
+								
+							})
+						}
+					})
+					return
+				}
+				this.currentTime = new Date().getTime()
+				console.log(this.currentTime)
+				this.isBeginf = this.isBegin()
+				this.time = this.calcTime()
+				
+			},
+			calcTime() {
+				if (this.isBeginf) {
+					return new Date(this.activity.endTime).getTime() - this.currentTime
+				} else {
+					
+					return this.currentTime - new Date (this.activity.beginTime).getTime()
+				}
+				
+			},
+			isBegin() {
+				return new Date (this.activity.beginTime).getTime() < this.currentTime? true : false
+			},
 		},
 		onLoad() {
 			let that = this
@@ -89,6 +109,7 @@
 			eventChannel.on('acceptData', function(data) {
 			  console.log(data)
 				that.cate = data.cate
+				that.toVip = data.toVip
 			})
 			console.log(this.cate)
 			if (this.cate === null) {
@@ -102,6 +123,11 @@
 					}
 				})
 			}
+			this.currentTime = new Date().getTime()
+			console.log(this.currentTime)
+			this.isBeginf = this.isBegin()
+			this.time = this.calcTime()
+			console.log(this.time)
 		}
 	}
 </script>

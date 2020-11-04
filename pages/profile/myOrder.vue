@@ -5,7 +5,7 @@
 				<text>{{item.message}}</text>
 			</view>
 		</view>
-		<order-list :orderList="state===0?product:filteredProduct">
+		<order-list @receive="receive" :orderList="state===0?product:filteredProduct">
 		</order-list>
 	</view>
 </template>
@@ -72,6 +72,19 @@
 				this.product = res.data.data
 				console.log(res.data.data)
 				uni.hideLoading();
+			},
+			async receive(id) {
+				console.log(id)
+				const res = await this.$myRequest({
+					url: 'api/UserOrders/ChangeUserOrderState',
+					method: 'POST',
+					data: {
+						id: id,
+						OrderState: 4
+					}
+				})
+				console.log(res)
+				await this.getOrders()
 			}
 		},
 		computed: {
@@ -83,89 +96,7 @@
 		},
 		onLoad() {
 			this.getOrders()
-			// this.product = [
-			// 	{
-			// 		"id": 0,
-			// 		"orderState": 0,
-			// 		"paiedTime": "2020-10-19T02:16:08.779Z",
-			// 		"sendTime": "2020-10-19T02:16:08.779Z",
-			// 		"userId": 0,
-			// 		"userName": "string",
-			// 		"shopId": 0,
-			// 		"shopName": "string",
-			// 		"discount": 0,
-			// 		"discountInfo": "string",
-			// 		"voucherId": 0,
-			// 		"price": 0,
-			// 		"integral": 0,
-			// 		"productItems": [
-			// 			{
-			// 				"id": 0,
-			// 				"userOrderId": 0,
-			// 				"productItemId": 0,
-			// 				"productItemName": "string",
-			// 				"count": 1,
-			// 				"discount": 0,
-			// 				"price": 20,
-			// 				"discountInfo": "string",
-			// 				"pic": "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2165531883,1410252634&fm=26&gp=0.jpg"
-			// 			},
-			// 			{
-			// 				"id": 1,
-			// 				"userOrderId": 0,
-			// 				"productItemId": 0,
-			// 				"productItemName": "string",
-			// 				"count": 2,
-			// 				"price": 100,
-			// 				"discount": 0,
-			// 				"discountInfo": "string",
-			// 				"pic": "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2165531883,1410252634&fm=26&gp=0.jpg"
-			// 			}
-			// 		]
-			// 	},
-			// 	{
-			// 		"id": 1,
-			// 		"orderState": 1,
-			// 		"paiedTime": "2020-10-19T02:16:08.779Z",
-			// 		"sendTime": "2020-10-19T02:16:08.779Z",
-			// 		"userId": 0,
-			// 		"userName": "string",
-			// 		"shopId": 0,
-			// 		"shopName": "string",
-			// 		"discount": 0,
-			// 		"discountInfo": "string",
-			// 		"voucherId": 0,
-			// 		"price": 0,
-			// 		"integral": 0,
-			// 		"productItems": [
-			// 			{
-			// 				"id": 0,
-			// 				"userOrderId": 0,
-			// 				"productItemId": 0,
-			// 				"productItemName": "string",
-			// 				"count": 1,
-			// 				"discount": 0,
-			// 				"price": 20,
-			// 				"discountInfo": "string",
-			// 				"pic": "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2165531883,1410252634&fm=26&gp=0.jpg"
-			// 			},
-			// 			{
-			// 				"id": 1,
-			// 				"userOrderId": 0,
-			// 				"productItemId": 0,
-			// 				"productItemName": "string",
-			// 				"count": 2,
-			// 				"price": 100,
-			// 				"discount": 0,
-			// 				"discountInfo": "string",
-			// 				"pic": "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2165531883,1410252634&fm=26&gp=0.jpg"
-			// 			}
-			// 		]
-			// 	}
-			// ],
-			
-			
-			
+
 		}
 	}
 </script>

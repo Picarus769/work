@@ -14,7 +14,19 @@ Vue.prototype.$constData = $constData
 Vue.prototype.$myRequest = myRequest
 Vue.prototype.$base = $base
 Vue.prototype.$req = $req
-
+Vue.prototype.$check = function check() {
+												if(this.$store.state.oftenAddress===null) {
+													uni.showModal({
+														content: '添加地址以寻找商店',
+														showCancel: false,
+														success() {
+															uni.navigateTo({
+																url: '/pages/profile/setAddress',
+															})
+														}
+													})
+												}
+											},
 
 App.mpType = 'app'
 

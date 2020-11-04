@@ -55,7 +55,7 @@
 					data: {
 						userId: this.userInfo.id,
 						shopId: this.shop.shopId,
-						price: this.inputValue
+						price: parseInt(this.inputValue)
 					}
 				})
 				console.log(res)

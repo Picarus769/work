@@ -26,9 +26,12 @@
 				<view v-if="order.orderState === 0">订单异常</view>
 				<view v-if="order.orderState === 1">未付款</view>
 				<view v-if="order.orderState === 2">付款时间：</view>
-				<view v-if="order.orderState === 3">已收货</view>
+				<view v-if="order.orderState === 3">已发货</view>
+				<view v-if="order.orderState === 4">已完成</view>
+				<view v-if="order.orderState === 4">返平台积分{{order.reIntegral}}返店铺积分{{order.reShopIntegral}}</view>
 			</view>
 			<view class="freight distribution">邮费：{{freight}}</view>
+			<view v-if="order.orderState === 3" class="freight distribution">快递单号：{{order.proof}}</view>
 			<view class="price">
 				<text>实付款
 					<text class="moneyIcon">￥</text>
@@ -40,13 +43,15 @@
 						{{totalPrice[index]}},
 					</text>
 				</text>
+				
 			</view>
+			<view class="intergral"><text>花费平台积分{{order.payIntegral}}</text><text>花费店铺积分{{order.payShopIntegral}}</text></view>
 			<view class="btn">
 				<view v-if="order.orderState === 0" class="btn_item">异常</view>
-				<view v-if="order.orderState === 1" @click="btnClick" class="btn_item">去付款</view>
-				<view v-if="order.orderState === 2" @click="btnClick" class="btn_item">确认收货</view>
-				<view v-if="order.orderState === 1" @click="btnClick('/pages/order/logistics', order)" class="btn_item">查看物流</view>
-				<view v-if="order.orderState === 3" @click="btnClick" class="btn_item">评价</view>
+				<view v-if="order.orderState === 1" @click="btnClick(order.orderState)" class="btn_item">去付款</view>
+				<view v-if="order.orderState === 3" @click="btnClick(order.orderState,'',order.id)" class="btn_item">确认收货</view>
+				<!-- <view v-if="order.orderState === 3" @click="btnClick(9,'/pages/order/logistics', order)" class="btn_item">查看物流</view> -->
+				<view v-if="order.orderState === 4" @click="btnClick(order.orderState)" class="btn_item">评价</view>
 			</view>
 		</view>
 	</view>
@@ -77,14 +82,28 @@
 			}
 		},
 		methods: {
-			btnClick(url ,order) {
-				uni.navigateTo({
-					url,
-					success: function(res) {
-					  res.eventChannel.emit('acceptDataFromOpenerPage', { data: order })
-					}
-				})
-			}
+			btnClick(state, url ,order) {
+				if (state === 1) {
+					uni.showToast({
+						title: '请等待后台核实',
+						icon: 'none'
+					})
+				} else if (state === 3) {
+					this.$emit('receive', order)
+				} else if (state === 9) {
+					uni.navigateTo({
+						url,
+						success: function(res) {
+						  res.eventChannel.emit('acceptDataFromOpenerPage', { data: order })
+						}
+					})
+				} else {
+					uni.showToast({
+						title: '功能未完成',
+						icon: 'none'
+					})
+				}
+			},
 		}
 	}
 </script>
@@ -139,6 +158,12 @@
 		.price {
 			display: flex;
 			flex-direction: row-reverse;
+		}
+		.intergral {
+			display: flex;
+			flex-direction: row-reverse;
+			font-size: 28rpx;
+			color: $font-color-disabled;
 		}
 		.total_price {
 			color: $font-color-disabled;

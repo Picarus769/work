@@ -27,8 +27,8 @@
 		
 	}
 	.checked {
-		border-color: pink;
-		background-color: pink;
+		border-color: red;
+		background-color: red;
 		
 	}
 </style>

@@ -57,19 +57,24 @@
 				
 				<view class="points area">
 					<image class="point_icon" src="../../static/images/score.svg" mode=""></image>
-					<text>可用店铺积分抵扣{{shopIntPrice}}元</text>
+					<text>可用店铺积分抵扣{{sPrice}}元</text>
 					<image class="check" @click="checkClick(0)" :src="shopIntChecked? '../../static/images/check_active.svg' : '../../static/images/check.svg'" mode=""></image>
 				</view>
 				<view class="points area">
 					<image class="point_icon" src="../../static/images/score.svg" mode=""></image>
-					<text>可用平台积分抵扣{{intPrice}}元</text>
+					<text>可用平台积分抵扣{{iPrice}}元</text>
 					<image class="check" @click="checkClick(1)" :src="integralChecked? '../../static/images/check_active.svg' : '../../static/images/check.svg'" mode=""></image>
 				</view>
-				<view class="area" @click="open">使用优惠券</view>
+				<view class="area voucher" @click="open"><text v-if="currentVoucherId === null">使用优惠券</text><text v-else>已使用优惠券减{{voucherMoney}}</text></view>
 				<uni-popup ref="popup" type="bottom">
-					<view class="vouchers">
-						<coupon v-for="(item, index) in vouchers" :key="index" :btn="state(item.state)" :item="item" @useVoucher="useVoucher" theme="#ff0000"></coupon>
-					</view>
+					<scroll-view scroll-y="true" style="height: 100%;">
+						<view class="vouchers">
+							<coupon v-for="(item, index) in voucherFilter" :key="index" :btn="state(item.state)" :item="item" @useVoucher="useVoucher" theme="#ff0000"></coupon>
+							<view class="block"></view>
+							<view class="cancel" @click="useVoucher(0)"><view>不使用优惠券</view></view>
+						</view>
+					</scroll-view>
+					
 					
 				</uni-popup>
 				<view class="reIntegral">
@@ -87,16 +92,11 @@
 <script>
 	import coupon from '@/components/coolc-coupon/coolc-coupon';
 	import uniPopup from '@/components/uni-popup/uni-popup.vue'
-	import uniPopupMessage from '@/components/uni-popup/uni-popup-message.vue'
-	import uniPopupDialog from '@/components/uni-popup/uni-popup-dialog.vue'
-	import popMenu from '@/components/rf-item-popup/index.vue';
+
 	import {mapGetters} from 'vuex'
 	export default {
 		components: {
-			popMenu,
 			uniPopup,
-			uniPopupMessage,
-			uniPopupDialog,
 			coupon
 		},
 		data() {
@@ -109,6 +109,7 @@
 				address: {},
 				vouchers: [],
 				currentVoucherId: null,
+				voucherMoney: null,
 			}
 		},
 		computed: {
@@ -123,11 +124,22 @@
 			totalPrice() {
 				let sPrice = this.shopIntChecked?this.shopIntPrice : 0
 				let iPrice = this.integralChecked?this.intPrice : 0
-				return this.product.reduce((sum, item) => {return sum + item.price * item.selectCount},0).toFixed(2) - sPrice - iPrice + this.freight
+				let temp = this.product.reduce((sum, item) => {return sum + item.price * item.selectCount},0).toFixed(2) - sPrice - iPrice + this.freight - this.voucherMoney
+				return temp>this.freight? temp:this.freight
 			},
+			sPrice() {
+				if(this.shopIntPrice>this.totalPrice-this.freight) return this.totalPrice-this.freight
+				return this.shopIntPrice
+			},
+			iPrice() {
+				if(this.intPrice>this.totalPrice-this.freight) return this.totalPrice-this.freight
+				return this.intPrice
+			},
+			//店铺积分可抵扣
 			shopIntPrice() {
 				return this.product.reduce((sum, item) => {return sum + item.shopIntegral * this.userInfo.shopIntegral},0)
 			},
+			//平台积分可抵扣
 			intPrice() {
 				return this.product.reduce((sum, item) => {return sum + item.integral * this.userInfo.integral},0)
 			},
@@ -136,6 +148,9 @@
 			},
 			reIntegral() {
 				return this.product.reduce((sum, item) => {return sum + item.reIntegral * item.selectCount},0)
+			},
+			voucherFilter() {
+				return this.vouchers.filter(item => item.state === 1)
 			}
 		},
 		methods: {
@@ -151,8 +166,23 @@
 			open(){
 				this.$refs.popup.open()
 			},
-			useVoucher(id) {
-				this.currentVoucherId = id
+			useVoucher(payload) {
+				if(payload === 0) {
+					this.currentVoucherId = null
+					this.voucherMoney = null
+					this.$refs.popup.close()
+					return
+				}
+				console.log(payload)
+				if(payload.money>this.totalPrice) {
+					uni.showToast({
+						title: '不满足条件',
+						icon: 'none'
+					})
+					return
+				}
+				this.currentVoucherId = payload.id
+				this.voucherMoney = payload.price
 				console.log(this.currentVoucherId)
 				this.$refs.popup.close()
 			},
@@ -189,6 +219,7 @@
 				console.log(this.orderProduct)
 				console.log(this.product[0].activityId)
 				console.log(this.address.id)
+				console.log(this.currentVoucherId)
 				const res = await this.$myRequest({
 					url: 'api/UserOrders',
 					method: 'POST',
@@ -246,6 +277,9 @@
 	page {
 		
 		background-color: $uni-grey-bg-color;
+	}
+	scroll-view {
+		height: 100%;
 	}
 	.bottom-bar {
 		background-color: #fff;
@@ -407,12 +441,33 @@
 			.vouchers {
 				padding: 20rpx;
 				background-color: #fff;
+				
+				.block {
+					height: 80rpx;
+				}
+				.cancel{
+					text-align: center;
+					position: fixed;
+					border-radius: 2em;
+					bottom: 10rpx;
+					margin: 0 150rpx;
+					background-color: #eee;
+					height: 80rpx;
+					line-height: 80rpx;
+					padding: 0 100rpx;
+					view {
+						
+					}
+				}
 			}
 			.reIntegral {
 				margin: 20rpx 30rpx;
 				font-size: 26rpx;
 			}
 			
+			
 		}
-		
+		.voucher {
+			font-size: 30rpx;
+		}
 	</style>

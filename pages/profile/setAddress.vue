@@ -21,13 +21,13 @@
 				</view> -->
 				<view class="my_picker">
 					<picker mode="selector" :value="selectProvinceValue" :range="provincesName" @change.prevent="provinceChange">
-						<view> <text>{{provincesRange[selectProvinceValue].areaName}}</text></view>
+						<view> <text>{{provincesRange[selectProvinceValue].name}}</text></view>
 					</picker>
 					<picker mode="selector" :value="selectCityValue" :range="prefecturesName" @change="cityChange">
-						<view> <text>{{prefecturesRange[selectCityValue].areaName}}</text></view>
+						<view> <text>{{prefecturesRange[selectCityValue].name}}</text></view>
 					</picker>
 					<picker mode="selector" :value="selectCountiesValue" :range="countiesName" @change="countiesChange">
-						<view><text>{{countiesRange[selectCountiesValue].areaName}}</text></view>
+						<view><text>{{countiesRange[selectCountiesValue].name}}</text></view>
 					</picker>
 				</view>
 				
@@ -40,22 +40,22 @@
 				</view> -->
 				 <!-- @click="labelClick(0)" -->
 			</view>
-			<view class="yt-list-cell b-b">
+			<view class="yt-list-cell b-b" @click="labelClick(0)">
 				<view class="cell-tit clamp"><text class="red_color"></text>姓名</view>
 				<view class="cell-tip">
-					<input type="text" id="name" :focus="name_f" value="" v-model="name"/>
+					<input type="text" id="name" @blur="blur(0)" :focus="name_f" value="" v-model="name"/>
 				</view>
 			</view>
-			<view class="yt-list-cell b-b">
+			<view class="yt-list-cell b-b" @click="labelClick(1)">
 				<view class="cell-tit clamp"><text class="red_color"></text>电话</view>
 				<view class="cell-tip">
-					<input type="text" id="phone" :focus="phone_f" value="" v-model="phone"/>
+					<input type="text" id="phone" @blur="blur(1)" :focus="phone_f" value="" v-model="phone"/>
 				</view>
 			</view>
-			<view class="yt-list-cell b-b">
+			<view class="yt-list-cell b-b" @click="labelClick(2)">
 				<view class="cell-tit clamp"><text class="red_color"></text>详细地址</view>
 				<view class="cell-tip">
-					<input type="text" id="info" :focus="info_f" value="" v-model="info"/>
+					<input type="text" id="info" @blur="blur(2)" :focus="info_f" value="" v-model="info"/>
 				</view>
 			</view>
 			
@@ -83,16 +83,17 @@
 	export default {
 		data() {
 			return {
+				needChange: null,
 				name_f: false,
 				phone_f: false,
 				info_f: false,
 				name: '',
 				selectProvinceValue: 0,
-				provincesRange: [{areaName: '选择省',areaId: -1}],
+				provincesRange: [{name: '选择省',id: -1}],
 				selectCityValue: 0,
-				prefecturesRange: [{areaName:'选择市',areaId: -1}],
+				prefecturesRange: [{name:'选择市',id: -1}],
 				selectCountiesValue: 0,
-				countiesRange: [{areaName:'选择区',areaId: -1}],
+				countiesRange: [{name:'选择区',id: -1}],
 				addressData: [],
 				text: '',
 				// provincedata:[
@@ -113,63 +114,150 @@
 				address: null
 			}
 		},
+		beforeDestroy() {
+			if(this.$store.state.oftenAddress===null) {
+				uni.navigateTo({
+					url: '/pages/profile/setAddress'
+				})
+			}
+		},
 		computed: {
 			...mapGetters(['userInfo']),
 			provincesName() {
 				let arr = []
 				for (let item of this.provincesRange) {
-					arr.push(item.areaName)
+					arr.push(item.name)
 				}
 				return arr
 			},
 			prefecturesName() {
 				let arr = []
 				for (let item of this.prefecturesRange) {
-					arr.push(item.areaName)
+					arr.push(item.name)
 				}
 				return arr
 			},
 			countiesName() {
 				let arr = []
 				for (let item of this.countiesRange) {
-					arr.push(item.areaName)
+					arr.push(item.name)
 				}
 				return arr
-			}
+			},
+			// prefecturesRange() {
+			// 	return this.provincesRange[this.selectProvinceValue].sub
+			// }
 		},
-		onLoad(options) {
+		async onLoad(options) {
+			let that = this
 			if (options.id) {
 				this.changeId = options.id
+				const eventChannel = this.getOpenerEventChannel()
+				eventChannel.on('acceptData', function(data) {
+				  console.log(data)
+					that.needChange = data
+				})
 			}
-			this.getProvinceRange()
+			await this.getProvinceRange()
+		},
+		watch: {
+			//将要修改的数据赋值
+			provincesRange(val) {
+				if(this.needChange) {
+					for (let i in val) {
+						if(val[i].name === this.needChange.provinceName){
+							this.selectProvinceValue = i
+							this.getCityRange()
+							return
+						}
+					}
+					// val.forEach(item => {
+					// 	if(item.name === this.needChange.provinceName) {
+					// 		this.selectProvinceValue = val.indexOf(item)
+					// 		this.getCityRange()
+					// 		return
+					// 	}
+					// })
+				}
+			},
+			prefecturesRange(val) {
+				if(this.needChange) {
+					for (let i in val) {
+						if(val[i].name === this.needChange.cityName){
+							this.selectCityValue = i
+							this.getCountiesRange()
+							return
+						}
+					}
+					// val.forEach(item => {
+					// 	if(item.name === this.needChange.cityName) {
+					// 		this.selectCityValue = val.indexOf(item)
+					// 		this.getCountiesRange()
+					// 		return
+					// 	}
+					// })
+				}
+			},
+			countiesRange(val) {
+				if(this.needChange) {
+					for (let i in val) {
+						if(val[i].name === this.needChange.countieName){
+							this.selectCountiesValue = i
+							this.name = this.needChange.name
+							this.phone = this.needChange.phone
+							this.info = this.needChange.info
+							return
+						}
+					}
+					// val.forEach(item => {
+					// 	if(item.name === this.needChange.countieName) {
+					// 		this.selectCountiesValue = val.indexOf(item)
+					// 		this.name = this.needChange.name
+					// 		this.phone = this.needChange.phone
+					// 		this.info = this.needChange.info
+					// 		return
+					// 	}
+					// })
+				}
+			}
+			
 		},
 		methods: {
-			// labelClick(id) {
-			// 	if(id === 0) {
-			// 		this.name_f = true
-			// 		this.phone_f = false
-			// 		this.info_f = false
-			// 	} else if (id === 1) {
-			// 		this.phone_f = true
-			// 		this.name_f = false
-			// 		this.info_f = false
-			// 	} else if (id === 2) {
-			// 		this.name_f = false
-			// 		this.phone_f = false
-			// 		this.info_f = true
-			// 	} else if (id === 3) {
-			// 		this.name_f = false
-			// 		this.phone_f = false
-			// 		this.info_f = false
-			// 	}
-			// },
-			provinceChange(e) {
-				this.selectProvinceValue = e.detail.value
-				this.getCityRange()
+			blur(id) {
+				if(id === 0) {
+					this.name_f = false
+				} else if (id === 1) {
+					this.phone_f = false
+				} else if (id === 2) {
+					this.info_f = false
+				}
 			},
-			cityChange(e) {
+			labelClick(id) {
+				if(id === 0) {
+					this.name_f = true
+					this.phone_f = false
+					this.info_f = false
+				} else if (id === 1) {
+					this.phone_f = true
+					this.name_f = false
+					this.info_f = false
+				} else if (id === 2) {
+					this.name_f = false
+					this.phone_f = false
+					this.info_f = true
+				} else if (id === 3) {
+					this.name_f = false
+					this.phone_f = false
+					this.info_f = false
+				}
+			},
+			async provinceChange(e) {
+				this.selectProvinceValue = e.detail.value
+				await this.getCityRange()
+			},
+			async cityChange(e) {
 				this.selectCityValue = e.detail.value
-				this.getCountiesRange()
+				await this.getCountiesRange()
 			},
 			countiesChange(e) {
 				this.selectCountiesValue = e.detail.value
@@ -183,10 +271,11 @@
 			// },
 			async getProvinceRange() {
 				const res = await this.$myRequest({
-					url: 'api/Province/All'
+					url: 'api/Province?id=0'
 				})
 				console.log(res)
-				this.provincesRange = res.data
+				this.provincesRange = [...this.provincesRange,...res.data.data]
+				console.log(this.provincesRange)
 				// .map(item => {
 				// 	let temp = {
 				// 		name: '
@@ -208,22 +297,32 @@
 				// 	console.log(this.provincesRange)
 				// }
 			},
-			getCityRange() {
-				this.prefecturesRange = []
-				for (let counties of this.addressData) {
-					if(this.provincesRange[this.selectProvinceValue].name === counties.city.provinceDto.name) {
-						this.prefecturesRange.push(counties.city)
-					}
-				}
+			async getCityRange() {
+				console.log(this.provincesRange[this.selectProvinceValue].id)
+				const res = await this.$myRequest({
+					url: 'api/City?ProvinceId=' + this.provincesRange[this.selectProvinceValue].id
+				})
+				console.log(res.data.data)
+				// for (let item of this.provincesRange[this.selectProvinceValue]) {
+				// 	if(item.areaName === counties.city.provinceDto.name) {
+				// 		this.prefecturesRange.push(counties.city)
+				// 	}
+				// }
+				this.prefecturesRange = res.data.data
 				this.getCountiesRange()
 			},
-			getCountiesRange() {
-				this.countiesRange = []
-				for (let counties of this.addressData) {
-					if(this.prefecturesRange[this.selectCityValue].name === counties.city.name) {
-						this.countiesRange.push(counties)
-					}
-				}
+			async getCountiesRange() {
+				console.log(this.prefecturesRange[this.selectCityValue].id)
+				const res = await this.$myRequest({
+					url: 'api/Counties?CityId=' + this.prefecturesRange[this.selectCityValue].id
+				})
+				console.log(res.data.data)
+				this.countiesRange = res.data.data
+				// for (let counties of this.addressData) {
+				// 	if(this.prefecturesRange[this.selectCityValue].name === counties.city.name) {
+				// 		this.countiesRange.push(counties)
+				// 	}
+				// }
 			},
 			async submit() {
 				if(this.provincesRange[this.selectProvinceValue].id === -1 || 
@@ -233,7 +332,18 @@
 						title: '请选择正确的地址',
 						icon: "none"
 					})
-				} else {
+					return
+				}
+				 // else if(!(/^1(3|4|5|6|7|8|9)d{9}$/.test(this.phone))) {
+					//  console.log(this.phone)
+				 // 	uni.showToast({
+				 // 		title: '输入手机号有误',
+				 // 		icon: 'none'
+				 // 	})
+				 // 	return
+				 // }
+				 else {
+					
 					console.log(this.provincesRange[this.selectProvinceValue].id)
 					let isFirst = this.$store.state.location.length === 0 ? true : false
 					const res = await this.$myRequest({
@@ -295,6 +405,13 @@
 					this.$store.commit('setLocation', this.address)
 					return res
 				},
+				checkPhone(){ 
+					if(!(/^1[3456789]d{9}$/.test(this.phone))){ 
+						return false; 
+					} else {
+						return true
+					}
+				},
 				async getProduct(areaId) {
 					console.log(areaId)
 					const res = await this.$myRequest({
@@ -309,7 +426,7 @@
 					this.$store.commit('setProducts', res.data.products)
 					this.$store.commit('setFreight', res.data.cost)
 					let temp = {
-						
+						rate: res.data.rate,
 						shopId: res.data.shopId,
 						shopRate:  res.data.shopRate,
 						shopName: res.data.shopName,
@@ -319,25 +436,6 @@
 					}
 					this.$store.commit('setShop', temp)
 				}
-				// async getProduct(oftenAddr) {
-				// 	console.log(oftenAddr)
-				// 	let areaId = oftenAddr.countiesId
-				// 	const res = await this.$myRequest({
-				// 		url: 'api/ShopStore',
-				// 		data: {
-				// 			AreaId: areaId,
-				// 			AreaCate: 3,
-				// 		}
-				// 	})
-				// 	console.log(res.data)
-				// 	store.commit('setCate', res.data.cateDtos)
-				// 	store.commit('setProducts', res.data.products)
-				// 	store.commit('setShop', res.data.shopId)
-				// }
-				// console.log(this.phone)
-				// console.log(this.provincesRange[this.selectProvinceValue].id)
-				// console.log(this.prefecturesRange[this.selectCityValue].id)
-				// console.log(this.countiesRange[this.selectCountiesValue].id)
 				
 			}
 		
@@ -354,13 +452,16 @@
 	// }
 	.my_picker {
 		display: flex;
-		padding:20rpx 200rpx 20rpx 0;
+		padding:20rpx 20rpx 20rpx 0;
 		picker {
 			text-align: center;
-			flex: 1;
-			// text {
-			// 	border-bottom: 1px solid $uni-color-primary;
-			// }
+			margin: auto;
+			text {
+				// border: 1px solid $uni-color-primary;
+				background-color: #eee;
+				padding: 10rpx 20rpx;
+				border-radius: 1em;
+			}
 			
 		}
 	}

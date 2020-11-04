@@ -24,44 +24,9 @@
 				<view>{{config.price3}}</view>
 			</view>
 		</view>
-		
 		<view class="options area">
-			<view class="option" @click="open">
-				<view class="left">规格</view>
-				<view class="center" v-if="selectCount===0">请选择规格</view>
-				<view class="center" v-else>{{currentAttr.productItemName+ ' '+'×'+selectCount}}</view>
-			</view>
-			<uni-popup ref="popup" type="bottom">
-				<view class="popup_content">
-					<view class="popup_info">
-						<image :src="currentAttr.itemPic?$constData.imageServer+currentItemImg:$constData.defaultImg"
-						 mode=""></image>
-						<view class="info">
-							<view class="name">{{currentAttr.productItemName}}</view>
-							<view class="price">￥{{selectCount === 0 ? currentAttr.price : totalPrice}}</view>
-							<view class="count">库存：{{currentAttr.count ? currentAttr.count : 0}}</view>
-						</view>
-					</view>
-					<view class="popup_attr">
-						<view v-for="item in productDetail.shopStore_ProductItems" :key="item.id" class="attr_item" @click="selectAttr(item.id)">
-							<view type="default" size="mini" :class="{is_selected: item.id===currentAttr.id}">{{item.productItemName}}</view>
-						</view>
-					</view>
-					<view class="select_count">
-						<text class="lebal">{{config.count}}</text>
-						<view class="button_area">
-							<text class="btn" @click="decrement">-</text>
-							<text class="number">{{selectCount}}</text>
-							<text class="btn" @click="increment">+</text>
-						</view>
-					</view>
-				</view>
-				<view class="btn_area">
-					<button type="default" @click="close">完成</button>
-				</view>
-				
-			</uni-popup>
-			<!-- <pop-menu title="购买类型" @hide="hideService" :specClass="specClass" @show="toggleSpec">
+
+			<pop-menu title="购买类型" @hide="hideService" :specClass="specClass" @show="toggleSpec">
 					<view slot="content">
 						<text class="selected-text" v-if="selectCount===0">请选择规格</text>
 						<text class="selected-text" v-if="selectCount!==0">{{currentAttr.productItemName+ ' '+'×'+selectCount}}</text>
@@ -93,7 +58,7 @@
 						</view>
 						<button type="default" @click="attrChecked">完成</button>
 					</view>
-				</pop-menu> -->
+				</pop-menu>
 
 			<view class="option">
 				<view class="left">发货</view>
@@ -162,8 +127,6 @@
 </template>
 
 <script>
-	import uniPopup from '@/components/uni-popup/uni-popup.vue'
-
 	import popMenu from '@/components/rf-item-popup/index.vue';
 	import config from '@/config/detailData.js';
 	import data from '@/data/detail/detail.js';
@@ -174,7 +137,7 @@
 
 		components: {
 			popMenu,
-			uniPopup
+
 		},
 		data() {
 			return {
@@ -227,14 +190,6 @@
 
 		},
 		methods: {
-			open(){
-				if (!this.productDetail) return;
-				if(this.selectCount === 0) this.selectCount = 1
-				this.$refs.popup.open()
-			},
-			close() {
-				this.$refs.popup.close()
-			},
 			share() {
 				uni.navigateTo({
 					url: './share'
@@ -253,7 +208,7 @@
 				// if (old.count)
 				const product = {}
 				product.activityId = this.currentAttr.activityId
-				product.itemPic = this.currentAttr.itemPic
+				product.image = this.currentAttr.itemPic ? this.$constData.imageServer + this.currentAttr.itemPic.split(',')[0]:this.$constData.defaultImg
 				product.productItemName = this.currentAttr.productItemName
 				product.totalCount = this.currentAttr.count
 				product.selectCount = this.selectCount != 0 ? this.selectCount : 1
@@ -408,7 +363,7 @@
 
 			.price_area {
 				display: flex;
-				text-align: center;
+
 				text {
 					font-size: 20rpx;
 				}
@@ -434,7 +389,7 @@
 
 			.price_describe {
 				display: flex;
-				text-align: center;
+
 				view {
 					flex: 1;
 					font-size: 20rpx;
@@ -466,7 +421,6 @@
 			}
 
 			.popup_content {
-				background-color: #fff;
 				width: 100%;
 				height: auto;
 				box-sizing: border-box;
@@ -549,9 +503,6 @@
 						}
 					}
 				}
-			}
-			.btn_area{
-				background-color: #fff;
 			}
 		}
 

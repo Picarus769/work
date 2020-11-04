@@ -6,28 +6,30 @@
 			// let res = JSON.parse(this.getCookie("current"));
 			let res = {
 				vipcate: 1,
-				name: '昵称',
+				wechatinfo: {
+					nickname: '昵称',
+					headimgurl: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1373560079,871367259&fm=26&gp=0.jpg',
+				},
+				
 				openid: null,
-				avatar: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1373560079,871367259&fm=26&gp=0.jpg',
-				integral: 0,
-				shopintegral: 20,
+				integral: 1050,
+				shopintegral: 0,
 				info: [
-					{
-						provinceid: 2,
-						provincename: "北京市",
-						cityid: 4,
-						cityname: "朝阳区",
-						countiesid: 4,
-						countiename: "朝阳区",
-						info: "123123123123",
-						userid: 4,
-						name: "123",
-						phone: "123123123",
-						isoften: true,
-						id: 127
-					}
+					{cityid: 454,
+					cityname: "东城区",
+					countiename: "东城区",
+					countiesid: 2875,
+					id: 168,
+					info: "123",
+					isoften: true,
+					name: "123",
+					phone: "135",
+					provinceid: 34,
+					provincename: "北京市",
+					userid: 29}
 				],
-				id: 4
+				
+				id: 29
 			}
 			
 			this.login(res).then(()=>{
@@ -86,9 +88,9 @@
 				})
 				let  rr = {
 				vipCate: r.vipcate,
-				name: r.name,
+				name: r.wechatinfo.nickname,
 				openId: r.openid,
-				avatar: r.avatar,
+				avatar: r.wechatinfo.headimgurl,
 				integral: r.integral,
 				shopIntegral: r.shopintegral,
 				info: r.info.map(item => {
@@ -121,15 +123,19 @@
 				
 				if(rr.info.length === 0) {
 					console.log("aaaaa")
-					uni.navigateTo({
-						url: '/pages/profile/setAddress',
+					uni.switchTab({
+						url: '/pages/index/index',
 						success() {
-							console.log("ccc")
+							
 						},
 						fail(e) {
 							
 							console.log(e)
 						}
+					})
+					this.getProduct({
+						countiesId:0,
+						cate: 0
 					})
 					// uni.showModal({
 					// 	content: '添加地址以寻找附近商店',
@@ -150,6 +156,7 @@
 					// 		console.log(e)
 					// 	}
 					// })
+					uni.hideLoading();
 				} else {
 					
 					store.commit('setLocation', rr.info);
@@ -173,7 +180,7 @@
 						url: 'api/ShopStore',
 						data: {
 							AreaId: areaId,
-							AreaCate: 3,
+							AreaCate: oftenAddr.cate===undefined?3:oftenAddr.cate,
 						}
 					})
 					console.log(res.data)
@@ -181,7 +188,7 @@
 					store.commit('setProducts', res.data.products)
 					store.commit('setFreight', res.data.cost)
 					let temp = {
-						
+						rate: res.data.rate,
 						shopId: res.data.shopId,
 						shopRate:  res.data.shopRate,
 						shopName: res.data.shopName,
@@ -192,6 +199,8 @@
 					console.log(temp)
 					store.commit('setShop', temp)
 					this.getActivity(res.data.shopId)
+					console.log(res.data.products[5].shopStore_ProductItems[0].productItemStr)
+					console.log(JSON.parse(res.data.products[5].shopStore_ProductItems[0].productItemStr))
 			},
 			async getActivity(id) {
 				const res = await this.$myRequest({

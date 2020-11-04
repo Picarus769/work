@@ -6,6 +6,7 @@
 			<cart-bottom-bar>
 			</cart-bottom-bar>
 		</view>
+		<view class="block"></view>
   </view>
 </template>
 
@@ -27,7 +28,10 @@
 			isEmpty() {
 				return this.cartList.length === 0?true:false
 			}
-		}
+		},
+		onTabItemTap() {
+			this.$check()
+		},
   }
 </script>
 
@@ -39,5 +43,8 @@
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
+	}
+	.block {
+		height: 80rpx;
 	}
 </style>

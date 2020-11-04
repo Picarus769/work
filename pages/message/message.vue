@@ -50,12 +50,15 @@
 					id: 0,
 					name: '服务通知',
 					portrait: '../../static/images/portrait.png',
-					message: '啊啊啊啊啊啊啊啊啊',
-					unCheckCount: 2,
+					message: '欢迎光临本店',
+					unCheckCount: 1,
 					lastTime: '10:10'
 				}
 			]
-		}
+		},
+		onTabItemTap() {
+			this.$check()
+		},
 	}
 </script>
 

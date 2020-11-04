@@ -2,7 +2,7 @@
 	<view class="shop">
 		<view class="info">
 			<view class="left">
-				<image :src="shopInfo.shopAvatar || '../../static/images/defaultImg.png'" mode=""></image>
+				<image :src="shopInfo.shopAvatar?$constData.imageServer+shopInfo.shopAvatar:$constData.defaultImg" mode=""></image>
 			</view>
 			<view class="right">
 				<view class="shop_name">{{shopInfo.shopName}}</view>
@@ -139,7 +139,7 @@ page {
 			.shop_name {
 				height: 50rpx;
 				line-height: 50rpx;
-				font-size: 24rpx;
+				font-size: 28rpx;
 			}
 			.shop_address{
 				height: 50rpx;

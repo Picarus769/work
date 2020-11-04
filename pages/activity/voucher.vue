@@ -1,9 +1,10 @@
 <template>
 	<view class="coupon_box">
-		<view class="other_type">
+		<view v-if="vouchers.length === 0" class="other_type">
 			<!-- <view class="text"><span>全面型优惠券</span></view> -->
+			暂无优惠券
 		</view>
-		<coupon v-for="(item, index) in vouchers" :key="index" :btn="state(item.state)" :item="item" theme="#ff0000"></coupon>
+		<coupon v-for="(item, index) in vouchers" @refresh="refresh" :key="index" :btn="state(item.state)" :item="item" theme="#ff0000"></coupon>
 	</view>
 </template>
 
@@ -16,7 +17,7 @@
 		},
 		data() {
 			return {
-				vouchers: null,
+				vouchers: [],
 			}
 		},
 		computed: {
@@ -39,6 +40,9 @@
 					return '已使用'
 				}
 			},
+			async refresh() {
+				await this.getVoucher()
+			},
 			async getVoucher() {
 				uni.showLoading({
 					title:'加载中。。。'
@@ -51,8 +55,8 @@
 						userId: this.userInfo.id
 					}
 				})
-				console.log(res.data)
 				this.vouchers = res.data
+				console.log(this.vouchers)
 				uni.hideLoading()
 			}
 		}
@@ -73,10 +77,11 @@
 	}
 
 	.other_type {
-		box-sizing: border-box;
-		width: 100%;
-		height: 90rpx;
-		padding-top: 50rpx;
+		color: #ccc;
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
 
 		.text {
 			width: 100%;

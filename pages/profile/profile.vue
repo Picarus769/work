@@ -40,6 +40,9 @@
 				
 			}
 		},
+		onTabItemTap() {
+			this.$check()
+		},
 		computed: {
 			...mapGetters(['userInfo'])
 		},

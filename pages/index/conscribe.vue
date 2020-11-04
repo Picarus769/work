@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<image :src="img||$constData.defaultImg" mode=""></image>
+		<!-- <image :src="img||$constData.defaultImg" mode=""></image> -->
 	</view>
 	
 </template>

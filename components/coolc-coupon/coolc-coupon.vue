@@ -4,19 +4,22 @@
 			<view class="nick" v-if="item.shopId === 1">全店铺可用</view>
 			<view class="nick" v-else>限制在{{item.shopName}}店内使用</view>
 			<view class="layof" :style="{color:theme}">￥{{item.price+" "}} <small>({{item.integral}}积分)</small></view>
-			<view class="end_time">{{item.limitTime|timeFormat()}}前使用</view>
+			<view class="end_time" v-if="item.state > 0">{{item.limitTime|timeFormat()}}前使用</view>
+
 			<view v-if="!types">
 				<!-- <view class="tit">券号：{{item.ticket}}</view> -->
 				<view class="demand">满{{item.limitMoney}}使用</view>
 			</view>
 		</view>
-		<view @click="btnClick(item.id)" class="get-btn" v-if="types" :style="{color:color, borderColor:color, background:solid}">{{btn}}</view>
-		<view @click="btnClick(item.id)" class="get-btn" v-if="!types" :style="{color:color, borderColor:color, background:solid}">{{btn}}</view>
+		<view @click="btnClick(item.id, item.limitMoney, item.price)" class="get-btn" v-if="types" :style="{color:color, borderColor:color, background:solid}">{{btn}}</view>
+		<view @click="btnClick(item.id, item.limitMoney,item.price)" class="get-btn" v-if="!types" :style="{color:color, borderColor:color, background:solid}">{{btn}}</view>
 	</view>
 </template>
 
 <script>
-	import {mapGetters} from 'vuex'
+	import {
+		mapGetters
+	} from 'vuex'
 	export default {
 		components: {
 
@@ -28,25 +31,29 @@
 		},
 		filters: {
 			timeFormat(v) {
-				let date = new Date(v)
-				let fmt = 'YYYY-mm-dd HH:MM:SS'
-				let ret;
-				const opt = {
-				    "Y+": date.getFullYear().toString(),        // 年
-				    "m+": (date.getMonth() + 1).toString(),     // 月
-				    "d+": date.getDate().toString(),            // 日
-				    "H+": date.getHours().toString(),           // 时
-				    "M+": date.getMinutes().toString(),         // 分
-				    "S+": date.getSeconds().toString()          // 秒
-				    // 有其他格式化字符需求可以继续添加，必须转化成字符串
-				};
-				for (let k in opt) {
-				    ret = new RegExp("(" + k + ")").exec(fmt);
-				    if (ret) {
-				        fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
-				    };
-				};
-				return fmt
+				if (v) {
+					let date = new Date(v)
+					let fmt = 'YYYY-mm-dd HH:MM:SS'
+					let ret;
+					const opt = {
+						"Y+": date.getFullYear().toString(), // 年
+						"m+": (date.getMonth() + 1).toString(), // 月
+						"d+": date.getDate().toString(), // 日
+						"H+": date.getHours().toString(), // 时
+						"M+": date.getMinutes().toString(), // 分
+						"S+": date.getSeconds().toString() // 秒
+						// 有其他格式化字符需求可以继续添加，必须转化成字符串
+					};
+					for (let k in opt) {
+						ret = new RegExp("(" + k + ")").exec(fmt);
+						if (ret) {
+							fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
+						};
+					};
+					return fmt
+				}
+				return ''
+
 			}
 		},
 		computed: {
@@ -78,13 +85,18 @@
 			},
 		},
 		methods: {
-			btnClick(id) {
-				if(this.btn === '已拥有' || this.btn === '已使用') return
-				if(this.btn === '使用') {
-					this.$emit('useVoucher', id)
+			btnClick(id, money, price) {
+				console.log(money)
+				if (this.btn === '已拥有' || this.btn === '已使用') return
+				if (this.btn === '使用') {
+					let payload = {
+						id: id,
+						money: money,
+						price: price
+					}
+					this.$emit('useVoucher', payload)
 					return
 				}
-				console.log(id)
 				this.getVoucher(id)
 			},
 			async getVoucher(id) {
@@ -100,7 +112,9 @@
 					}
 				})
 				console.log(res)
+
 				uni.hideLoading()
+				this.$emit('refresh')
 			}
 		}
 	}

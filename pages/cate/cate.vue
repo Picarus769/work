@@ -54,21 +54,13 @@
 			return {
 				isOneCol: true,
 				currentCate: null,
-				selectedId: 1,
+				selectedId: 0,
 				lebalUp: null,
 				lebalDown: null
 			}
 		},
 		computed: {
-			...mapGetters(['products']),
-			cate() {
-				// return [{
-				// 	id: 0,
-				// 	cateName: '热门活动'
-				// }, ...this.$store.state.cate]
-				
-				return this.$store.state.cate;
-			},
+			...mapGetters(['products', 'cate']),
 			filteredItems() {
 				return this.products.filter(item => item.cateId === this.selectedId)
 			}
@@ -85,12 +77,16 @@
 				})
 			}
 		},
+		onTabItemTap() {
+			this.$check()
+		},
 		onLoad() {
 			this.lebalUp = this.$constData.lebalUp
 			this.lebalDown = this.$constData.lebalDown
+			this.selectedId = this.cate[0].id
 			// this.cate = data.temp
 			// console.log(this.cate)
-			this.currentCate = this.cate[this.selectedId].cateList
+			// this.currentCate = this.cate[this.selectedId].cateName
 		}
 	}
 </script>

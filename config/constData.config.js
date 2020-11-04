@@ -65,7 +65,8 @@ export default {
 		{
 			name: '招募计划',
 			icon: '../../static/images/join_in.png',
-			url: '/pages/index/conscribe'
+			// url: '/pages/index/conscribe'
+			url: ''
 		},
 		{
 			name: '营销推广',
@@ -161,13 +162,15 @@ export default {
 			id: 0,
 			title: 'VIP',
 			info: '购买VIP套餐升级',
-			icon: '../../static/images/vip1.png'
+			icon: '../../static/images/vip1.png',
+			toVip: '1'
 		},
 		{
 			id: 1,
 			title: '伊客',
 			info: '购买伊客套餐升级',
-			icon: '../../static/images/vip2.png'
+			icon: '../../static/images/vip2.png',
+			toVip: '2'
 		}
 	],
 	vipInfo: [

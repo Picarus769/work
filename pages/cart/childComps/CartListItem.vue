@@ -4,7 +4,7 @@
 			<CheckButton @click.native="checkedChange" :isChecked="item.checked"></CheckButton>
 		</view>
 		<view class="item-img">
-			<image :src="item.image" alt="商品图片">
+			<image :src="item.itemPic?$constData.imageServer + item.itemPic.split(',')[0]:$constData.defaultImg" alt="商品图片">
 		</view>
 		<view class="item-info">
 			<view class="item-title">{{item.productItemName}}</view>
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-	import CheckButton from 'components/checkButton/CheckButton.vue'
+	import CheckButton from '@/components/checkButton/CheckButton.vue'
 	export default {
 		name: "CartListItem",
 		components: {
@@ -104,6 +104,8 @@
 	.delete {
 		margin-left: auto;
 		padding: 10rpx 20rpx;
+		height: 50rpx;
+		line-height: 50rpx;
 		color: #ccc;
 		font-size: 30rpx;
 	}
