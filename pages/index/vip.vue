@@ -73,8 +73,11 @@
 			vipEnjoy() {
 				let vipAct = this.activities.filter(item => item.activityCate === 6)
 				if(vipAct.length === 0) return []
-				return vipAct
-				.filter(item => item.activity_ProductItemDtos.length>0)[0].activity_ProductItemDtos
+				
+				let temp = vipAct.filter(item => item.activity_ProductItemDtos.length>0)
+				
+				if(temp.length===0) return []
+				return temp[0].activity_ProductItemDtos
 			},
 			vipCate() {
 				if(this.userInfo.vipCate === 1) return '普通会员'

@@ -14,14 +14,27 @@
 				</view>
 			</view>
 			<view class="price_area">
-				<view class="price1 price"><text>￥</text>{{productDetail.price?productDetail.price:'暂无'}}</view>
+				<view class="price1 price"><text>￥</text>{{this.currentAttr.price}}</view>
+				<!-- 
 				<view class="price2 price"><text>￥</text>{{productDetail.price2?productDetail.price2:'暂无'}}</view>
-				<view class="price3 price"><text>￥</text>{{productDetail.price3?productDetail.price3:'暂无'}}</view>
+				<view class="price3 price"><text>￥</text>{{productDetail.price3?productDetail.price3:'暂无'}}</view> -->
 			</view>
 			<view class="price_describe">
-				<view>{{config.price1}}</view>
-				<view>{{config.price2}}</view>
-				<view>{{config.price3}}</view>
+				<!-- <view>价格</view> -->
+				<!-- <view>{{config.price2}}</view> --><!-- 
+				<view>{{config.price3}}</view> -->
+			</view>
+			<view class="int">
+				<!-- <view>每店铺积分可抵：{{this.currentAttr.shopIntegral>0?this.currentAttr.shopIntegral:'0'}}</view> -->
+				<view>可用{{this.currentAttr.integral}}平台积分兑换</view>
+				<!-- <view>{{config.price2}}</view> --><!-- 
+				<view>{{config.price3}}</view> -->
+			</view>
+			<view class="int">
+				<!-- <view>每店铺积分可抵：{{this.currentAttr.shopIntegral>0?this.currentAttr.shopIntegral:'0'}}</view> -->
+				<view>可返{{this.currentAttr.reIntegral}}平台积分</view>
+				<!-- <view>{{config.price2}}</view> --><!-- 
+				<view>{{config.price3}}</view> -->
 			</view>
 		</view>
 		
@@ -163,7 +176,6 @@
 
 <script>
 	import uniPopup from '@/components/uni-popup/uni-popup.vue'
-
 	import popMenu from '@/components/rf-item-popup/index.vue';
 	import config from '@/config/detailData.js';
 	import data from '@/data/detail/detail.js';
@@ -251,6 +263,7 @@
 				}
 				// let old = this.cartList.find(item=> this.currentAttr.id === item.iid)
 				// if (old.count)
+				console.log(this.currentAttr.id)
 				const product = {}
 				product.activityId = this.currentAttr.activityId
 				product.itemPic = this.currentAttr.itemPic
@@ -264,6 +277,7 @@
 				product.desc = this.productDetail.info
 				product.price = this.currentAttr.price
 				product.iid = this.currentAttr.id
+				product.shopStoreId = this.productDetail.shopId
 				product.productItemId = this.currentAttr.productItemId
 				this.$store.dispatch('addCart', {product, count:this.selectCount===0?1:this.selectCount}).then(res => {
 					uni.showToast({
@@ -354,6 +368,7 @@
 				this.attrId = this.productDetail.shopStore_ProductItems[0].id
 			}
 			console.log(this.$constData.imageServer + this.shop.shopAvatar)
+			console.log(this.productDetail)
 		}
 	}
 </script>
@@ -414,7 +429,7 @@
 				}
 
 				.price {
-					flex: 1;
+					// flex: 1;
 					
 					font-size: 40rpx;
 				}
@@ -433,10 +448,21 @@
 			}
 
 			.price_describe {
+				margin-bottom: 10rpx;
 				display: flex;
 				text-align: center;
 				view {
-					flex: 1;
+					// flex: 1;
+					font-size: 20rpx;
+					color: $font-color-disabled;
+				}
+			}
+			.int {
+				margin-bottom: 10rpx;
+				display: flex;
+				text-align: center;
+				view {
+					// flex: 1;
 					font-size: 20rpx;
 					color: $font-color-disabled;
 				}

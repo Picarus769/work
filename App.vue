@@ -3,34 +3,34 @@
 	export default {
 		onLaunch: function() {
 			console.log('App Launch');
-			// let res = JSON.parse(this.getCookie("current"));
-			let res = {
-				vipcate: 1,
-				wechatinfo: {
-					nickname: '昵称',
-					headimgurl: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1373560079,871367259&fm=26&gp=0.jpg',
-				},
+			let res = JSON.parse(this.getCookie("current"));
+			// let res = {
+			// 	vipcate: 0,
+			// 	wechatinfo: {
+			// 		nickname: '昵称',
+			// 		headimgurl: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1373560079,871367259&fm=26&gp=0.jpg',
+			// 	},
 				
-				openid: null,
-				integral: 1050,
-				shopintegral: 0,
-				info: [
-					{cityid: 454,
-					cityname: "东城区",
-					countiename: "东城区",
-					countiesid: 2875,
-					id: 168,
-					info: "123",
-					isoften: true,
-					name: "123",
-					phone: "135",
-					provinceid: 34,
-					provincename: "北京市",
-					userid: 29}
-				],
+			// 	openid: null,
+			// 	integral: 1000,
+			// 	shopintegral: 1,
+			// 	info: [
+			// 		{cityid: 454,
+			// 		cityname: "东城区",
+			// 		countiename: "东城区",
+			// 		countiesid: 2875,
+			// 		id: 168,
+			// 		info: "123",
+			// 		isoften: true,
+			// 		name: "123",
+			// 		phone: "135",
+			// 		provinceid: 34,
+			// 		provincename: "北京市",
+			// 		userid: 57}
+			// 	],
 				
-				id: 29
-			}
+			// 	id: 57
+			// }
 			
 			this.login(res).then(()=>{
 				console.log("app.vue完成")
@@ -86,11 +86,13 @@
 						console.log(e)
 					}
 				})
+				console.log(r)
+				console.log(r)
 				let  rr = {
 				vipCate: r.vipcate,
-				name: r.wechatinfo.nickname,
+				name: r.wechatinfo?.nickname,
 				openId: r.openid,
-				avatar: r.wechatinfo.headimgurl,
+				avatar: r.wechatinfo?.headimgurl,
 				integral: r.integral,
 				shopIntegral: r.shopintegral,
 				info: r.info.map(item => {
@@ -109,7 +111,7 @@
 						id: item.id
 					}
 					return temp
-				}),
+				})||[],
 				id: r.id
 			}
 				store.commit('getCacheData', rr)
@@ -199,8 +201,8 @@
 					console.log(temp)
 					store.commit('setShop', temp)
 					this.getActivity(res.data.shopId)
-					console.log(res.data.products[5].shopStore_ProductItems[0].productItemStr)
-					console.log(JSON.parse(res.data.products[5].shopStore_ProductItems[0].productItemStr))
+					// console.log(res.data.products[5].shopStore_ProductItems[0].productItemStr)
+					// console.log(JSON.parse(res.data.products[5].shopStore_ProductItems[0].productItemStr))
 			},
 			async getActivity(id) {
 				const res = await this.$myRequest({

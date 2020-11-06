@@ -4,6 +4,7 @@
 			:key="index"
 			:item="item"
 			@deleteItem="deleteItem"/>
+		<view class="block"></view>
 	</view>
 	
 </template>
@@ -41,5 +42,8 @@
 	.content {
 		height: 100%;
 		overflow: hidden;
+	}
+	.block {
+		height: 200rpx;
 	}
 </style>

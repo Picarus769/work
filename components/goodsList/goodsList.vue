@@ -8,7 +8,7 @@
 					<view class="price">{{"￥" + item.price}}</view><view class="old_price" v-if="item.oldPrice">{{"￥" + item.oldPrice}}</view>
 				</view> -->
 				<view>
-					<view class="price">{{price[index][0].price}}</view>
+					<view class="price">{{"￥" + price[index][0].price}}</view>
 				</view>
 				<view>
 				</view>
@@ -57,26 +57,41 @@
 			...mapGetters(['vipCate']),
 			price() {
 				let list = []
+				if(this.cate) {
+					for (let item of this.goods) {
+						list.push([{
+							price: item.price,
+							integral: item.integral,
+							returnIntegral: item.returnIntegral,
+							returnShopIntegral: item.returnShopIntegral,
+							shopIntegral: item.shopIntegral
+						}])
+					}
+					
+				} else {
 				for (let item of this.goods) {
 					let price = []
-					item.shopStore_ProductItems.forEach(productItem=>{
-						if(productItem.productItemStr === null) {
-							console.log("sss")
-							price.push({
-								price: productItem.price,
-								integral: productItem.integral,
-								returnIntegral: productItem.reIntegral,
-								returnShopIntegral: productItem.reShopIntegral,
-								shopIntegral: productItem.shopIntegral
-							})
-						} else {
-							console.log(JSON.parse(productItem.productItemStr))
-							console.log(JSON.parse(productItem.productItemStr).filter(i=>i.vipCate === this.vipCate)[0])
-							price.push(JSON.parse(productItem.productItemStr).filter(i=>i.vipCate === this.vipCate)[0].price)
-						}
-					})
-					console.log(price)
-					list.push(price)
+					
+						item.shopStore_ProductItems.forEach(productItem=>{
+							if(productItem.productItemStr === null) {
+								price.push({
+									price: productItem.price,
+									integral: productItem.integral,
+									returnIntegral: productItem.reIntegral,
+									returnShopIntegral: productItem.reShopIntegral,
+									shopIntegral: productItem.shopIntegral
+								})
+							} else {
+								// console.log(JSON.parse(productItem.productItemStr))
+								// console.log(JSON.parse(productItem.productItemStr).filter(i=>i.vipCate === this.vipCate)[0])
+								price.push(JSON.parse(productItem.productItemStr).filter(i=>i.VipCate === this.vipCate)[0].price)
+							}
+						})
+						// console.log(price)
+						list.push(price)
+					}
+					
+
 				}
 				console.log(list)
 				return list
@@ -91,8 +106,8 @@
 					})
 					return
 				}
-				console.log(item)
-				console.log(this.price[index])
+				// console.log(item)
+				// console.log(this.price[index])
 				for(let i in item.shopStore_ProductItems) {
 					item.shopStore_ProductItems[i].price = this.price[index][i].price
 					item.shopStore_ProductItems[i].integral = this.price[index][i].integral

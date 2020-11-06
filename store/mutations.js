@@ -34,6 +34,7 @@ export default {
 		let cart = uni.getStorageSync('cart')
 		let userInfo = uni.getStorageSync('userInfo')
 		if(user.id === userInfo.id) {
+			
 			state.cartList = cart
 		}
 	},
@@ -76,10 +77,21 @@ export default {
 		
 		state.shop = shop
 	},
+	//更新积分
+	setInt(state, int) {
+		console.log('更新积分')
+		state.userInfo.shopIntegral = int.shopIntegral
+		state.userInfo.integral = int.integral
+	},
 	//保存商品
 	setProducts(state, products) {
 		console.log("已保存商品")
 		state.products = products.filter(item => item.shopStore_ProductItems.filter(i => i.count>0).length>0)
+		state.products.forEach(item => {
+			item.shopStore_ProductItems.map(productItem => {
+				return productItem.price = JSON.parse(productItem.productItemStr).filter(i=>i.VipCate === state.userInfo.vipCate)[0].price.price
+			})
+		})
 	},
 	//保存点击的商品
 	setCurrentProduct(state, product) {
@@ -122,5 +134,14 @@ export default {
 	deleteItem(state, iid) {
 		state.cartList = state.cartList.filter(item => item.iid != iid)
 		uni.setStorageSync('cart',state.cartList)
+	},
+	setCartPrice(state, p) {
+		console.log('购物车价格修改')
+		state.cartList.forEach(item => {
+			if(item.iid === p.id) {
+				item.price = p.price
+				return
+			}
+		})
 	}
 }

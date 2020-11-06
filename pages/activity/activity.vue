@@ -32,7 +32,8 @@
 				currentTime: null,
 				time: null,
 				isBeginf: false,
-				toVip: null
+				toVip: null,
+				activity: {}
 			}
 		},
 		components: {
@@ -40,20 +41,7 @@
 		},
 		computed: {
 			...mapGetters(['activities']),
-			activity() {
-				let act = this.activities
-				.filter(item => new Date(item.endTime).getTime() - new Date().getTime())
-				.filter(item => item.activity_ProductItemDtos.length>0)
-				if(this.toVip) {
-					return act
-					.filter(item => item.activityCate == this.cate)
-					.filter(item => item.toVip == this.toVip)[0]
-				} else {
-					return act
-					.filter(item => item.activityCate === this.cate)[0]
-				}
-
-			},
+			
 			goods() {
 				return this.activity
 				.activity_ProductItemDtos
@@ -71,6 +59,21 @@
 			
 		},
 		methods: {
+			getActivity() {
+				console.log('aaaa')
+				let act = this.activities
+				.filter(item => new Date(item.endTime).getTime() - this.currentTime>0)
+				.filter(item => item.activity_ProductItemDtos.length>0)
+				if(this.toVip) {
+					return act
+					.filter(item => item.activityCate == this.cate)
+					.filter(item => item.toVip == this.toVip)[0]
+				} else {
+					return act
+					.filter(item => item.activityCate === this.cate)[0]
+				}
+				
+			},
 			onFinish() {
 				if(isBeginf) {
 					uni.showModal({
@@ -100,6 +103,7 @@
 				
 			},
 			isBegin() {
+				// if(this.activity === []) return false
 				return new Date (this.activity.beginTime).getTime() < this.currentTime? true : false
 			},
 		},
@@ -111,8 +115,19 @@
 				that.cate = data.cate
 				that.toVip = data.toVip
 			})
+			this.activity = this.getActivity()
 			console.log(this.cate)
 			if (this.cate === null) {
+				uni.showModal({
+					title: '无活动',
+					showCancel: false,
+					success() {
+						uni.navigateBack({
+							
+						})
+					}
+				})
+			} else if(this.activities.length === 0) {
 				uni.showModal({
 					title: '无活动',
 					showCancel: false,
@@ -127,6 +142,16 @@
 			console.log(this.currentTime)
 			this.isBeginf = this.isBegin()
 			this.time = this.calcTime()
+			// if(this.time<0) {
+			// 	uni.navigateBack({
+			// 		success() {
+			// 			uni.showToast({
+			// 				title: '活动已结束',
+			// 				icon: 'none'
+			// 			})
+			// 		}
+			// 	})
+			// }
 			console.log(this.time)
 		}
 	}

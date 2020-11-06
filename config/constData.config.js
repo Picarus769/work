@@ -139,6 +139,11 @@ export default {
 			icon: '../../static/images/my_points.png',
 			url: '/pages/profile/myPoints'
 		},
+		{
+			message: '团队业绩',
+			icon: '../../static/images/team.svg',
+			url: ''
+		},
 		// {
 		// 	message: '设置',
 		// 	icon: '../../static/images/settings.png',

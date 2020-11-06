@@ -28,10 +28,13 @@
 				<view v-if="order.orderState === 2">付款时间：</view>
 				<view v-if="order.orderState === 3">已发货</view>
 				<view v-if="order.orderState === 4">已完成</view>
-				<view v-if="order.orderState === 4">返平台积分{{order.reIntegral}}返店铺积分{{order.reShopIntegral}}</view>
+				<view v-if="order.orderState === 4">返平台积分{{order.reIntegral}}</view>
 			</view>
 			<view class="freight distribution">邮费：{{freight}}</view>
 			<view v-if="order.orderState === 3" class="freight distribution">快递单号：{{order.proof}}</view>
+			<view class="intergral"><text>花费平台积分{{order.payIntegral}}</text></view>
+			<!-- <view class="intergral"><text>花费店铺积分{{order.payShopIntegral<0?0:order.payShopIntegral}}</text></view> -->
+			
 			<view class="price">
 				<text>实付款
 					<text class="moneyIcon">￥</text>
@@ -45,7 +48,7 @@
 				</text>
 				
 			</view>
-			<view class="intergral"><text>花费平台积分{{order.payIntegral}}</text><text>花费店铺积分{{order.payShopIntegral}}</text></view>
+			
 			<view class="btn">
 				<view v-if="order.orderState === 0" class="btn_item">异常</view>
 				<view v-if="order.orderState === 1" @click="btnClick(order.orderState)" class="btn_item">去付款</view>

@@ -2,7 +2,9 @@ export default {
 	
 	addCart(context, payload) {
 		return new Promise((resolve, reject) => {
-			let oldProduct = context.state.cartList.find(item => item.iid === payload.product.iid)
+			console.log(context.state)
+			console.log(context.state.cartList)
+			let oldProduct = context.state.cartList.find(item =>  item.iid === payload.product.iid)
 			if(payload.product.totalCount<payload.count) {
 				uni.showToast({
 					title:"数量超出库存",

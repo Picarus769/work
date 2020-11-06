@@ -5,8 +5,9 @@
 			<cart-list></cart-list>
 			<cart-bottom-bar>
 			</cart-bottom-bar>
+			<view class="block"></view>
 		</view>
-		<view class="block"></view>
+		
   </view>
 </template>
 
@@ -21,12 +22,36 @@
 			CartBottomBar
 		},
 		onLoad() {
-			console.log(this.cartList)
+			console.log(this.cartList,this.products)
+			this.checkItems()
 		},
 		computed:{
-			...mapGetters(['cartList']),
+			...mapGetters(['cartList', 'products']),
 			isEmpty() {
 				return this.cartList.length === 0?true:false
+			}
+		},
+		methods: {
+			checkItems() {
+				this.products.forEach(item => {
+					item.shopStore_ProductItems.forEach(productItem => {
+						let cartItem = this.cartList.find(function(cart){
+							return cart.iid === productItem.id
+						})
+						if(cartItem) {
+							if(productItem.price !== cartItem.price) {
+								let p = {
+									price : productItem.price,
+									id: cartItem.iid
+								}
+								this.$store.commit('setCartPrice', p)
+							}
+						} else {
+							console.log('a')
+							this.$store.commit('deleteItem', productItem.iid)
+						}
+					})
+				})
 			}
 		},
 		onTabItemTap() {
@@ -45,6 +70,6 @@
 		transform: translate(-50%, -50%);
 	}
 	.block {
-		height: 80rpx;
+		height: 200rpx;
 	}
 </style>

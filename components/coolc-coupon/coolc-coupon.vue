@@ -11,8 +11,8 @@
 				<view class="demand">满{{item.limitMoney}}使用</view>
 			</view>
 		</view>
-		<view @click="btnClick(item.id, item.limitMoney, item.price)" class="get-btn" v-if="types" :style="{color:color, borderColor:color, background:solid}">{{btn}}</view>
-		<view @click="btnClick(item.id, item.limitMoney,item.price)" class="get-btn" v-if="!types" :style="{color:color, borderColor:color, background:solid}">{{btn}}</view>
+		<view @click="btnClick(item.id, item.limitMoney, item.price, item.integral)" class="get-btn" v-if="types" :style="{color:color, borderColor:color, background:solid}">{{btn}}</view>
+		<view @click="btnClick(item.id, item.limitMoney,item.price, item.integral)" class="get-btn" v-if="!types" :style="{color:color, borderColor:color, background:solid}">{{btn}}</view>
 	</view>
 </template>
 
@@ -85,14 +85,15 @@
 			},
 		},
 		methods: {
-			btnClick(id, money, price) {
+			btnClick(id, money, price, integral) {
 				console.log(money)
 				if (this.btn === '已拥有' || this.btn === '已使用') return
 				if (this.btn === '使用') {
 					let payload = {
 						id: id,
 						money: money,
-						price: price
+						price: price,
+						int: integral
 					}
 					this.$emit('useVoucher', payload)
 					return

@@ -23,8 +23,8 @@
 					</view> -->
 					<swiper :indicator-dots="true" circular="true" :autoplay="true" :interval="3000" :duration="1000">
 						<swiper-item v-for="item in swiper" :key="item.id">
-							<view class="big_img" @click="actClick(item.id)">
-								<image :src="item.image" mode=""></image>
+							<view class="big_img" @click="actClick(item.activityCate)">
+								<image :src="$constData.imageServer+item.image" mode=""></image>
 							</view>
 						</swiper-item>
 					</swiper>
@@ -169,7 +169,8 @@
 				const res = await this.$myRequest({
 					url: 'api/Banners'
 				})
-				console.log('banners',res.data)
+				console.log('banners',res.data.data)
+				this.swiper = res.data.data
 			},
 			check() {
 				this.$check()

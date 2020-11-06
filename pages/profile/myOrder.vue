@@ -84,7 +84,19 @@
 					}
 				})
 				console.log(res)
+				await this.changeInt()
 				await this.getOrders()
+			},
+			async changeInt() {
+				const res = await this.$myRequest({
+					url: 'api/User?id='+this.$store.state.userInfo.id
+				})
+				console.log(res.data.data)
+				let temp = {
+					shopIntegral: res.data.data[0].shopIntegral,
+					integral: res.data.data[0].integral
+				}
+				this.$store.commit('setInt', temp)
 			}
 		},
 		computed: {

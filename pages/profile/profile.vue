@@ -3,7 +3,7 @@
 		<view v-if="userInfo">
 			<view class="header">
 				<view class="header_left">
-					<image :src="userInfo.avatar ? userInfo.avatar : '../../static/images/Roulette1.png'" mode="" class="header_left_image"></image>
+					<image :src="userInfo.avatar ? decodeURIComponent(userInfo.avatar) : '../../static/images/Roulette1.png'" mode="" class="header_left_image"></image>
 				</view>
 				<view class="header_center">
 					<view>{{userInfo.name}}</view>
@@ -60,6 +60,7 @@
 		},
 		onLoad() {
 			this.config = this.$constData.profileConfig
+			console.log(this.userInfo.avatar)
 		}
 	}
 </script>

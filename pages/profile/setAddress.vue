@@ -222,6 +222,9 @@
 			}
 			
 		},
+		destroyed() {
+			
+		},
 		methods: {
 			blur(id) {
 				if(id === 0) {
@@ -390,9 +393,6 @@
 						// 	store.commit('setProducts', res2.data.products)
 						// })
 						
-						uni.switchTab({
-							url: '/pages/index/index'
-						})
 					})
 				}
 				},
@@ -403,6 +403,16 @@
 					this.address = res.data.data
 					console.log(this.address)
 					this.$store.commit('setLocation', this.address)
+					console.log('跳转')
+					uni.switchTab({
+						url: '/pages/index/index',
+						success() {
+							console.log('aa')
+						},
+						fail(e) {
+							console.log(e)
+						}
+					})
 					return res
 				},
 				checkPhone(){ 

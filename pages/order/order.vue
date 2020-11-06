@@ -4,7 +4,7 @@
 			<view class="btn" @click="submit">
 				提交订单
 			</view>
-			<view class="price">{{totalPrice}}</view>
+			<view class="price">{{payPrice}}</view>
 			<view class="text">合计：</view>
 			<view class="count">共{{count}}件,</view>
 		</view>
@@ -55,16 +55,17 @@
 					</view>
 				</view>
 				
-				<view class="points area">
+<!-- 				<view class="points area">
 					<image class="point_icon" src="../../static/images/score.svg" mode=""></image>
-					<text>可用店铺积分抵扣{{sPrice}}元</text>
+					<text>可用{{costShopInt}}店铺积分抵扣{{sPrice}}元</text>
 					<image class="check" @click="checkClick(0)" :src="shopIntChecked? '../../static/images/check_active.svg' : '../../static/images/check.svg'" mode=""></image>
-				</view>
+				</view> -->
 				<view class="points area">
 					<image class="point_icon" src="../../static/images/score.svg" mode=""></image>
-					<text>可用平台积分抵扣{{iPrice}}元</text>
+					<text>可用{{costInt}}平台积分抵扣{{intPrice}}</text>
 					<image class="check" @click="checkClick(1)" :src="integralChecked? '../../static/images/check_active.svg' : '../../static/images/check.svg'" mode=""></image>
 				</view>
+				<view class="alert"><text class="red">*</text><text>抵扣优先级：优惠券>平台积分</text></view>
 				<view class="area voucher" @click="open"><text v-if="currentVoucherId === null">使用优惠券</text><text v-else>已使用优惠券减{{voucherMoney}}</text></view>
 				<uni-popup ref="popup" type="bottom">
 					<scroll-view scroll-y="true" style="height: 100%;">
@@ -74,13 +75,12 @@
 							<view class="cancel" @click="useVoucher(0)"><view>不使用优惠券</view></view>
 						</view>
 					</scroll-view>
-					
-					
 				</uni-popup>
 				<view class="reIntegral">
-					本次可反平台积分{{reIntegral}}分,店铺积分{{reShopInt}}
+					本次可反平台积分{{reIntegral}}分
 				</view>
-				
+				<view class="block"></view>
+				<view class="block"></view>
 			</view>
 			
 		</view>
@@ -101,19 +101,29 @@
 		},
 		data() {
 			return {
+				// sortByShopInt: [],
+				sortByInt: [],
 				integralChecked: false,
-				shopIntChecked: false,
+				// shopIntChecked: false,
 				product: [],
 				orderProduct: [],
 				specClass: 'none',
 				address: {},
 				vouchers: [],
 				currentVoucherId: null,
-				voucherMoney: null,
+				voucherMoney: 0,
+				totalPrice: 0,
+				// costShopInt: 0,
+				// shopIntPrice: 0,
+				costInt: 0,
+				intPrice: 0,
+				intDeductCount: [],
+				voucherUsed: false,
+				voucherIntValue: 0
 			}
 		},
 		computed: {
-			...mapGetters(['userInfo', 'shop', 'freight']),
+			...mapGetters(['userInfo', 'shop', 'freight', 'cartList']),
 			
 			filteredVouchers() {
 				return this.vouchers.filter(item => item.state === 1)
@@ -121,37 +131,59 @@
 			count() {
 				return this.product.reduce((sum, item) => {return sum + item.selectCount},0)
 			},
-			totalPrice() {
-				let sPrice = this.shopIntChecked?this.shopIntPrice : 0
-				let iPrice = this.integralChecked?this.intPrice : 0
-				let temp = this.product.reduce((sum, item) => {return sum + item.price * item.selectCount},0).toFixed(2) - sPrice - iPrice + this.freight - this.voucherMoney
-				return temp>this.freight? temp:this.freight
-			},
-			sPrice() {
-				if(this.shopIntPrice>this.totalPrice-this.freight) return this.totalPrice-this.freight
-				return this.shopIntPrice
-			},
+			
+			// totalPrice() {
+			// 	let sPrice = this.shopIntChecked?this.shopIntPrice : 0
+			// 	let iPrice = this.integralChecked?this.intPrice : 0
+			// 	let temp = this.product.reduce((sum, item) => {return sum + item.price * item.selectCount},0).toFixed(2) - sPrice - iPrice + this.freight - this.voucherMoney
+			// 	return temp>this.freight? temp:this.freight
+			// },
+			// sPrice() {
+			// 	console.log('a')
+			// 	if(this.shopIntPrice>this.totalPrice-this.freight) return this.totalPrice-this.freight
+			// 	return this.shopIntPrice
+			// },
 			iPrice() {
-				if(this.intPrice>this.totalPrice-this.freight) return this.totalPrice-this.freight
-				return this.intPrice
+				if(this.integralChecked === true) return this.intPrice
+				return 0
 			},
-			//店铺积分可抵扣
-			shopIntPrice() {
-				return this.product.reduce((sum, item) => {return sum + item.shopIntegral * this.userInfo.shopIntegral},0)
-			},
-			//平台积分可抵扣
-			intPrice() {
-				return this.product.reduce((sum, item) => {return sum + item.integral * this.userInfo.integral},0)
-			},
-			reShopInt() {
-				return this.product.reduce((sum, item) => {return sum + item.reShopIntegral * item.selectCount},0)
-			},
+			
+			// //平台积分可抵扣
+			// intPrice() {
+			// 	return this.product.reduce((sum, item) => {return sum + item.integral * this.userInfo.integral},0)-this.sPrice
+			// },
+			// reShopInt() {
+			// 	return this.product.reduce((sum, item) => {
+			// 		let a = item.reIntegral===-1?0:item.reIntegral
+			// 		return sum + a * item.selectCount},0)
+			// },
 			reIntegral() {
 				return this.product.reduce((sum, item) => {return sum + item.reIntegral * item.selectCount},0)
 			},
 			voucherFilter() {
 				return this.vouchers.filter(item => item.state === 1)
-			}
+			},
+			// lastShopInt() {
+			// 	return this.userInfo.shopIntegral - this.costShopInt
+			// },
+			lastInt() {
+				if(this.voucherUsed) return this.userInfo.integral - this.costInt + this.voucherIntValue
+				return this.userInfo.integral - this.costInt
+			},
+			voucherDeductPrice() {
+				return this.totalPrice - this.voucherMoney
+			},
+			payPrice() {
+				if (this.integralChecked) return this.totalPrice - this.iPrice  + this.freight
+				return this.voucherDeductPrice + this.freight 
+			},
+			
+			// iiPrice() {
+			// 	return this.integralChecked?this.iPrice : 0
+			// },
+			// ssPrice() {
+			// 	return this.shopIntChecked?this.sPrice : 0
+			// }
 		},
 		methods: {
 			state(n) {
@@ -163,13 +195,115 @@
 					return '已使用'
 				}
 			},
+			
 			open(){
 				this.$refs.popup.open()
+			},
+			// //店铺积分可抵扣
+			// calcShopIntPrice() {
+			// 	this.costShopInt = 0
+			// 	this.shopIntPrice = 0
+			// 	if(this.totalPrice - this.voucherMoney === this.freight) {
+			// 		 this.shopIntPrice === 0
+			// 		return
+			// 	} else if (this.userInfo.shopIntegral === 0) {
+			// 		this.shopIntPrice === 0
+			// 		return 
+			// 	} else {
+			// 		for(let i in this.sortByShopInt) {
+			// 			if(this.sortByShopInt[i].shopStoreId == 1) {
+			// 				continue
+			// 			}
+						
+			// 			let totalP = this.sortByShopInt[i].selectCount * this.sortByShopInt[i].price
+			// 			let costS = Math.ceil(totalP/this.sortByShopInt[i].shopIntegral)
+			// 			if(this.lastShopInt<costS) {
+			// 				this.costShopInt += this.lastShopInt
+			// 				this.shopIntPrice += this.lastShopInt*this.sortByShopInt[i].shopIntegral
+			// 				return
+			// 			} else {
+			// 				this.costShopInt += costS
+			// 				this.shopIntPrice += totalP
+			// 			}	
+			// 		}
+					
+			// 	}
+			// },
+			//平台积分可抵扣
+			calcIntPrice() {
+				this.costInt = 0
+				this.intPrice = 0
+				this.intDeductCount = []
+				let lastPrice = this.totalPrice
+				for(let item of this.sortByInt) {
+					//积分不足抵扣当前商品
+					if(item.integral>this.lastInt) {
+						continue
+					} else {
+						//抵扣当前商品数量
+						
+						for(let i=1;i<=item.selectCount;i++) {
+							console.log(i)
+							
+							if(item.integral>this.lastInt) {
+								this.intDeductCount.push(i-1)
+								break;
+							} else {
+								if(lastPrice < item.price) {
+									continue
+								}
+								this.costInt += item.integral
+								this.intPrice = i*item.price
+								lastPrice -= item.price
+							}
+						}
+					}
+					console.log(this.intPrice)
+					// let totalP = item.selectCount * item.price
+					// let costS = Math.ceil(totalP/item.integral)
+					// if(this.lastInt<costS) {
+					// 	this.costInt += this.lastInt
+					// 	this.shopIntPrice += this.lastInt*item.shopIntegral
+					// 	return
+					// } else {
+					// 	this.costInt += costS
+					// 	this.intPrice += totalP
+					// }	
+				}
+				if(this.voucherIntValue) {
+					this.costInt = (this.costInt - this.voucherIntValue) > 0? this.costInt - this.voucherIntValue : 0
+				}
+				
+				console.log('花费积分：',this.costInt)
+				console.log('可抵扣', this.intPrice)
+				console.log('计数', this.intDeductCount)
+				// if(this.totalPrice - this.voucherMoney -this.ssPrice -this.freight === 0) {
+				// 	this.intPrice === 0
+				// 	return
+				// } else if (this.userInfo.integral === 0) {
+				// 	this.intPrice === 0
+				// 	return
+				// } else {
+				// 	for(let item of this.sortByInt) {
+				// 		let totalP = item.selectCount * item.price
+				// 		let costS = Math.ceil(totalP/item.integral)
+				// 		if(this.lastInt<costS) {
+				// 			this.costInt += this.lastInt
+				// 			this.shopIntPrice += this.lastInt*item.shopIntegral
+				// 			return
+				// 		} else {
+				// 			this.costInt += costS
+				// 			this.intPrice += totalP
+				// 		}	
+				// 	}
+				// }
 			},
 			useVoucher(payload) {
 				if(payload === 0) {
 					this.currentVoucherId = null
-					this.voucherMoney = null
+					this.voucherMoney = 0
+					this.voucherIntValue = 0
+					this.calcIntPrice()
 					this.$refs.popup.close()
 					return
 				}
@@ -181,10 +315,14 @@
 					})
 					return
 				}
+				this.voucherUsed = true
 				this.currentVoucherId = payload.id
 				this.voucherMoney = payload.price
+				this.voucherIntValue = payload.int
 				console.log(this.currentVoucherId)
 				this.$refs.popup.close()
+				// this.calcShopIntPrice()
+				this.calcIntPrice()
 			},
 			async getVoucher() {
 				console.log(this.shop.shopId)
@@ -199,10 +337,14 @@
 				this.vouchers = res.data
 			},
 			checkClick(flag) {
-				if(flag === 0) {
-					this.shopIntChecked = !this.shopIntChecked
-				} else if (flag ===1) {
+				if(flag === 1) {
+				// 	this.shopIntChecked = !this.shopIntChecked
+				// 	this.calcShopIntPrice()
+				// 	this.calcIntPrice()
+				// } else if (flag ===1) {
 					this.integralChecked = !this.integralChecked
+					// this.calcShopIntPrice()
+					this.calcIntPrice()
 				}
 				// this.isChecked = !this.isChecked
 			},
@@ -228,7 +370,8 @@
 						"userId": this.userInfo.id,
 						"shopId": this.$store.state.shop.shopId,
 						"activitieId": this.product[0].activityId||null,
-						"useShopIntegral": this.shopIntChecked,
+						// "useShopIntegral": this.shopIntChecked,
+						"useShopIntegral": false,
 						"useIntegral": this.integralChecked,
 						"productItems": this.orderProduct,
 						"voucherId": this.currentVoucherId
@@ -238,6 +381,11 @@
 				if(res.data>0) {
 					uni.navigateTo({
 						url: '/pages/profile/myOrder'
+					})
+					this.product.forEach(item => {
+						if(item.iid) {
+							this.$store.commit('deleteItem', item.iid)
+						}
 					})
 				}
 			}
@@ -266,9 +414,16 @@
 				})
 				console.log(this.orderProduct)
 			})
-			console.log(this.product)
+			console.log('订单列表', this.product)
+			
 			this.address = this.$store.state.oftenAddress
+			// this.sortByShopInt = this.product.sort((a,b)=> b.shopIntegral - a.shopIntegral)
+			this.sortByInt = this.product.sort((a,b)=> b.integral - a.integral)
+			this.totalPrice = this.product.reduce((sum, item) => {return sum+item.price*item.selectCount},0)
 
+			// this.calcShopIntPrice()
+			this.calcIntPrice()
+			// console.log(this.sortByShopInt)
 		}
 	}
 </script>
@@ -282,6 +437,7 @@
 		height: 100%;
 	}
 	.bottom-bar {
+		z-index: 99;
 		background-color: #fff;
 		position: fixed;
 		width: 100%;
@@ -442,9 +598,7 @@
 				padding: 20rpx;
 				background-color: #fff;
 				
-				.block {
-					height: 80rpx;
-				}
+				
 				.cancel{
 					text-align: center;
 					position: fixed;
@@ -464,8 +618,18 @@
 				margin: 20rpx 30rpx;
 				font-size: 26rpx;
 			}
+			.alert {
+				margin: 20rpx;
+				color: $font-color-disabled;
+				font-size: 26rpx;
+				.red {
+					color: red;
+				}
+			}
 			
-			
+		}
+		.block {
+			height: 80rpx;
 		}
 		.voucher {
 			font-size: 30rpx;
