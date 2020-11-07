@@ -117,7 +117,7 @@
 			})
 			this.activity = this.getActivity()
 			console.log(this.cate)
-			if (this.cate === null) {
+			if (this.cate === null || this.activity === undefined) {
 				uni.showModal({
 					title: '无活动',
 					showCancel: false,

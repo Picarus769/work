@@ -8,7 +8,8 @@
 					<view class="price">{{"￥" + item.price}}</view><view class="old_price" v-if="item.oldPrice">{{"￥" + item.oldPrice}}</view>
 				</view> -->
 				<view>
-					<view class="price">{{"￥" + price[index][0].price}}</view>
+					<view class="price">{{"￥" + price[index][0].price}}</view><view class="old_price" v-if="item.oldPrice">{{"￥" + item.oldPrice}}</view>
+				</view>
 				</view>
 				<view>
 				</view>
@@ -84,10 +85,10 @@
 							} else {
 								// console.log(JSON.parse(productItem.productItemStr))
 								// console.log(JSON.parse(productItem.productItemStr).filter(i=>i.vipCate === this.vipCate)[0])
-								price.push(JSON.parse(productItem.productItemStr).filter(i=>i.VipCate === this.vipCate)[0].price)
+								price.push(JSON.parse(productItem.productItemStr).filter(i=>parseInt(i.VipCate) === parseInt(this.vipCate))[0].price)
 							}
 						})
-						// console.log(price)
+						console.log(price)
 						list.push(price)
 					}
 					

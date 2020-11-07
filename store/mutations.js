@@ -88,8 +88,10 @@ export default {
 		console.log("已保存商品")
 		state.products = products.filter(item => item.shopStore_ProductItems.filter(i => i.count>0).length>0)
 		state.products.forEach(item => {
+			console.log('a')
 			item.shopStore_ProductItems.map(productItem => {
-				return productItem.price = JSON.parse(productItem.productItemStr).filter(i=>i.VipCate === state.userInfo.vipCate)[0].price.price
+				// console.log(JSON.parse(productItem.productItemStr).filter(i=>i.VipCate === state.userInfo.vipCate))
+				return productItem.price = JSON.parse(productItem.productItemStr).filter(i=>parseInt(i.VipCate) === parseInt(state.userInfo.vipCate))[0].price.price
 			})
 		})
 	},

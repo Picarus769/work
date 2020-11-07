@@ -33,25 +33,26 @@
 		},
 		methods: {
 			checkItems() {
-				this.products.forEach(item => {
-					item.shopStore_ProductItems.forEach(productItem => {
-						let cartItem = this.cartList.find(function(cart){
-							return cart.iid === productItem.id
-						})
-						if(cartItem) {
-							if(productItem.price !== cartItem.price) {
-								let p = {
-									price : productItem.price,
-									id: cartItem.iid
-								}
-								this.$store.commit('setCartPrice', p)
-							}
-						} else {
-							console.log('a')
-							this.$store.commit('deleteItem', productItem.iid)
-						}
-					})
+				const cartId = this.cartList.map(item => {return { id : item.iid,price : item.price}})
+				let storeArr = new Array();
+				this.products.map(q=> q.shopStore_ProductItems.map(a=>{return { id : a.id,price : a.price}})).forEach(q=>{
+					storeArr = storeArr.concat(q);
 				})
+				
+				storeArr.forEach(q=>{
+					const index = cartId.findIndex(a=> a.id === q.id);
+					
+					if(index >= 0)
+					{
+						if(cartId[index].price !== q.price){
+							this.$store.commit('setCartPrice', q);
+						}
+						
+						cartId.splice(index,1);
+					}
+				})
+				console.log(cartId)
+				cartId.forEach(item => this.$store.commit('deleteItem', item.id))
 			}
 		},
 		onTabItemTap() {
